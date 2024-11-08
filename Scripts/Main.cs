@@ -18,23 +18,17 @@ public class Main : Sounds
     public Transform BoardEndPoint;
     public Transform BoardStart;
     public Transform GUIStart;
-    public Bot Bot;
     public GameObject Win;
     public GameObject Lose;
     public TutorialText TutorialText;
     public static Main Instance { get; private set; }
     private void Start()
     {
-        StartCoroutine(TutorialText.SetText("Hello, i`m you Pawn, i here... etc."));
         Instance = this;
         Factory = new Factory();
-        Bot.Factory = new Factory();
         Factory.Initialization(true);
-        Bot.Factory.Initialization(false);
         GiveKitDefault(DeckData, Factory);
-        GiveKitDefault(Bot.DeckData, Bot.Factory);
         StartCoroutine(GiveFigure(DeckData, Factory.Figure("Pawn")));
-        StartCoroutine(GiveFigure(Bot.DeckData, Bot.Factory.Figure("Pawn")));
         Board.DisableDragFigure();
     }
 
@@ -68,7 +62,6 @@ public class Main : Sounds
             yield return Movement.Smooth(GUI, 0.25f, GUI.position, GUIEndPoint.position);
             yield return Movement.Smooth(Board.transform, 0.25f, Board.transform.position, BoardEndPoint.position);
             yield return Movement.AddSmooth(Board.transform, 1, 1.3f, 1.5f);
-            yield return Bot.EndTurn();
             yield return new WaitForSeconds(0.25f);
             foreach (var s in Hand.Slots)
             {
@@ -82,7 +75,6 @@ public class Main : Sounds
     }
     public IEnumerator Back()
     {
-        yield return Bot.Move();
         Board.DisableFirstTurn();
         if (Hand.Slots.Count > 0 || DeckData.Figures.Count > 0)
         {
@@ -100,8 +92,6 @@ public class Main : Sounds
                 Characteristics.Mana = Characteristics.MaxMana;
                 Characteristics.Amount.text = Characteristics.Mana.ToString() + "/" + Characteristics.MaxMana.ToString();
             }
-            if (Bot.Hand.Slots.Count == 0)
-                yield return GiveFigure(Bot.DeckData);
 
             foreach (var s in Hand.Slots)
             {
@@ -110,21 +100,14 @@ public class Main : Sounds
 
             _tryEndTurn = true;
         }
-        else
-        {
-            if (Bot.Hand.Slots.Count == 0)
-                yield return GiveFigure(Bot.DeckData);
 
-            yield return Bot.EndTurn();
-
-        }
-        if (Bot.Hand.DisplayedSlot.Count == 0 && Bot.DeckData.Figures.Count == 0 && Hand.Slots.Count == 0)
+        //проверка на отсутствие выставленных фигур, отсутствие фигур в руке, отсутствие фигур в колоде
         {
             PlaySound(AudioWin, 1, 1);
             Win.SetActive(true);
 
         }
-        else if (Hand.DisplayedSlot.Count == 0 && DeckData.Figures.Count == 0 && Hand.Slots.Count == 0)
+        if (Hand.DisplayedSlot.Count == 0 && DeckData.Figures.Count == 0 && Hand.Slots.Count == 0)
         {
             PlaySound(AudioLose, 1, 1);
             Lose.SetActive(true);

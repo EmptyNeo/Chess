@@ -101,7 +101,7 @@ public class Board : MonoBehaviour
     }
     public void DisableFirstTurn()
     {
-        foreach(Slot  slot in Slots)
+        foreach(Slot slot in Slots)
         {
             if (slot.Figure.IsFirstTurn)
             {

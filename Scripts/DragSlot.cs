@@ -27,14 +27,6 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
         {
             if (OldSlot.Figure.NotNull)
             {
-                foreach (Slot s in Board.Instance.Slots)
-                {
-                    if(s.Figure.NotNull)
-                    {
-                        Debug.Log(s.Figure.X);
-                        Debug.Log(s.Figure.Y);
-                    }
-                }
                 Board.Instance.ShowHints(OldSlot.Figure);
                 GetComponentInChildren<RectTransform>().localScale = new Vector2(1.25f, 1.25f);
                 GetComponentInChildren<Image>().color = new Color(1, 1, 1, 0.75f);

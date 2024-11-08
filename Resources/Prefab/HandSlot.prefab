@@ -70,6 +70,7 @@ MonoBehaviour:
     Name: 
     IsFirstTurn: 0
     ColorFigure: 0
+    Priority: 0
   FigureImage: {fileID: 9089779374991447307}
   Cost: {fileID: 1674142561319220526}
   Hand: {fileID: 0}

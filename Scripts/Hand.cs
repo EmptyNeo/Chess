@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,11 +10,14 @@ public class Hand : MonoBehaviour
     public List<Slot> DisplayedSlot;
     public float Spacing = 1f;
 
-    public void AddToHand(HandSlot slot)
+    public IEnumerator AddToHand(HandSlot slot)
     {
         Slots.Add(slot);
+        slot.Drag.objDelete = true;
         ResetAlignetSet();
         SmoothMovement();
+        yield return new WaitForSeconds(1f);
+        slot.Drag.objDelete = false;
     }
     public void RemoveFromHand(int index)
     {
@@ -33,7 +37,7 @@ public class Hand : MonoBehaviour
             StartCoroutine(Movement.Smooth(AlignetSet[i].transform, 0.25f, AlignetSet[i].transform.position, GetPosition(i)));
         }
     }
-   
+
     public void ResetAlignetSet()
     {
         AlignetSet.Clear();
@@ -46,7 +50,7 @@ public class Hand : MonoBehaviour
     }
     public int FindDisplayedSlot(Slot slot)
     {
-        for(int i = 0; i < DisplayedSlot.Count;i++)
+        for (int i = 0; i < DisplayedSlot.Count; i++)
         {
             if (DisplayedSlot[i] == slot)
                 return i;

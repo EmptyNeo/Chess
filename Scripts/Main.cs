@@ -24,6 +24,8 @@ public class Main : Sounds
     public static Main Instance { get; private set; }
     private void Start()
     {
+/*        TutorialText.EnablePanel();
+        StartCoroutine(Tutorial.Enable(TutorialText));*/
         Instance = this;
         Factory = new Factory();
         Factory.Initialization(true);
@@ -102,11 +104,10 @@ public class Main : Sounds
         }
 
         //проверка на отсутствие выставленных фигур, отсутствие фигур в руке, отсутствие фигур в колоде
-        {
-            PlaySound(AudioWin, 1, 1);
-            Win.SetActive(true);
-
-        }
+        //{
+            //PlaySound(AudioWin, 1, 1);
+            //Win.SetActive(true);
+        //}
         if (Hand.DisplayedSlot.Count == 0 && DeckData.Figures.Count == 0 && Hand.Slots.Count == 0)
         {
             PlaySound(AudioLose, 1, 1);

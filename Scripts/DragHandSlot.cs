@@ -35,13 +35,22 @@ public class DragHandSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
             IsDragging = true;
             transform.SetParent(transform.parent.parent);
             Main.Instance.HintPanel.SetActive(true);
-
+            Image image = Main.Instance.HintPanel.transform.GetChild(0).GetComponent<Image>();
+            if (Characteristics.Instance.Mana < OldSlot.Figure.Cost)
+            {
+                image.color = new Color(1, 0, 0, image.color.a);
+            }
+            else
+            {
+                image.color = new Color(0, 1, 0, image.color.a);
+            }
+            Main.Instance.Hand.ResetAlignetSet();
+            Main.Instance.Hand.SmoothMovement();
         }
 
     }
     public void OnPointerUp(PointerEventData eventData)
     {
-
         if (OldSlot.Figure.NotNull && TryDrag)
         {
             GetComponentInChildren<RectTransform>().localScale = new Vector2(1f, 1f);
@@ -49,7 +58,7 @@ public class DragHandSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
             RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
             if (hit.collider != null && hit.collider.TryGetComponent(out Slot slot))
             {
-                if (slot.Figure != null && slot.Figure.NotNull == false)
+                if (slot.Figure.NotNull == false)
                     StartCoroutine(RechargeSlot(slot));
                 else
                     StartCoroutine(Movement.Smooth(transform, 0.2f, transform.position, OldSlot.transform.position));
@@ -57,16 +66,20 @@ public class DragHandSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
             }
             else
                 StartCoroutine(Movement.Smooth(transform, 0.2f, transform.position, OldSlot.transform.position));
+
+
             _image.raycastTarget = true;
             IsDragging = false;
             Main.Instance.HintPanel.SetActive(false);
             transform.SetParent(OldSlot.transform);
+            Main.Instance.Hand.ResetAlignetSet();
+            Main.Instance.Hand.SmoothMovement();
         }
 
     }
-    public IEnumerator RechargeSlot(Slot new_slot)
+    public IEnumerator RechargeSlot(Slot newSlot)
     {
-        if (Characteristics.Instance.Mana < OldSlot.Figure.Cost || new_slot.Y < 5)
+        if (Characteristics.Instance.Mana < OldSlot.Figure.Cost || newSlot.Y < 5)
         {
             yield return Movement.Smooth(transform, 0.2f, transform.position, OldSlot.transform.position);
         }
@@ -74,17 +87,16 @@ public class DragHandSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
         {
             objDelete = true;
             _icon.SetActive(false);
-            yield return Movement.TakeOpacity(transform, new_slot.transform.position, _image, 1, 10);
+            yield return Movement.TakeOpacity(transform, newSlot.transform.position, _image, 1, 10);
             yield return new WaitForSeconds(0.01f);
             Main.Instance.PlaySound(Main.Instance.AudioExposeFigure, 2, 1);
             Characteristics.Instance.TakeMana(OldSlot.Figure.Cost);
-            new_slot.SetFigure(OldSlot.Figure);
-            new_slot.DragSlot.TryDrag = false;
+            newSlot.SetFigure(OldSlot.Figure);
+            newSlot.DragSlot.TryDrag = false;
             int index = OldSlot.transform.GetSiblingIndex();
-            OldSlot.Hand.DisplayedSlot.Add(new_slot);
+            OldSlot.Hand.DisplayedSlot.Add(newSlot);
             OldSlot.Hand.RemoveFromHand(index);
             Destroy(OldSlot.gameObject);
         }
     }
-
 }

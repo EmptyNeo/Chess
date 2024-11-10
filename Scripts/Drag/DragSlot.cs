@@ -88,8 +88,9 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
         if (new_slot.Figure.NotNull)
         {
             new_slot.Nullify();
+            Main.Instance.Levels[Main.indexLevel].Rival.DisplayedSlot.Remove(new_slot);
             new_slot.SetFigure(figure);
-
+            Main.Instance.Hand.DisplayedSlot[index] = new_slot;
         }
         else
         {

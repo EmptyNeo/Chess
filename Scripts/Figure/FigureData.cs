@@ -23,6 +23,7 @@ public class FigureData : ICloneable
         X = x;
         Y = y;
         NotNull = true;
+        Name = nameSprite;
         IsFirstTurn = true;
         _nameSprite = nameSprite;
         ColorFigure = colorFigure;

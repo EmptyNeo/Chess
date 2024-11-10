@@ -7,7 +7,6 @@ public class Pawn : FigureData
     public Pawn(int x, int y, string nameSprite, ColorFigure colorFigure) : base(x, y, nameSprite, colorFigure)
     {
         IsFirstTurn = false;
-        Name = "Pawn";
         Icon = SpriteUtil.Load("pieces", nameSprite);
         Cost = 0;
         Priority = 1;
@@ -28,7 +27,6 @@ public class Pawn : FigureData
 
             if (targetSlot.X == X && targetSlot.Y == Y - 1)
             {
-                Debug.Log(targetSlot.Figure.NotNull);
                 if (targetSlot.Figure.NotNull == false)
                     return true;
             }
@@ -47,7 +45,6 @@ public class Pawn : FigureData
 
             if (targetSlot.X == X && targetSlot.Y == Y + 1)
             {
-                Debug.Log(targetSlot.Figure.NotNull);
                 if (targetSlot.Figure.NotNull == false)
                     return true;
             }
@@ -68,7 +65,6 @@ public class Bishop : FigureData
 {
     public Bishop(int x, int y, string nameSprite, ColorFigure colorFigure) : base(x, y, nameSprite, colorFigure)
     {
-        Name = "Bishop";
         Icon = SpriteUtil.Load("pieces", nameSprite);
         Cost = 1;
 
@@ -110,7 +106,6 @@ public class Rook : FigureData
 {
     public Rook(int x, int y, string nameSprite, ColorFigure colorFigure) : base(x, y, nameSprite, colorFigure)
     {
-        Name = "Rook";
         Icon = SpriteUtil.Load("pieces", nameSprite);
         Cost = 1;
 
@@ -130,7 +125,6 @@ public class Rook : FigureData
                 {
                     if (Board.Instance.Slots[Y + i * directionY, X].Figure.NotNull)
                     {
-                        Debug.Log("На пути ладьи находится фигура");
                         return false;
                     }
                 }
@@ -142,7 +136,6 @@ public class Rook : FigureData
                 {
                     if (Board.Instance.Slots[Y, X + i * directionX].Figure.NotNull)
                     {
-                        Debug.Log("На пути ладьи находится фигура");
                         return false;
                     }
                 }
@@ -150,7 +143,6 @@ public class Rook : FigureData
 
             if (targetSlot.Figure.NotNull && targetSlot.Figure.ColorFigure == ColorFigure)
             {
-                Debug.Log("На целевой позиции находится фигура того же цвета");
                 return false;
             }
 
@@ -173,7 +165,6 @@ public class Knight : FigureData
 {
     public Knight(int x, int y, string nameSprite, ColorFigure colorFigure) : base(x, y, nameSprite, colorFigure)
     {
-        Name = "Knight";
         Icon = SpriteUtil.Load("pieces", nameSprite);
         Cost = 1;
 
@@ -206,7 +197,6 @@ public class Queen : FigureData
 {
     public Queen(int x, int y, string nameSprite, ColorFigure colorFigure) : base(x, y, nameSprite, colorFigure)
     {
-        Name = "Queen";
         Icon = SpriteUtil.Load("pieces", nameSprite);
         Cost = 2;
 
@@ -251,7 +241,6 @@ public class Queen : FigureData
                 {
                     if (Board.Instance.Slots[Y + i * directionY, X].Figure.NotNull)
                     {
-                        Debug.Log("На пути ладьи находится фигура");
                         return false;
                     }
                 }
@@ -263,7 +252,6 @@ public class Queen : FigureData
                 {
                     if (Board.Instance.Slots[Y, X + i * directionX].Figure.NotNull)
                     {
-                        Debug.Log("На пути ладьи находится фигура");
                         return false;
                     }
                 }
@@ -272,7 +260,6 @@ public class Queen : FigureData
             if (targetSlot.Figure.NotNull &&
                 targetSlot.Figure.ColorFigure == ColorFigure)
             {
-                Debug.Log("На целевой позиции находится фигура того же цвета");
                 return false;
             }
 

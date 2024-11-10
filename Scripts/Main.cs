@@ -1,6 +1,7 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Main : Sounds
 {
@@ -18,20 +19,26 @@ public class Main : Sounds
     public Transform BoardEndPoint;
     public Transform BoardStart;
     public Transform GUIStart;
+    public Transform RivalHand;
     public GameObject Win;
     public GameObject Lose;
     public TutorialText TutorialText;
     public static Main Instance { get; private set; }
+    public static int indexLevel = 0;
+    public List<Level> Levels = new();
+
     private void Start()
     {
-/*        TutorialText.EnablePanel();
-        StartCoroutine(Tutorial.Enable(TutorialText));*/
+        /*        TutorialText.EnablePanel();
+                StartCoroutine(Tutorial.Enable(TutorialText));*/
         Instance = this;
         Factory = new Factory();
-        Factory.Initialization(true);
-        GiveKitDefault(DeckData, Factory);
-        StartCoroutine(GiveFigure(DeckData, Factory.Figure("Pawn")));
+        DeckData.GiveKitDefault(Factory);        
+        StartCoroutine(DeckData.GiveFigure(this, Sound, Factory.Figure("w_pawn")));
         Board.DisableDragFigure();
+        Levels.Add(new Level1());
+        Levels.Add(new Level2());
+        Levels[indexLevel].Init();
     }
 
 
@@ -87,7 +94,7 @@ public class Main : Sounds
             yield return Movement.Smooth(GUI, 0.25f, GUI.position, GUIStart.position);
 
             yield return new WaitForSeconds(0.3f);
-            yield return GiveFigure(DeckData);
+            yield return DeckData.GiveFigure(this, Sound);
 
             if (Hand.Slots.Count > 0)
             {
@@ -103,117 +110,25 @@ public class Main : Sounds
             _tryEndTurn = true;
         }
 
-        //проверка на отсутствие выставленных фигур, отсутствие фигур в руке, отсутствие фигур в колоде
-        //{
-            //PlaySound(AudioWin, 1, 1);
-            //Win.SetActive(true);
-        //}
-        if (Hand.DisplayedSlot.Count == 0 && DeckData.Figures.Count == 0 && Hand.Slots.Count == 0)
+        if (Levels[indexLevel].Rival.DisplayedSlot.Count == 0
+            && Levels[indexLevel].Rival.Figure.Count == 0)
+        {
+            PlaySound(AudioWin, 1, 1);
+            Win.SetActive(true);
+        }
+        else if (Hand.DisplayedSlot.Count == 0 && DeckData.Figures.Count == 0 && Hand.Slots.Count == 0)
         {
             PlaySound(AudioLose, 1, 1);
             Lose.SetActive(true);
         }
-       
 
     }
-
-    private IEnumerator GiveFigure(DeckData deckData)
+    public void Restart()
     {
-        if (deckData.Figures.Count == 0)
-            yield return null;
-
-        for (int i = 0; i < 3; i++)
-        {
-            if (deckData.Figures.Count > 0)
-            {
-                PlaySound(Sound, 1, 1);
-                deckData.SpawnFigure();
-                yield return new WaitForSeconds(0.2f);
-            }
-        }
-
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
-    private IEnumerator GiveFigure(DeckData deckData, FigureData figureData)
+    public void Continue()
     {
-        if (deckData.Figures.Count == 0)
-            yield return null;
-
-        for (int i = 0; i < 3; i++)
-        {
-            if (deckData.Figures.Count > 0)
-            {
-
-                PlaySound(Sound, 1, 1);
-                deckData.SpawnFigure(figureData);
-                yield return new WaitForSeconds(0.2f);
-            }
-        }
-    }
-    private void GiveKitDefault(DeckData deckData, Factory factory)
-    {
-        for (int i = 0; i < 8; i++)
-            deckData.AddToDeck(factory.Figure("Pawn"));
-        for (int i = 0; i < 2; i++)
-        {
-            deckData.AddToDeck(factory.Figure("Bishop"));
-            deckData.AddToDeck(factory.Figure("Knight"));
-            deckData.AddToDeck(factory.Figure("Rook"));
-        }
-        deckData.AddToDeck(factory.Figure("Queen"));
-    }
-}
-public static class Movement
-{
-    public static IEnumerator Smooth(Transform transform, float duration, Vector3 a, Vector3 b)
-    {
-        float time = 0f;
-
-        while (time < duration)
-        {
-            time += Time.deltaTime;
-            float t = Mathf.Clamp01(time / duration);
-            transform.position = Vector2.Lerp(a, b, t);
-            yield return null;
-        }
-
-    }
-    public static IEnumerator TakeOpacity(Transform transform, Vector3 b,Image image, float duration, float speed)
-    {
-        float time = duration;
-
-        while (time > 0)
-        {
-            time -= Time.deltaTime * speed;
-            image.color = new Color(image.color.r, image.color.g, image.color.b, time);
-            transform.position = b;
-            yield return null;
-        }
-
-    }
-
-    public static IEnumerator AddSmooth(Transform transform, float startScale, float maxScale, float speed)
-    {
-        float scale = startScale;
-        Vector3 pos = transform.position;
-        while (scale < maxScale)
-        {
-            scale += Time.deltaTime * speed;
-            transform.localScale = new Vector2(scale, scale);
-            transform.position = pos;
-            yield return null;
-        }
-        transform.position = pos;
-    }
-    public static IEnumerator TakeSmooth(Transform transform, float startScale, float maxScale, float speed)
-    {
-        float scale = startScale;
-
-        while (scale > maxScale)
-        {
-            scale -= Time.deltaTime * speed;
-            transform.localScale = new Vector2(scale, scale);
-            yield return null;
-        }
-        transform.localScale = new Vector2(maxScale, maxScale);
+        SceneManager.LoadScene("Map");
     }
 }

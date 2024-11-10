@@ -61,19 +61,27 @@ public class DragHandSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
                 if (slot.Figure.NotNull == false)
                     StartCoroutine(RechargeSlot(slot));
                 else
+                {
                     StartCoroutine(Movement.Smooth(transform, 0.2f, transform.position, OldSlot.transform.position));
+                }
 
             }
             else
+            {
                 StartCoroutine(Movement.Smooth(transform, 0.2f, transform.position, OldSlot.transform.position));
+            
+            }
 
 
             _image.raycastTarget = true;
             IsDragging = false;
             Main.Instance.HintPanel.SetActive(false);
             transform.SetParent(OldSlot.transform);
-            Main.Instance.Hand.ResetAlignetSet();
-            Main.Instance.Hand.SmoothMovement();
+            if (!objDelete)
+            {
+                Main.Instance.Hand.ResetAlignetSet();
+                Main.Instance.Hand.SmoothMovement();
+            }
         }
 
     }
@@ -96,7 +104,9 @@ public class DragHandSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
             int index = OldSlot.transform.GetSiblingIndex();
             OldSlot.Hand.DisplayedSlot.Add(newSlot);
             OldSlot.Hand.RemoveFromHand(index);
+            yield return Main.Instance.Levels[Main.indexLevel].Rival.EndTurn();
             Destroy(OldSlot.gameObject);
+
         }
     }
 }

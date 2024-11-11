@@ -73,6 +73,7 @@ MonoBehaviour:
     Name: 
     IsFirstTurn: 0
     ColorFigure: 0
+    Priority: 0
   FigureImage: {fileID: 9089779374991447307}
   Outline: {fileID: 909876086326832746}
   Hint: {fileID: 8018871171618475947}
@@ -177,7 +178,7 @@ GameObject:
   - component: {fileID: 762873813954349609}
   - component: {fileID: 7415743163784261950}
   m_Layer: 6
-  m_Name: Drag
+  m_Name: ViewCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -104,7 +104,7 @@ public class DragHandSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
             int index = OldSlot.transform.GetSiblingIndex();
             OldSlot.Hand.DisplayedSlot.Add(newSlot);
             OldSlot.Hand.RemoveFromHand(index);
-            yield return Main.Instance.Levels[Main.indexLevel].Rival.EndTurn();
+            yield return Main.Levels[Main.indexLevel].Rival.EndTurn();
             Destroy(OldSlot.gameObject);
 
         }

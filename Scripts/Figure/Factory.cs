@@ -5,9 +5,9 @@ using UnityEngine;
 [Serializable]
 public class Factory
 {
-    [SerializeField] private List<FigureData> _figureCreators = new();
-    public List<FigureData> FigureCreators => _figureCreators;
-
+    [SerializeField] private List<FigureData> _creators = new();
+    public List<FigureData> Creators => _creators;
+   
     public Factory()
     {
         Register(new Pawn(0, 0, "w_pawn", ColorFigure.White));
@@ -21,22 +21,22 @@ public class Factory
         Register(new Knight(0, 0, "b_knight", ColorFigure.Black));
         Register(new Queen(0, 0, "b_queen", ColorFigure.Black));
     }
-    public FigureData Figure(string name)
+    public FigureData GetFigure(string name)
     {
-        foreach (var figure in _figureCreators)
+        foreach (var figure in _creators)
             if (figure.Name == name)
                 return figure;
 
         return null;
     }
-    public FigureData Figure(int index)
+    public FigureData GetFigure(int index)
     {
-        return _figureCreators[index];
+        return _creators[index];
     }
 
     public void Register(FigureData creator)
     {
-        _figureCreators.Add(creator);
+        _creators.Add(creator);
     }
 
 }

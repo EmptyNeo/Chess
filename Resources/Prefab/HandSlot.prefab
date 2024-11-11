@@ -119,7 +119,7 @@ GameObject:
   - component: {fileID: 3793350169291325958}
   - component: {fileID: 7461903529916558269}
   m_Layer: 5
-  m_Name: Drag
+  m_Name: ViewCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

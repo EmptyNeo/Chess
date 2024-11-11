@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class DeckData : MonoBehaviour
+public class Deck : MonoBehaviour
 {
     public int Amount;
     public TMP_Text TAmount;
     public List<FigureData> Figures = new();
     public GameObject HandSlot;
-    public Transform Deck;
+    public Transform DeckPoint;
     public Hand Hand;
     public float duration;
-
+    public List<string> NameFigures = new();
     public void AddToDeck(FigureData figure)
     {
         Figures.Add(figure);
@@ -20,7 +20,7 @@ public class DeckData : MonoBehaviour
     }
     public void SpawnFigure(FigureData figureData)
     {
-        HandSlot slot = Instantiate(HandSlot, Deck.position, Quaternion.identity, Hand.transform).GetComponent<HandSlot>();
+        HandSlot slot = Instantiate(HandSlot, DeckPoint.position, Quaternion.identity, Hand.transform).GetComponent<HandSlot>();
 
         StartCoroutine(Hand.AddToHand(slot));
         slot.SetFigure(figureData);
@@ -31,26 +31,29 @@ public class DeckData : MonoBehaviour
     public void SpawnFigure()
     {
         int index = Random.Range(0, Figures.Count);
-        HandSlot slot = Instantiate(HandSlot, Deck.position, Quaternion.identity, Hand.transform).GetComponent<HandSlot>();
+        HandSlot slot = Instantiate(HandSlot, DeckPoint.position, Quaternion.identity, Hand.transform).GetComponent<HandSlot>();
         StartCoroutine(Hand.AddToHand(slot));
         slot.SetFigure(Figures[index]);
         slot.SetAmountMana(Figures[index].Cost);
         Figures.RemoveAt(index);
         TAmount.text = $"x{--Amount}";
     }
-    public void GiveKitDefault(Factory factory)
+    public void GiveDefaultDeck(Factory factory)
     {
         for (int i = 0; i < 8; i++)
-            AddToDeck(factory.Figure("w_pawn"));
-        for (int i = 0; i < 2; i++)
-        {
-            AddToDeck(factory.Figure("w_bishop"));
-            AddToDeck(factory.Figure("w_knight"));
-            AddToDeck(factory.Figure("w_rook"));
-        }
-        AddToDeck(factory.Figure("w_queen"));
+            AddToDeck(factory.GetFigure("w_pawn"));
     }
-
+    public void GiveDeckCards(DataDeck dataDeck,Factory factory)
+    {
+        if (dataDeck != null)
+        {
+            for (int i = 0; i < dataDeck.figures.Length; i++)
+            {
+                AddToDeck(factory.GetFigure(dataDeck.figures[i]));
+                NameFigures.Add(dataDeck.figures[i]);
+            }
+        }
+    }
     public IEnumerator GiveFigure(Sounds sounds, AudioClip sound)
     {
         if (Figures.Count == 0)

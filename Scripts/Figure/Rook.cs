@@ -2,7 +2,7 @@
 
 public class Rook : FigureData
 {
-    public Rook(int x, int y, string nameSprite, ColorFigure colorFigure) : base(x, y, nameSprite, colorFigure)
+    public Rook(int x, int y, string nameSprite, TypeFigure typeFigure) : base(x, y, nameSprite, typeFigure)
     {
         Icon = SpriteUtil.Load("pieces", nameSprite);
         Cost = 1;
@@ -11,9 +11,8 @@ public class Rook : FigureData
     }
     public override bool CanMove(Slot targetSlot)
     {
-        if (IsFigure(targetSlot))
+        if (targetSlot.CardData.TypeFigure == TypeFigure.Special)
             return false;
-
 
         if (X == targetSlot.X && Y == targetSlot.Y)
             return false;
@@ -43,7 +42,7 @@ public class Rook : FigureData
                 }
             }
 
-            if (targetSlot.CardData.NotNull && targetSlot.CardData.ColorFigure == ColorFigure)
+            if (targetSlot.CardData.NotNull && targetSlot.CardData.TypeFigure == TypeFigure)
             {
                 return false;
             }
@@ -56,7 +55,7 @@ public class Rook : FigureData
 
     public override object Clone()
     {
-        return new Rook(X, Y, Name, ColorFigure)
+        return new Rook(X, Y, Name, TypeFigure)
         {
             NotNull = true,
             Icon = Icon

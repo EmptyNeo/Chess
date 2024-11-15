@@ -10,18 +10,19 @@ public class Factory
    
     public Factory()
     {
-        Register(new Pawn(0, 0, "w_pawn", ColorFigure.White));
-        Register(new Bishop(0, 0, "w_bishop", ColorFigure.White));
-        Register(new Rook(0, 0, "w_rook", ColorFigure.White));
-        Register(new Knight(0, 0, "w_knight", ColorFigure.White));
-        Register(new Queen(0, 0, "w_queen", ColorFigure.White));
-        Register(new Pawn(0, 0, "b_pawn", ColorFigure.Black));
-        Register(new Bishop(0, 0, "b_bishop", ColorFigure.Black));
-        Register(new Rook(0, 0, "b_rook", ColorFigure.Black));
-        Register(new Knight(0, 0, "b_knight", ColorFigure.Black));
-        Register(new Queen(0, 0, "b_queen", ColorFigure.Black));
-        Register(new Barrel(0, 0, "barrel", ColorFigure.None));
-        Register(new Thunder(0, 0, "thunder", ColorFigure.None));
+        Register(new Pawn(0, 0, "w_pawn", TypeFigure.White));
+        Register(new Bishop(0, 0, "w_bishop", TypeFigure.White));
+        Register(new Rook(0, 0, "w_rook", TypeFigure.White));
+        Register(new Knight(0, 0, "w_knight", TypeFigure.White));
+        Register(new Queen(0, 0, "w_queen", TypeFigure.White));
+        Register(new Pawn(0, 0, "b_pawn", TypeFigure.Black));
+        Register(new Bishop(0, 0, "b_bishop", TypeFigure.Black));
+        Register(new Rook(0, 0, "b_rook", TypeFigure.Black));
+        Register(new Knight(0, 0, "b_knight", TypeFigure.Black));
+        Register(new Queen(0, 0, "b_queen", TypeFigure.Black));
+        Register(new Barrel(0, 0, "barrel", TypeFigure.Special));
+        Register(new Thunder(0, 0, "thunder", TypeFigure.Special));
+        Register(new AccelerationCard(0, 0, "acceleration", TypeFigure.Special));
     }
     public CardData GetFigure(string name)
     {

@@ -83,15 +83,20 @@ public class Board : MonoBehaviour
             }
         }
     }
-    public void ShowBacklight(CardData cardData)
+    public void ShowBacklight(CardData cardData, bool isExpose)
     {
         for (int i = 0; i < Slots.GetLength(0); i++)
         {
             for (int j = 0; j < Slots.GetLength(1); j++)
             {
-                if (cardData.TryShowBacklight(Slots[i, j]))
+                if (cardData.TryExpose(Slots[i, j]))
                 {
-                    Slots[i, j].Backlight.SetActive(true);
+                    Slots[i, j].Backlight.gameObject.SetActive(true);
+                    if (isExpose)
+                    {
+                        Slots[i, j].Backlight.color = new Color(0, 1, 0, Slots[i, j].Backlight.color.a);
+                    }
+                    else Slots[i, j].Backlight.color = new Color(1, 0, 0, Slots[i, j].Backlight.color.a); 
                 }
             }
         }
@@ -102,7 +107,7 @@ public class Board : MonoBehaviour
         {
             for (int j = 0; j < Slots.GetLength(1); j++)
             {
-                Slots[i, j].Backlight.SetActive(false);
+                Slots[i, j].Backlight.gameObject.SetActive(false);
             }
         }
     }

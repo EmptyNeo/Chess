@@ -72,12 +72,12 @@ MonoBehaviour:
     Cost: 0
     NotNull: 0
     Name: 
-    ColorFigure: 0
+    TypeFigure: 0
     Priority: 0
   FigureImage: {fileID: 9089779374991447307}
   Outline: {fileID: 909876086326832746}
   Hint: {fileID: 8018871171618475947}
-  Backlight: {fileID: 4930380229432981912}
+  Backlight: {fileID: 2485924939732013007}
   DragSlot: {fileID: 4270173411757579689}
 --- !u!61 &-3048324125417512765
 BoxCollider2D:

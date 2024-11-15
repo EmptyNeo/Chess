@@ -8,7 +8,7 @@ public class Slot : MonoBehaviour
     public Image FigureImage;
     public Image Outline;
     public GameObject Hint;
-    public GameObject Backlight;
+    public Image Backlight;
     public DragSlot DragSlot;
 
     public void SetFigure(CardData cardData)
@@ -21,7 +21,7 @@ public class Slot : MonoBehaviour
     }
     public void Nullify()
     {
-        CardData = new FigureData(0, 0, "", ColorFigure.None)
+        CardData = new FigureData(0, 0, "", TypeFigure.None)
         {
             NotNull = false,
             Icon = null

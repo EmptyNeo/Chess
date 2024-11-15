@@ -10,7 +10,7 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (OldSlot.CardData.LimitMove > 0 || OldSlot.CardData.ColorFigure != ColorFigure.White)
+        if (OldSlot.CardData.LimitMove > 0 || OldSlot.CardData.TypeFigure != TypeFigure.White)
             return;
         if (OldSlot.CardData.NotNull && TryDrag)
         {
@@ -21,7 +21,7 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (OldSlot.CardData.LimitMove > 0 || OldSlot.CardData.ColorFigure != ColorFigure.White)
+        if (OldSlot.CardData.LimitMove > 0 || OldSlot.CardData.TypeFigure != TypeFigure.White)
             return;
 
         if (TryDrag)
@@ -50,7 +50,7 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (OldSlot.CardData.LimitMove > 0 || OldSlot.CardData.ColorFigure != ColorFigure.White)
+        if (OldSlot.CardData.LimitMove > 0 || OldSlot.CardData.TypeFigure != TypeFigure.White)
             return;
 
         if (TryDrag && OldSlot.CardData.NotNull)

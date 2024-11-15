@@ -2,7 +2,7 @@
 
 public class Queen : FigureData
 {
-    public Queen(int x, int y, string nameSprite, ColorFigure colorFigure) : base(x, y, nameSprite, colorFigure)
+    public Queen(int x, int y, string nameSprite, TypeFigure typeFigure) : base(x, y, nameSprite, typeFigure)
     {
         Icon = SpriteUtil.Load("pieces", nameSprite);
         Cost = 2;
@@ -11,9 +11,8 @@ public class Queen : FigureData
     }
     public override bool CanMove(Slot targetSlot)
     {
-        if (IsFigure(targetSlot))
+        if (targetSlot.CardData.TypeFigure == TypeFigure.Special)
             return false;
-
 
         if (targetSlot.X == X && targetSlot.Y == Y)
             return false;
@@ -34,7 +33,7 @@ public class Queen : FigureData
                 if (Board.Instance.Slots[Y + i * directionY, X + i * directionX].CardData.NotNull)
                     return false;
 
-            if (targetSlot.CardData.NotNull && targetSlot.CardData.ColorFigure == ColorFigure)
+            if (targetSlot.CardData.NotNull && targetSlot.CardData.TypeFigure == TypeFigure)
                 return false;
 
             return true;
@@ -69,7 +68,7 @@ public class Queen : FigureData
             }
 
             if (targetSlot.CardData.NotNull &&
-                targetSlot.CardData.ColorFigure == ColorFigure)
+                targetSlot.CardData.TypeFigure == TypeFigure)
             {
                 return false;
             }
@@ -82,7 +81,7 @@ public class Queen : FigureData
 
     public override object Clone()
     {
-        return new Queen(X, Y, Name, ColorFigure)
+        return new Queen(X, Y, Name, TypeFigure)
         {
             NotNull = true,
             Icon = Icon

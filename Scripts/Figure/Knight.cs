@@ -2,7 +2,7 @@
 
 public class Knight : FigureData
 {
-    public Knight(int x, int y, string nameSprite, ColorFigure colorFigure) : base(x, y, nameSprite, colorFigure)
+    public Knight(int x, int y, string nameSprite, TypeFigure typeFigure) : base(x, y, nameSprite, typeFigure)
     {
         Icon = SpriteUtil.Load("pieces", nameSprite);
         Cost = 1;
@@ -11,16 +11,15 @@ public class Knight : FigureData
     }
     public override bool CanMove(Slot targetSlot)
     {
-        if (IsFigure(targetSlot))
+        if (targetSlot.CardData.TypeFigure == TypeFigure.Special)
             return false;
-
 
         if (X == targetSlot.X && Y == targetSlot.Y)
             return false;
 
         if (Mathf.Abs(targetSlot.X - X) == 1 && Mathf.Abs(targetSlot.Y - Y) == 2 || Mathf.Abs(targetSlot.X - X) == 2 && Mathf.Abs(targetSlot.Y - Y) == 1)
         {
-            if (targetSlot.CardData.NotNull && targetSlot.CardData.ColorFigure == ColorFigure)
+            if (targetSlot.CardData.NotNull && targetSlot.CardData.TypeFigure == TypeFigure)
                 return false;
 
             return true;
@@ -30,7 +29,7 @@ public class Knight : FigureData
 
     public override object Clone()
     {
-        return new Knight(X, Y, Name, ColorFigure)
+        return new Knight(X, Y, Name, TypeFigure)
         {
             NotNull = true,
             Icon = Icon

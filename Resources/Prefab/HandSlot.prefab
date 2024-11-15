@@ -61,15 +61,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   X: 0
   Y: 0
-  Figure:
+  CardData:
     X: 0
     Y: 0
     Icon: {fileID: 0}
     Cost: 0
     NotNull: 0
     Name: 
-    IsFirstTurn: 0
-    ColorFigure: 0
+    TypeFigure: 0
     Priority: 0
   FigureImage: {fileID: 9089779374991447307}
   Cost: {fileID: 1674142561319220526}
@@ -169,7 +168,7 @@ MonoBehaviour:
   OldSlot: {fileID: 8723226273693144737}
   IsDragging: 0
   TryDrag: 1
-  _icon: {fileID: 7798401881379653234}
+  Icon: {fileID: 7798401881379653234}
   objDelete: 0
 --- !u!114 &3793350169291325958
 MonoBehaviour:

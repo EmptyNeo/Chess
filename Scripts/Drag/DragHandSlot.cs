@@ -11,8 +11,8 @@ public class DragHandSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
     public bool IsDragging;
 
     public bool TryDrag = true;
-    private Image _image => GetComponent<Image>();
-    public GameObject _icon;
+    public Image Image => GetComponent<Image>();
+    public GameObject Icon;
 
     public bool objDelete;
     public void OnDrag(PointerEventData eventData)
@@ -31,39 +31,32 @@ public class DragHandSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
             Vector2 pos = transform.position;
             GetComponentInChildren<RectTransform>().localScale = new Vector2(1.25f, 1.25f);
             transform.position = pos;
-            _image.color = new Color(_image.color.r, _image.color.g, _image.color.b, 0.75f);
-            _image.raycastTarget = false;
+            Image.color = new Color(Image.color.r, Image.color.g, Image.color.b, 0.75f);
+            Image.raycastTarget = false;
             IsDragging = true;
             transform.SetParent(transform.parent.parent);
-            Board.Instance.ShowBacklight(OldSlot.CardData);
-            Image image = Main.Instance.HintPanel.transform.GetChild(0).GetComponent<Image>();
-            if (Characteristics.Instance.Mana < OldSlot.CardData.Cost)
-            {
-                image.color = new Color(1, 0, 0, image.color.a);
-            }
-            else
-            {
-                image.color = new Color(0, 1, 0, image.color.a);
-            }
+            Board.Instance.ShowBacklight(OldSlot.CardData, Characteristics.Instance.Mana >= OldSlot.CardData.Cost);
             Main.Instance.Hand.ResetAlignetSet();
             Main.Instance.Hand.SmoothMovement();
         }
 
     }
+    int j;
     public void OnPointerUp(PointerEventData eventData)
     {
         if (OldSlot.CardData.NotNull && TryDrag)
         {
             GetComponentInChildren<RectTransform>().localScale = new Vector2(1f, 1f);
-            _image.color = new Color(_image.color.r, _image.color.g, _image.color.b, 1f);
+            Image.color = new Color(Image.color.r, Image.color.g, Image.color.b, 1f);
             RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
             if (hit.collider != null && hit.collider.TryGetComponent(out Slot slot))
             {
-               
-                if (slot.CardData.NotNull == false)
+                if (OldSlot.CardData is FigureData && slot.CardData.NotNull == false)
                     StartCoroutine(RechargeSlot(slot));
-                else if (OldSlot.CardData.TryExpose(slot) && slot.CardData.NotNull && OldSlot.CardData is SpecialCard)
-                    StartCoroutine(Display(slot));
+                else if (OldSlot.CardData is SpecialCard specialCard && OldSlot.CardData.TryExpose(slot))
+                {
+                    StartCoroutine(specialCard.Recharge(this, slot));
+                }
                 else
                 {
                     StartCoroutine(Movement.Smooth(transform, 0.2f, transform.position, OldSlot.transform.position));
@@ -78,7 +71,7 @@ public class DragHandSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
 
 
             Board.Instance.HideBacklight();
-            _image.raycastTarget = true;
+            Image.raycastTarget = true;
             IsDragging = false;
             Main.Instance.HintPanel.SetActive(false);
             transform.SetParent(OldSlot.transform);
@@ -92,32 +85,25 @@ public class DragHandSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
     }
     public IEnumerator RechargeSlot(Slot newSlot)
     {
-        if (Characteristics.Instance.Mana < OldSlot.CardData.Cost || OldSlot.CardData.TryExpose(newSlot))
+        if (Characteristics.Instance.Mana < OldSlot.CardData.Cost || OldSlot.CardData.TryExpose(newSlot) == false)
         {
             yield return Movement.Smooth(transform, 0.2f, transform.position, OldSlot.transform.position);
         }
         else
         {
-            yield return Display(newSlot);
+            objDelete = true;
+            Icon.SetActive(false);
+            yield return Movement.TakeOpacity(transform, newSlot.transform.position, Image, 1, 10);
+            yield return new WaitForSeconds(0.01f);
+            OldSlot.CardData.PlaySound();
+            Characteristics.Instance.TakeMana(OldSlot.CardData.Cost);
+            newSlot.SetFigure(OldSlot.CardData);
+            newSlot.DragSlot.TryDrag = false;
+            int index = OldSlot.transform.GetSiblingIndex();
+            OldSlot.Hand.DisplayedSlot.Add(newSlot);
+            OldSlot.Hand.RemoveFromHand(index);
+            yield return Main.Levels[Main.Instance.IndexLevel].Rival.EndTurn();
+            Destroy(OldSlot.gameObject);
         }
-    }
-
-    private IEnumerator Display(Slot newSlot)
-    {
-        objDelete = true;
-        _icon.SetActive(false);
-        yield return Movement.TakeOpacity(transform, newSlot.transform.position, _image, 1, 10);
-        yield return new WaitForSeconds(0.01f);
-        OldSlot.CardData.PlaySound();
-        Characteristics.Instance.TakeMana(OldSlot.CardData.Cost);
-        newSlot.SetFigure(OldSlot.CardData);
-        newSlot.DragSlot.TryDrag = false;
-        int index = OldSlot.transform.GetSiblingIndex();
-        OldSlot.Hand.DisplayedSlot.Add(newSlot);
-        OldSlot.Hand.RemoveFromHand(index);
-        if (newSlot.CardData is SpecialCard specialCard)
-            specialCard.Ability();
-        yield return Main.Levels[Main.Instance.IndexLevel].Rival.EndTurn();
-        Destroy(OldSlot.gameObject);
     }
 }

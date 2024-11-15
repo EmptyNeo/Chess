@@ -1,7 +1,7 @@
 ﻿public class Pawn : FigureData
 {
 
-    public Pawn(int x, int y, string nameSprite, ColorFigure colorFigure) : base(x, y, nameSprite, colorFigure)
+    public Pawn(int x, int y, string nameSprite, TypeFigure typeFigure) : base(x, y, nameSprite, typeFigure)
     {
         LimitMove = 0;
         Icon = SpriteUtil.Load("pieces", nameSprite);
@@ -11,17 +11,16 @@
 
     public override bool CanMove(Slot targetSlot)
     {
-        if (IsFigure(targetSlot))
+        if (targetSlot.CardData.TypeFigure == TypeFigure.Special)
             return false;
-
-        if (ColorFigure == ColorFigure.White)
+        if (TypeFigure == TypeFigure.White)
         {
             if (X == targetSlot.X && Y == targetSlot.Y)
                 return false;
 
             if (targetSlot.X == X - 1 && targetSlot.Y == Y - 1 || targetSlot.X == X + 1 && targetSlot.Y == Y - 1)
             {
-                if (targetSlot.CardData.NotNull && targetSlot.CardData.ColorFigure != ColorFigure)
+                if (targetSlot.CardData.NotNull && targetSlot.CardData.TypeFigure != TypeFigure)
                     return true;
             }
 
@@ -39,7 +38,7 @@
 
             if (targetSlot.X == X - 1 && targetSlot.Y == Y + 1 || targetSlot.X == X + 1 && targetSlot.Y == Y + 1)
             {
-                if (targetSlot.CardData.NotNull && targetSlot.CardData.ColorFigure != ColorFigure)
+                if (targetSlot.CardData.NotNull && targetSlot.CardData.TypeFigure != TypeFigure)
                     return true;
             }
 
@@ -53,7 +52,7 @@
     }
     public override object Clone()
     {
-        return new Pawn(X, Y, Name, ColorFigure)
+        return new Pawn(X, Y, Name, TypeFigure)
         {
             NotNull = true,
             Icon = Icon

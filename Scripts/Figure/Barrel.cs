@@ -1,8 +1,9 @@
+using System.Collections;
 using UnityEngine;
 
 public class Barrel : SpecialCard
 {
-    public Barrel(int x, int y, string nameSprite, ColorFigure colorFigure) : base(x, y, nameSprite, colorFigure)
+    public Barrel(int x, int y, string nameSprite, TypeFigure typeFigure) : base(x, y, nameSprite, typeFigure)
     {
         Name = nameSprite;
         Icon = SpriteUtil.Load("special_card", nameSprite);
@@ -23,32 +24,26 @@ public class Barrel : SpecialCard
     }
     public override void Ability()
     {
-        if (X + 1 < Board.Instance.Slots.GetLength(1)  && Board.Instance.Slots[Y, X + 1].CardData.NotNull == false)
+        if (X + 1 < Board.Instance.Slots.GetLength(1) && Board.Instance.Slots[Y, X + 1].CardData.NotNull == false)
         {
-            Board.Instance.Slots[Y, X + 1].SetFigure(new Barrel(X + 1, Y, "barrel", ColorFigure.None));
+            Board.Instance.Slots[Y, X + 1].SetFigure(new Barrel(X + 1, Y, "barrel", TypeFigure.Special));
         }
         if (X - 1 > 0 && Board.Instance.Slots[Y, X - 1].CardData.NotNull == false)
         {
-            Board.Instance.Slots[Y, X - 1].SetFigure(new Barrel(X - 1, Y, "barrel", ColorFigure.None));
+            Board.Instance.Slots[Y, X - 1].SetFigure(new Barrel(X - 1, Y, "barrel", TypeFigure.Special));
         }
     }
     public override bool TryExpose(Slot slot)
     {
-        if (slot.Y < 5 && slot.CardData.NotNull == false)
+        if (slot.Y > 4 && slot.CardData.NotNull == false)
             return true;
 
         return false;
     }
-    public override bool TryShowBacklight(Slot newSlot)
-    {
-        if (newSlot.Y > 4 && !newSlot.CardData.NotNull)
-            return true;
 
-        return false;
-    }
     public override object Clone()
     {
-        return new Barrel(X, Y, Name, ColorFigure)
+        return new Barrel(X, Y, Name, TypeFigure)
         {
             NotNull = true,
             Icon = Icon

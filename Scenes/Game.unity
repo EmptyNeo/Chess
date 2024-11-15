@@ -2479,6 +2479,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slot
       objectReference: {fileID: 0}
+    - target: {fileID: 2448717209722883975, guid: 9e9e3ac8b45328f459df05212533c2e1, type: 3}
+      propertyPath: Backlight
+      value: 
+      objectReference: {fileID: 1063262592}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5383,6 +5387,17 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1063262592 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2485924939732013007, guid: 9e9e3ac8b45328f459df05212533c2e1, type: 3}
+  m_PrefabInstance: {fileID: 533811608}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1069143251
 GameObject:
   m_ObjectHideFlags: 0

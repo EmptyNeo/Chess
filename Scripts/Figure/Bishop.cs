@@ -2,7 +2,7 @@
 
 public class Bishop : FigureData
 {
-    public Bishop(int x, int y, string nameSprite, ColorFigure colorFigure) : base(x, y, nameSprite, colorFigure)
+    public Bishop(int x, int y, string nameSprite, TypeFigure typeFigure) : base(x, y, nameSprite, typeFigure)
     {
         Icon = SpriteUtil.Load("pieces", nameSprite);
         Cost = 1;
@@ -11,7 +11,7 @@ public class Bishop : FigureData
     }
     public override bool CanMove(Slot targetSlot)
     {
-        if (IsFigure(targetSlot))
+        if (targetSlot.CardData.TypeFigure == TypeFigure.Special)
             return false;
 
         if (targetSlot.X == X && targetSlot.Y == Y)
@@ -28,7 +28,7 @@ public class Bishop : FigureData
                 if (Board.Instance.Slots[Y + i * directionY, X + i * directionX].CardData.NotNull)
                     return false;
 
-            if (targetSlot.CardData.NotNull && targetSlot.CardData.ColorFigure == ColorFigure)
+            if (targetSlot.CardData.NotNull && targetSlot.CardData.TypeFigure == TypeFigure)
                 return false;
 
             return true;
@@ -38,7 +38,7 @@ public class Bishop : FigureData
 
     public override object Clone()
     {
-        return new Bishop(X, Y, Name, ColorFigure)
+        return new Bishop(X, Y, Name, TypeFigure)
         {
             NotNull = true,
             Icon = Icon

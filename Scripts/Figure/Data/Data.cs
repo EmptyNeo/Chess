@@ -11,7 +11,7 @@ public abstract class Data : ICloneable
     public int Cost;
     public bool NotNull;
     public string Name;
-    public ColorFigure ColorFigure;
+    public TypeFigure TypeFigure;
     public int Priority;
     protected int _limitMove;
     public virtual int LimitMove
@@ -28,6 +28,6 @@ public abstract class Data : ICloneable
     }
     public abstract void PlaySound();
     public abstract bool TryExpose(Slot slot);
-    public abstract bool TryShowBacklight(Slot newSlot);
+
     public abstract object Clone();
 }

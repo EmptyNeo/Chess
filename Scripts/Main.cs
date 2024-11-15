@@ -50,6 +50,7 @@ public class Main : Sounds
         DeckData.GiveDefaultDeck(Factory);
         StartCoroutine(DeckData.GiveFigure(this, Sound, Factory.GetFigure("w_pawn")));
         DeckData.AddToDeck(Factory.GetFigure("thunder"));
+        DeckData.AddToDeck(Factory.GetFigure("acceleration"));
         DataDeck deck = BinarySavingSystem.LoadDeck();
         DeckData.GiveDeckCards(deck, Factory);
         Board.DisableDragFigure();
@@ -168,10 +169,10 @@ public class Main : Sounds
     }
     public void GiveRandomCardToDeck()
     {
-        List<FigureData> creators = new();
-        foreach (FigureData f in Factory.Creators)
+        List<CardData> creators = new();
+        foreach (CardData f in Factory.Creators)
         {
-            if ((f.ColorFigure == ColorFigure.White || f.ColorFigure == ColorFigure.None) && f.Name != "w_pawn")
+            if ((f.TypeFigure == TypeFigure.White || f.TypeFigure == TypeFigure.Special) && f.Name != "w_pawn")
             {
                 if (DeckData.NameFigures.Count + 8 < 16)
                     creators.Add(f);

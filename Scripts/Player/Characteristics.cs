@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Characteristics : MonoBehaviour
 {
-    private int _mana;
+    [SerializeField] private int _mana;
     public int Mana 
     { 
         get => _mana;

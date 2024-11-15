@@ -5,8 +5,8 @@ using UnityEngine;
 [Serializable]
 public class Factory
 {
-    [SerializeField] private List<FigureData> _creators = new();
-    public List<FigureData> Creators => _creators;
+    [SerializeField] private List<CardData> _creators = new();
+    public List<CardData> Creators => _creators;
    
     public Factory()
     {
@@ -20,8 +20,10 @@ public class Factory
         Register(new Rook(0, 0, "b_rook", ColorFigure.Black));
         Register(new Knight(0, 0, "b_knight", ColorFigure.Black));
         Register(new Queen(0, 0, "b_queen", ColorFigure.Black));
+        Register(new Barrel(0, 0, "barrel", ColorFigure.None));
+        Register(new Thunder(0, 0, "thunder", ColorFigure.None));
     }
-    public FigureData GetFigure(string name)
+    public CardData GetFigure(string name)
     {
         foreach (var figure in _creators)
             if (figure.Name == name)
@@ -29,12 +31,12 @@ public class Factory
 
         return null;
     }
-    public FigureData GetFigure(int index)
+    public CardData GetFigure(int index)
     {
         return _creators[index];
     }
 
-    public void Register(FigureData creator)
+    public void Register(CardData creator)
     {
         _creators.Add(creator);
     }

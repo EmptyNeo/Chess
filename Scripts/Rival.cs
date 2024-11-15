@@ -36,7 +36,7 @@ public class Rival
         {
             int y = Random.Range(0, 3);
             int x = Random.Range(0, board.Slots.GetLength(1));
-            if (board.Slots[y, x].Figure.NotNull)
+            if (board.Slots[y, x].CardData.NotNull)
                 RerollSlot(board, ref y, ref x);
 
             Slot boardSlot = board.Slots[y, x];
@@ -48,7 +48,7 @@ public class Rival
             yield return new WaitForSeconds(0.15f);
 
             main.PlaySound(main.AudioExposeFigure, 1, 1);
-            boardSlot.SetFigure(handSlot.Figure);
+            boardSlot.SetFigure(handSlot.CardData);
             Object.Destroy(handSlot.gameObject);
             DisplayedSlot.Add(boardSlot);
             Figure.RemoveAt(index);
@@ -58,7 +58,7 @@ public class Rival
     {
         y = Random.Range(0, 3);
         x = Random.Range(0, board.Slots.GetLength(1));
-        if (board.Slots[y, x].Figure.NotNull)
+        if (board.Slots[y, x].CardData.NotNull)
             RerollSlot(board, ref y, ref x);
     }
 }

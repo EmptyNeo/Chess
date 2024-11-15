@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -24,11 +22,12 @@ public class Main : Sounds
     public Transform RivalHand;
     public GameObject Win;
     public GameObject Lose;
+    public GameObject Pick;
     public TutorialText TutorialText;
     public Card Card;
     public Transform[] CardPoint;
     public static Main Instance { get; private set; }
-    public static int indexLevel;
+    public int IndexLevel;
     public static List<Level> Levels = new()
     {
         new Level0(),
@@ -50,11 +49,15 @@ public class Main : Sounds
         Factory = new Factory();
         DeckData.GiveDefaultDeck(Factory);
         StartCoroutine(DeckData.GiveFigure(this, Sound, Factory.GetFigure("w_pawn")));
-
+        DeckData.AddToDeck(Factory.GetFigure("thunder"));
         DataDeck deck = BinarySavingSystem.LoadDeck();
         DeckData.GiveDeckCards(deck, Factory);
         Board.DisableDragFigure();
-        Levels[indexLevel].Init();
+        if (PlayerPrefs.HasKey("IndexLevel"))
+        {
+            IndexLevel = PlayerPrefs.GetInt("IndexLevel");
+        }
+        Levels[IndexLevel].Init();
     }
 
 
@@ -63,7 +66,7 @@ public class Main : Sounds
         if (Input.GetKeyDown(KeyCode.C))
         {
             int index = Random.Range(0, Factory.Creators.Count);
-            DeckData.AddToDeck(Factory.Creators[index]);
+            DeckData.AddToDeck(Factory.Creators[index]);    
         }
         if (Input.GetKeyUp(KeyCode.V))
         {
@@ -71,8 +74,8 @@ public class Main : Sounds
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
-            Win.SetActive(true);
-            StartCoroutine(GiveRandomCardToDeck());
+            Pick.SetActive(true);
+            GiveRandomCardToDeck();
         }
     }
     public void StartEndTurn()
@@ -84,6 +87,7 @@ public class Main : Sounds
 
     private IEnumerator EndTurn()
     {
+        
         if (_tryEndTurn)
         {
             _tryEndTurn = false;
@@ -104,8 +108,12 @@ public class Main : Sounds
     }
     public IEnumerator Back()
     {
-        Board.DisableFirstTurn();
-        if (Hand.Slots.Count > 0 || DeckData.Figures.Count > 0)
+        for (int i = 0; i < Hand.DisplayedSlot.Count; i++)
+        {
+            Hand.DisplayedSlot[i].CardData.LimitMove--;
+        }
+        
+        if (Hand.Slots.Count > 0 || DeckData.Cards.Count > 0)
         {
             Board.DisableDragFigure();
             yield return new WaitForSeconds(0.25f);
@@ -130,14 +138,13 @@ public class Main : Sounds
             _tryEndTurn = true;
         }
 
-        if (Levels[indexLevel].Rival.DisplayedSlot.Count == 0
-            && Levels[indexLevel].Rival.Figure.Count == 0)
+        if (Levels[IndexLevel].Rival.DisplayedSlot.Count == 0
+            && Levels[IndexLevel].Rival.Figure.Count == 0)
         {
             PlaySound(AudioWin, 1, 1);
             Win.SetActive(true);
-            yield return GiveRandomCardToDeck();
         }
-        else if (Hand.DisplayedSlot.Count == 0 && DeckData.Figures.Count == 0 && Hand.Slots.Count == 0)
+        else if (Hand.DisplayedSlot.Count == 0 && DeckData.Cards.Count == 0 && Hand.Slots.Count == 0)
         {
             PlaySound(AudioLose, 1, 1);
             Lose.SetActive(true);
@@ -150,31 +157,36 @@ public class Main : Sounds
     }
     public void Continue()
     {
+        Win.SetActive(false);
+        Pick.SetActive(true);
+
+        GiveRandomCardToDeck();
+    }
+    public void Skip()
+    {
         SceneManager.LoadScene("Map");
     }
-    public IEnumerator GiveRandomCardToDeck()
+    public void GiveRandomCardToDeck()
     {
         List<FigureData> creators = new();
         foreach (FigureData f in Factory.Creators)
         {
-            if (f.ColorFigure == ColorFigure.White && f.Name != "w_pawn")
+            if ((f.ColorFigure == ColorFigure.White || f.ColorFigure == ColorFigure.None) && f.Name != "w_pawn")
             {
                 if (DeckData.NameFigures.Count + 8 < 16)
                     creators.Add(f);
                 else
-                    Win.transform.GetChild(0).gameObject.SetActive(true);
+                    Pick.transform.GetChild(0).gameObject.SetActive(true);
             }
         }
         if (creators.Count > 0)
         {
             for (int i = 0; i < 3; i++)
             {
-                Card card = Instantiate(Card.gameObject, CardPoint[0].transform.position, Quaternion.identity, Win.transform).GetComponent<Card>();
+                Card card = Instantiate(Card.gameObject, CardPoint[i].transform.position, Quaternion.identity, Pick.transform).GetComponent<Card>();
                 int index = Random.Range(0, creators.Count);
                 card.SetCard(creators[index]);
                 creators.RemoveAt(index);
-                yield return Movement.Smooth(card.transform, 0.25f, card.transform.position, CardPoint[i].position);
-                yield return new WaitForSeconds(0.2f);
             }
         }
     }

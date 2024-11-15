@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 2ceb8ab966b3e7c41bec4479bb7a3ee7
+guid: 52e4f6f8b02455047a0fb61baf3c7797
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 24
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -69,7 +69,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 64
+    maxTextureSize: 256
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -136,85 +136,43 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Walk Person _0
+      name: barrel
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 15
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        y: 16
+        width: 16
+        height: 16
+      alignment: 9
+      pivot: {x: 0.4642404, y: 0.4553002}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 71d3a3f1a340307429961be58dd450ba
-      internalID: 1603754587
+      spriteID: be883409faa2c3c4b881c73bfa8550c2
+      internalID: -143341600
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Walk Person _1
+      name: thunder
       rect:
         serializedVersion: 2
-        x: 15
-        y: 0
-        width: 15
-        height: 24
+        x: 16
+        y: 16
+        width: 16
+        height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2bc2a5845100e984eb45b3b340318f5d
-      internalID: 819594061
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Walk Person _2
-      rect:
-        serializedVersion: 2
-        x: 30
-        y: 0
-        width: 15
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e98a51cdbbb3e5d46afdb3266b807bc6
-      internalID: 1053404293
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Walk Person _3
-      rect:
-        serializedVersion: 2
-        x: 45
-        y: 0
-        width: 15
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e4899d419150e4d45b7e26cc939c8f5e
-      internalID: 478502695
+      spriteID: 27bd8e5f40cf0f04fa390de73e55071f
+      internalID: -1858730906
       vertices: []
       indices: 
       edges: []
@@ -230,10 +188,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Walk Person _0: 1603754587
-      Walk Person _1: 819594061
-      Walk Person _2: 1053404293
-      Walk Person _3: 478502695
+      barrel: -143341600
+      thunder: -1858730906
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

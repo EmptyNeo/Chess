@@ -1,12 +1,11 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class HandSlot : MonoBehaviour
 {
     public int X, Y;
-    public FigureData Figure;
+    public CardData CardData;
     public Image FigureImage;
     public TMP_Text Cost;
     public Hand Hand;
@@ -20,18 +19,18 @@ public class HandSlot : MonoBehaviour
     {
         Cost.text = cost.ToString();
     }
-    public void SetFigure(FigureData figure)
+    public void SetFigure(CardData figure)
     {
-        Figure = (FigureData)figure.Clone();
-        Figure.X = X;
-        Figure.Y = Y;
-        FigureImage.sprite = Figure.Icon;
+        CardData = (CardData)figure.Clone();
+        CardData.X = X;
+        CardData.Y = Y;
+        FigureImage.sprite = CardData.Icon;
         FigureImage.color = new Color(1, 1, 1, 1);
     }
     public void Nullify()
     {
-        Figure.NotNull = false;
-        Figure = null;
+        CardData.NotNull = false;
+        CardData = null;
         FigureImage.sprite = null;
         FigureImage.color = new Color(1, 1, 1, 0);
     }

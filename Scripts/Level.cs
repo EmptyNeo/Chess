@@ -15,7 +15,7 @@ public class Level0 : Level
     {
         Rival = new Rival(new List<FigureData>()
         {
-            new Pawn(0,1, "b_pawn", ColorFigure.Black),
+            new Pawn(0,2, "b_pawn", ColorFigure.Black),
             new Pawn(1,2, "b_pawn", ColorFigure.Black),
             new Pawn(2,2, "b_pawn", ColorFigure.Black),
             new Pawn(3,2, "b_pawn", ColorFigure.Black),

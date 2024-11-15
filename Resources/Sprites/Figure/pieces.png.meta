@@ -69,10 +69,10 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 256
+    maxTextureSize: 512
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 3
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -404,6 +404,7 @@ TextureImporter:
       b_pawn: -1160403948
       b_queen: -1334180259
       b_rook: 2102413044
+      barrel: -29242438
       w_bishop: -1431933373
       w_king: -604942083
       w_knight: -1028754655

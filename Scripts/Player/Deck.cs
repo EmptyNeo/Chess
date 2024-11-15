@@ -7,35 +7,35 @@ public class Deck : MonoBehaviour
 {
     public int Amount;
     public TMP_Text TAmount;
-    public List<FigureData> Figures = new();
+    public List<CardData> Cards = new();
     public GameObject HandSlot;
     public Transform DeckPoint;
     public Hand Hand;
     public float duration;
     public List<string> NameFigures = new();
-    public void AddToDeck(FigureData figure)
+    public void AddToDeck(CardData card)
     {
-        Figures.Add(figure);
+        Cards.Add(card);
         TAmount.text = $"x{++Amount}";
     }
-    public void SpawnFigure(FigureData figureData)
+    public void SpawnFigure(CardData cardData)
     {
         HandSlot slot = Instantiate(HandSlot, DeckPoint.position, Quaternion.identity, Hand.transform).GetComponent<HandSlot>();
 
         StartCoroutine(Hand.AddToHand(slot));
-        slot.SetFigure(figureData);
-        slot.SetAmountMana(figureData.Cost);
-        Figures.RemoveAt(0);
+        slot.SetFigure(cardData);
+        slot.SetAmountMana(cardData.Cost);
+        Cards.RemoveAt(0);
         TAmount.text = $"x{--Amount}";
     }
     public void SpawnFigure()
     {
-        int index = Random.Range(0, Figures.Count);
+        int index = Random.Range(0, Cards.Count);
         HandSlot slot = Instantiate(HandSlot, DeckPoint.position, Quaternion.identity, Hand.transform).GetComponent<HandSlot>();
         StartCoroutine(Hand.AddToHand(slot));
-        slot.SetFigure(Figures[index]);
-        slot.SetAmountMana(Figures[index].Cost);
-        Figures.RemoveAt(index);
+        slot.SetFigure(Cards[index]);
+        slot.SetAmountMana(Cards[index].Cost);
+        Cards.RemoveAt(index);
         TAmount.text = $"x{--Amount}";
     }
     public void GiveDefaultDeck(Factory factory)
@@ -56,12 +56,12 @@ public class Deck : MonoBehaviour
     }
     public IEnumerator GiveFigure(Sounds sounds, AudioClip sound)
     {
-        if (Figures.Count == 0)
+        if (Cards.Count == 0)
             yield return null;
 
         for (int i = 0; i < 3; i++)
         {
-            if (Figures.Count > 0)
+            if (Cards.Count > 0)
             {
                 sounds.PlaySound(sound, 1, 1);
                 SpawnFigure();
@@ -70,17 +70,17 @@ public class Deck : MonoBehaviour
         }
 
     }
-    public IEnumerator GiveFigure(Sounds sounds, AudioClip sound, FigureData figure)
+    public IEnumerator GiveFigure(Sounds sounds, AudioClip sound, CardData cardData)
     {
-        if (Figures.Count == 0)
+        if (Cards.Count == 0)
             yield return null;
 
         for (int i = 0; i < 3; i++)
         {
-            if (Figures.Count > 0)
+            if (Cards.Count > 0)
             {
                 sounds.PlaySound(sound, 1, 1);
-                SpawnFigure(figure);
+                SpawnFigure(cardData);
                 yield return new WaitForSeconds(0.2f);
             }
         }

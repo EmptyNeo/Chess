@@ -9,13 +9,17 @@ public class Map : MonoBehaviour
     public Transform Player;
     public Animator PlayerAnimator;
     public List<MapPoint> Point = new();
+    public int IndexLevel;
     private void Start()
     {
-
+        if (PlayerPrefs.HasKey("IndexLevel"))
+        {
+            IndexLevel = PlayerPrefs.GetInt("IndexLevel");
+        }
         if (PlayerPrefs.HasKey("index"))
         {
             int index = PlayerPrefs.GetInt("index");
-            if (Main.indexLevel < Point[^1].Index)
+            if (IndexLevel < Point[^1].Index)
             {
                 Vector3 pos = Point[index].transform.position;
                 Player.transform.position = new Vector3(pos.x, pos.y + 0.5f, 0);
@@ -23,6 +27,8 @@ public class Map : MonoBehaviour
             else
             {
                 SceneManager.LoadScene("Victory");
+                BinarySavingSystem.DeleteDeck();
+                PlayerPrefs.DeleteAll();
             }
         }
     }
@@ -36,7 +42,8 @@ public class Map : MonoBehaviour
     }
     public void OnStart(int index)
     {
-        if (Main.indexLevel != index && Point[index].Index == Main.indexLevel + 1)
+        Debug.Log(Main.Instance.IndexLevel);
+        if (IndexLevel != Point[index].Index && Point[index].Index == IndexLevel + 1)
         {
             StartCoroutine(ChoiceLevel(index));
         }
@@ -47,8 +54,9 @@ public class Map : MonoBehaviour
         yield return Movement.Smooth(Player, 1, Player.position, Point[index].transform.position + new Vector3(0, 0.5f,0));
         PlayerAnimator.SetBool("walk", false);
         PlayerPrefs.SetInt("index", index);
+        PlayerPrefs.SetInt("IndexLevel", Point[index].Index);
         PlayerPrefs.Save();
-        Main.indexLevel = Point[index].Index;
+        yield return new WaitForSeconds(0.1f);
         SceneManager.LoadScene("Game");
     }
 }

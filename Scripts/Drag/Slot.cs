@@ -4,25 +4,28 @@ using UnityEngine.UI;
 public class Slot : MonoBehaviour
 {
     public int X, Y;
-    public FigureData Figure;
+    public CardData CardData;
     public Image FigureImage;
     public Image Outline;
     public GameObject Hint;
+    public GameObject Backlight;
     public DragSlot DragSlot;
-    public void SetFigure(FigureData figure)
+
+    public void SetFigure(CardData cardData)
     {
-        Figure = (FigureData)figure.Clone();
-        Figure.X = X;
-        Figure.Y = Y;
-        FigureImage.sprite = Figure.Icon;
-        FigureImage.color = new Color(1,1,1,1);
+        CardData = (CardData)cardData.Clone();
+        CardData.X = X;
+        CardData.Y = Y;
+        FigureImage.sprite = CardData.Icon;
+        FigureImage.color = new Color(1, 1, 1, 1);
     }
     public void Nullify()
     {
-        Figure.NotNull = false;
-        Figure.X = 0;
-        Figure.Y = 0;
-        FigureImage.sprite = null;
+        CardData = new FigureData(0, 0, "", ColorFigure.None)
+        {
+            NotNull = false,
+            Icon = null
+        };
         FigureImage.color = new Color(1, 1, 1, 0);
     }
 

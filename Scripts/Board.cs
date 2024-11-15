@@ -11,8 +11,8 @@ public class Board : MonoBehaviour
     private void Start()
     {
         Instance = this;
-         char[,] Boards =
-        {
+        char[,] Boards =
+       {
             { '@','#','@','#','@','#','@','#' },
             { '#','@','#','@','#','@','#','@' },
             { '@','#','@','#','@','#','@','#' },
@@ -23,9 +23,9 @@ public class Board : MonoBehaviour
             { '#','@','#','@','#','@','#','@' },
             { '@','#','@','#','@','#','@','#' },
         };
-    int i = 0,
-            j = 0,
-            limit = 8;
+        int i = 0,
+                j = 0,
+                limit = 8;
         for (int k = 0; k < transform.childCount; k++)
         {
             if (j == limit)
@@ -60,13 +60,13 @@ public class Board : MonoBehaviour
         }
 
     }
-    public void ShowHints(FigureData figure)
+    public void ShowHints(CardData cardData)
     {
         for (int i = 0; i < Slots.GetLength(0); i++)
         {
             for (int j = 0; j < Slots.GetLength(1); j++)
             {
-                if (figure.CanMove(Slots[i, j]))
+                if (cardData is FigureData figure && figure.CanMove(Slots[i, j]))
                 {
                     Slots[i, j].Hint.SetActive(true);
                 }
@@ -83,6 +83,29 @@ public class Board : MonoBehaviour
             }
         }
     }
+    public void ShowBacklight(CardData cardData)
+    {
+        for (int i = 0; i < Slots.GetLength(0); i++)
+        {
+            for (int j = 0; j < Slots.GetLength(1); j++)
+            {
+                if (cardData.TryShowBacklight(Slots[i, j]))
+                {
+                    Slots[i, j].Backlight.SetActive(true);
+                }
+            }
+        }
+    }
+    public void HideBacklight()
+    {
+        for (int i = 0; i < Slots.GetLength(0); i++)
+        {
+            for (int j = 0; j < Slots.GetLength(1); j++)
+            {
+                Slots[i, j].Backlight.SetActive(false);
+            }
+        }
+    }
     public void EnableDragFigure()
     {
         foreach (Slot slot in Slots)
@@ -96,17 +119,7 @@ public class Board : MonoBehaviour
         foreach (Slot slot in Slots)
         {
             slot.DragSlot.TryDrag = false;
-           
-        }
-    }
-    public void DisableFirstTurn()
-    {
-        foreach(Slot slot in Slots)
-        {
-            if (slot.Figure.IsFirstTurn)
-            {
-                slot.Figure.IsFirstTurn = false;
-            }
+
         }
     }
 }

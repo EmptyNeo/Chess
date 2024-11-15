@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -9,9 +10,9 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (OldSlot.Figure.IsFirstTurn || OldSlot.Figure.ColorFigure != ColorFigure.White)
+        if (OldSlot.CardData.LimitMove > 0 || OldSlot.CardData.ColorFigure != ColorFigure.White)
             return;
-        if (OldSlot.Figure.NotNull && TryDrag)
+        if (OldSlot.CardData.NotNull && TryDrag)
         {
             transform.position = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
@@ -20,14 +21,14 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (OldSlot.Figure.IsFirstTurn || OldSlot.Figure.ColorFigure != ColorFigure.White)
+        if (OldSlot.CardData.LimitMove > 0 || OldSlot.CardData.ColorFigure != ColorFigure.White)
             return;
 
         if (TryDrag)
         {
-            if (OldSlot.Figure.NotNull)
+            if (OldSlot.CardData.NotNull)
             {
-                Board.Instance.ShowHints(OldSlot.Figure);
+                Board.Instance.ShowHints(OldSlot.CardData);
                 GetComponentInChildren<RectTransform>().localScale = new Vector2(1.25f, 1.25f);
                 GetComponentInChildren<Image>().color = new Color(1, 1, 1, 0.75f);
                 GetComponentInChildren<Image>().raycastTarget = false;
@@ -49,10 +50,10 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (OldSlot.Figure.IsFirstTurn || OldSlot.Figure.ColorFigure != ColorFigure.White)
+        if (OldSlot.CardData.LimitMove > 0 || OldSlot.CardData.ColorFigure != ColorFigure.White)
             return;
 
-        if (TryDrag && OldSlot.Figure.NotNull)
+        if (TryDrag && OldSlot.CardData.NotNull)
         {
             GetComponentInChildren<Image>().color = new Color(1, 1, 1, 1f);
             GetComponentInChildren<Image>().raycastTarget = true;
@@ -60,41 +61,46 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
             RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
             if (hit.collider != null && hit.collider.TryGetComponent(out Slot slot))
             {
-                if (OldSlot.Figure.CanMove(slot))
+                if (OldSlot.CardData is FigureData figure && figure.CanMove(slot))
                 {
                     RechargeSlot(slot);
                     transform.position = OldSlot.transform.position;
                 }
                 else
                 {
-                    StartCoroutine(Movement.Smooth(transform, 0.25f, transform.position, OldSlot.transform.position));
+                    StartCoroutine(ReturnToSlot());
                 }
             }
             else
             {
-                StartCoroutine(Movement.Smooth(transform, 0.2f, transform.position, OldSlot.transform.position));
+                StartCoroutine(ReturnToSlot());
             }
-
-            transform.SetParent(OldSlot.transform);
+            
             Board.Instance.HideHints();
         }
+    }
+    public IEnumerator ReturnToSlot()
+    {
+        yield return Movement.Smooth(transform, 0.2f, transform.position, OldSlot.transform.position);
+        yield return new WaitForSeconds(0.2f);
+        transform.SetParent(OldSlot.transform);
     }
     public void RechargeSlot(Slot new_slot)
     {
         Main.Instance.PlaySound(Main.Instance.AudioExposeFigure, 1, 1);
-        FigureData figure = OldSlot.Figure;
+        CardData cardData = OldSlot.CardData;
         OldSlot.Nullify();
         int index = Main.Instance.Hand.FindDisplayedSlot(OldSlot);
-        if (new_slot.Figure.NotNull)
+        if (new_slot.CardData.NotNull)
         {
             new_slot.Nullify();
-            Main.Levels[Main.indexLevel].Rival.DisplayedSlot.Remove(new_slot);
-            new_slot.SetFigure(figure);
+            Main.Levels[Main.Instance.IndexLevel].Rival.DisplayedSlot.Remove(new_slot);
+            new_slot.SetFigure(cardData);
             Main.Instance.Hand.DisplayedSlot[index] = new_slot;
         }
         else
         {
-            new_slot.SetFigure(figure);
+            new_slot.SetFigure(cardData);
         }
         Main.Instance.Hand.DisplayedSlot[index] = new_slot;
         StartCoroutine(Main.Instance.Back());

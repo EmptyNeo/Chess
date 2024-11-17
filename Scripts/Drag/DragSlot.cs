@@ -28,7 +28,11 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
         {
             if (OldSlot.CardData.NotNull)
             {
-                Board.Instance.ShowHints(OldSlot.CardData);
+                if (OldSlot.CardData is FigureData figure && figure.IsTravel)
+                    Board.Instance.ShowBacklight(OldSlot.CardData, true);
+                else
+                    Board.Instance.ShowHints(OldSlot.CardData);
+
                 GetComponentInChildren<RectTransform>().localScale = new Vector2(1.25f, 1.25f);
                 GetComponentInChildren<Image>().color = new Color(1, 1, 1, 0.75f);
                 GetComponentInChildren<Image>().raycastTarget = false;
@@ -75,8 +79,9 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
             {
                 StartCoroutine(ReturnToSlot());
             }
-            
+
             Board.Instance.HideHints();
+            Board.Instance.HideBacklight();
         }
     }
     public IEnumerator ReturnToSlot()
@@ -85,24 +90,33 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
         yield return new WaitForSeconds(0.2f);
         transform.SetParent(OldSlot.transform);
     }
-    public void RechargeSlot(Slot new_slot)
+    public void RechargeSlot(Slot newSlot)
     {
         Main.Instance.PlaySound(Main.Instance.AudioExposeFigure, 1, 1);
         CardData cardData = OldSlot.CardData;
         OldSlot.Nullify();
         int index = Main.Instance.Hand.FindDisplayedSlot(OldSlot);
-        if (new_slot.CardData.NotNull)
+        bool back = true;
+        if (newSlot.CardData.NotNull)
         {
-            new_slot.Nullify();
-            Main.Levels[Main.Instance.IndexLevel].Rival.DisplayedSlot.Remove(new_slot);
-            new_slot.SetFigure(cardData);
-            Main.Instance.Hand.DisplayedSlot[index] = new_slot;
+            newSlot.Nullify();
+            Main.Levels[Main.Instance.IndexLevel].Rival.DisplayedSlot.Remove(newSlot);
+            newSlot.SetFigure(cardData);
+            Main.Instance.Hand.DisplayedSlot[index] = newSlot;
         }
         else
         {
-            new_slot.SetFigure(cardData);
+
+            if (cardData is FigureData figure && figure.IsTravel)
+            {
+                TryDrag = false;
+                figure.IsTravel = false;
+                back = false;
+            }
+            newSlot.SetFigure(cardData);
         }
-        Main.Instance.Hand.DisplayedSlot[index] = new_slot;
-        StartCoroutine(Main.Instance.Back());
+        Main.Instance.Hand.DisplayedSlot[index] = newSlot;
+        if (back)
+            StartCoroutine(Main.Instance.Back());
     }
 }

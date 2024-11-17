@@ -1,16 +1,16 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class AccelerationCard : SpecialCard
+public class DecelerationCard : SpecialCard
 {
-    public AccelerationCard(int x, int y, string nameSprite, TypeFigure typeFigure) : base(x, y, nameSprite, typeFigure)
+    public DecelerationCard(int x, int y, string nameSprite, TypeFigure colorFigure) : base(x, y, nameSprite, colorFigure)
     {
         Icon = SpriteUtil.Load("special_card", nameSprite);
-        Cost = 1;
+        Cost = 0;
     }
     public override IEnumerator Recharge(DragHandSlot handSlot, Slot newSlot)
     {
-        if(Characteristics.Instance.Mana < handSlot.OldSlot.CardData.Cost)
+        if (Characteristics.Instance.Mana < handSlot.OldSlot.CardData.Cost)
         {
             yield return Movement.Smooth(handSlot.transform, 0.2f, handSlot.transform.position, handSlot.OldSlot.transform.position);
         }
@@ -24,23 +24,28 @@ public class AccelerationCard : SpecialCard
             Characteristics.Instance.TakeMana(Cost);
             int index = handSlot.OldSlot.transform.GetSiblingIndex();
             handSlot.OldSlot.Hand.RemoveFromHand(index);
-            newSlot.DragSlot.OldSlot.CardData.LimitMove--;
+            Debug.Log(newSlot.DragSlot.OldSlot.CardData.LimitMove);
+            newSlot.DragSlot.OldSlot.CardData.LimitMove++;
+            Debug.Log(newSlot.DragSlot.OldSlot.CardData.LimitMove);
+
             yield return Main.Levels[Main.Instance.IndexLevel].Rival.EndTurn();
             Object.Destroy(handSlot.OldSlot.gameObject);
         }
     }
     public override bool TryExpose(Slot newSlot)
     {
-        if (newSlot.CardData.TypeFigure == TypeFigure.White && newSlot.CardData.NotNull)
+        if (newSlot.CardData.NotNull)
             return true;
+
         return false;
     }
     public override object Clone()
     {
-        return new AccelerationCard(X, Y, Name, TypeFigure)
+        return new DecelerationCard(X, Y, Name, TypeFigure)
         {
             NotNull = true,
             Icon = Icon
         };
     }
 }
+        

@@ -20,9 +20,14 @@ public class Factory
         Register(new Rook(0, 0, "b_rook", TypeFigure.Black));
         Register(new Knight(0, 0, "b_knight", TypeFigure.Black));
         Register(new Queen(0, 0, "b_queen", TypeFigure.Black));
-        Register(new Barrel(0, 0, "barrel", TypeFigure.Special));
-        Register(new Thunder(0, 0, "thunder", TypeFigure.Special));
+        Register(new BarrelCard(0, 0, "barrel", TypeFigure.Special));
+        Register(new ThunderCard(0, 0, "thunder", TypeFigure.Special));
         Register(new AccelerationCard(0, 0, "acceleration", TypeFigure.Special));
+        Register(new DecelerationCard(0, 0, "deceleration", TypeFigure.Special));
+        Register(new FreezingCard(0, 0, "freezing", TypeFigure.Special));
+        Register(new DefrostingCard(0, 0, "defrosting", TypeFigure.Special));
+        Register(new ProtectiveCard(0, 0, "protective", TypeFigure.Special));
+        Register(new TransferCard(0, 0, "transfer", TypeFigure.Special));
     }
     public CardData GetFigure(string name)
     {

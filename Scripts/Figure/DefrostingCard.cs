@@ -1,16 +1,16 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class AccelerationCard : SpecialCard
+public class DefrostingCard : SpecialCard
 {
-    public AccelerationCard(int x, int y, string nameSprite, TypeFigure typeFigure) : base(x, y, nameSprite, typeFigure)
+    public DefrostingCard(int x, int y, string nameSprite, TypeFigure TypeFigure) : base(x, y, nameSprite, TypeFigure)
     {
         Icon = SpriteUtil.Load("special_card", nameSprite);
-        Cost = 1;
+        Cost = 2;
     }
     public override IEnumerator Recharge(DragHandSlot handSlot, Slot newSlot)
     {
-        if(Characteristics.Instance.Mana < handSlot.OldSlot.CardData.Cost)
+        if (Characteristics.Instance.Mana < handSlot.OldSlot.CardData.Cost)
         {
             yield return Movement.Smooth(handSlot.transform, 0.2f, handSlot.transform.position, handSlot.OldSlot.transform.position);
         }
@@ -24,20 +24,34 @@ public class AccelerationCard : SpecialCard
             Characteristics.Instance.TakeMana(Cost);
             int index = handSlot.OldSlot.transform.GetSiblingIndex();
             handSlot.OldSlot.Hand.RemoveFromHand(index);
-            newSlot.DragSlot.OldSlot.CardData.LimitMove--;
+
+            foreach (var card in Main.Instance.Hand.DisplayedSlot)
+            {
+                if (card.CardData is FigureData figure && card.FigureImage.sprite.name == figure.FreezeName)
+                {
+                    figure.LimitMove = -1;
+                }
+            }
+
+
             yield return Main.Levels[Main.Instance.IndexLevel].Rival.EndTurn();
             Object.Destroy(handSlot.OldSlot.gameObject);
         }
     }
-    public override bool TryExpose(Slot newSlot)
+    public override bool TryExpose(Slot slot)
     {
-        if (newSlot.CardData.TypeFigure == TypeFigure.White && newSlot.CardData.NotNull)
-            return true;
+        if (slot.CardData is FigureData figure)
+        {
+            if (figure.TypeFigure == TypeFigure.White && slot.FigureImage.sprite.name == figure.FreezeName)
+            {
+                return true;
+            }
+        }
         return false;
     }
     public override object Clone()
     {
-        return new AccelerationCard(X, Y, Name, TypeFigure)
+        return new DefrostingCard(X, Y, Name, TypeFigure)
         {
             NotNull = true,
             Icon = Icon

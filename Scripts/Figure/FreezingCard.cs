@@ -1,16 +1,16 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class AccelerationCard : SpecialCard
+public class FreezingCard : SpecialCard
 {
-    public AccelerationCard(int x, int y, string nameSprite, TypeFigure typeFigure) : base(x, y, nameSprite, typeFigure)
+    public FreezingCard(int x, int y, string nameSprite, TypeFigure typeFigure) : base(x, y, nameSprite, typeFigure)
     {
         Icon = SpriteUtil.Load("special_card", nameSprite);
-        Cost = 1;
+        Cost = 2;
     }
     public override IEnumerator Recharge(DragHandSlot handSlot, Slot newSlot)
     {
-        if(Characteristics.Instance.Mana < handSlot.OldSlot.CardData.Cost)
+        if (Characteristics.Instance.Mana < handSlot.OldSlot.CardData.Cost)
         {
             yield return Movement.Smooth(handSlot.transform, 0.2f, handSlot.transform.position, handSlot.OldSlot.transform.position);
         }
@@ -24,20 +24,25 @@ public class AccelerationCard : SpecialCard
             Characteristics.Instance.TakeMana(Cost);
             int index = handSlot.OldSlot.transform.GetSiblingIndex();
             handSlot.OldSlot.Hand.RemoveFromHand(index);
-            newSlot.DragSlot.OldSlot.CardData.LimitMove--;
+            newSlot.DragSlot.OldSlot.CardData.LimitMove+=2;
+            if (newSlot.DragSlot.OldSlot.CardData is FigureData figure)
+                newSlot.DragSlot.OldSlot.FigureImage.sprite = SpriteUtil.Load("pieces", figure.FreezeName);
             yield return Main.Levels[Main.Instance.IndexLevel].Rival.EndTurn();
             Object.Destroy(handSlot.OldSlot.gameObject);
         }
     }
-    public override bool TryExpose(Slot newSlot)
+    public override bool TryExpose(Slot slot)
     {
-        if (newSlot.CardData.TypeFigure == TypeFigure.White && newSlot.CardData.NotNull)
+        if (slot.CardData.NotNull)
+        {
             return true;
-        return false;
+        }
+        else
+            return false;
     }
     public override object Clone()
     {
-        return new AccelerationCard(X, Y, Name, TypeFigure)
+        return new FreezingCard(X, Y, Name, TypeFigure)
         {
             NotNull = true,
             Icon = Icon

@@ -9838,6 +9838,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e47ac26866bd86b4b8266dbc72d49967, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mana: 0
   MaxMana: 2
   Amount: {fileID: 1847824549}
 --- !u!1 &2007165834

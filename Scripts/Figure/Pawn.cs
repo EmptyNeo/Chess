@@ -11,7 +11,11 @@
 
     public override bool CanMove(Slot targetSlot)
     {
+        if (IsTravel && TryExpose(targetSlot))
+            return true;
         if (targetSlot.CardData.TypeFigure == TypeFigure.Special)
+            return false;
+        if (targetSlot.CardData is FigureData figure && figure.IsProtected)
             return false;
         if (TypeFigure == TypeFigure.White)
         {
@@ -52,10 +56,17 @@
     }
     public override object Clone()
     {
+        string color;
+        if (TypeFigure == TypeFigure.White)
+            color = "w";
+        else
+            color = "b";
         return new Pawn(X, Y, Name, TypeFigure)
         {
             NotNull = true,
-            Icon = Icon
+            Icon = Icon,
+            IsProtected = IsProtected,
+            FreezeName = color + "f_" + Name.Split("_")[1]
         };
     }
 }

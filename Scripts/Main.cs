@@ -49,8 +49,6 @@ public class Main : Sounds
         Factory = new Factory();
         DeckData.GiveDefaultDeck(Factory);
         StartCoroutine(DeckData.GiveFigure(this, Sound, Factory.GetFigure("w_pawn")));
-        DeckData.AddToDeck(Factory.GetFigure("thunder"));
-        DeckData.AddToDeck(Factory.GetFigure("acceleration"));
         DataDeck deck = BinarySavingSystem.LoadDeck();
         DeckData.GiveDeckCards(deck, Factory);
         Board.DisableDragFigure();
@@ -71,7 +69,8 @@ public class Main : Sounds
         }
         if (Input.GetKeyUp(KeyCode.V))
         {
-            DeckData.SpawnFigure();
+            if(DeckData.Cards.Count > 0)
+                DeckData.SpawnFigure();
         }
         if (Input.GetKeyDown(KeyCode.W))
         {

@@ -11,6 +11,8 @@ public class Bishop : FigureData
     }
     public override bool CanMove(Slot targetSlot)
     {
+        if (IsTravel&&TryExpose(targetSlot))
+            return true;
         if (targetSlot.CardData.TypeFigure == TypeFigure.Special)
             return false;
 

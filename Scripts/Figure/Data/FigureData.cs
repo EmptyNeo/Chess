@@ -3,12 +3,34 @@
 [Serializable]
 public class FigureData : CardData
 {
-    public FigureData(int x, int y, string nameSprite, TypeFigure colorFigure) : base(x, y, nameSprite, colorFigure)
+    public override int LimitMove
+    {
+        get => _limitMove;
+        set
+        {
+            if (value < 0)
+            {
+                LimitMove = 0;
+                Board.Instance.Slots[Y, X].FigureImage.sprite = SpriteUtil.Load("pieces", Name);
+                if (IsProtected)
+                    IsProtected = false;
+            }
+            else
+                _limitMove = value;
+        }
+    }
+
+    public bool IsTravel;
+
+    public bool IsProtected;
+    public string FreezeName;
+    public FigureData(int x, int y, string nameSprite, TypeFigure typeFigure) : base(x, y, nameSprite, typeFigure)
     {
         X = x;
         Y = y; 
         Name = nameSprite;
-        TypeFigure = colorFigure;
+        TypeFigure = typeFigure;
+        LimitMove = 1;
     }
 
     public virtual bool CanMove(Slot targetSlot)
@@ -18,6 +40,13 @@ public class FigureData : CardData
  
     public override bool TryExpose(Slot slot)
     {
+        if (IsTravel)
+        {
+            if (slot.Y > 4 && !slot.CardData.NotNull)
+            {
+                return true;
+            }
+        }
         if (slot.Y > 4 && !slot.CardData.NotNull)
             return true;
 
@@ -25,10 +54,16 @@ public class FigureData : CardData
     }
     public override object Clone()
     {
+        string color;
+        if (TypeFigure == TypeFigure.White)
+            color = "w";
+        else
+            color = "b";
         return new FigureData(X, Y, Name, TypeFigure)
         {
-            NotNull= true,
-            Icon = Icon
+            NotNull = true,
+            Icon = Icon,
+            FreezeName = color + "f_" + Name.Split("_")[1]
         };
     }
 

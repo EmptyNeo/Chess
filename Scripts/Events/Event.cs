@@ -1,6 +1,9 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public abstract class Event : MonoBehaviour
 {
-    public abstract void StartEvent();
+
+    public GameObject Panel;
+    public abstract IEnumerator StartEvent();
 }

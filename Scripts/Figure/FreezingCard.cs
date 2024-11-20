@@ -24,6 +24,7 @@ public class FreezingCard : SpecialCard
             Characteristics.Instance.TakeMana(Cost);
             int index = handSlot.OldSlot.transform.GetSiblingIndex();
             handSlot.OldSlot.Hand.RemoveFromHand(index);
+
             for (int i = -1; i <= 1; i++)
             {
                 for (int j = -1; j <= 1; j++)
@@ -47,6 +48,10 @@ public class FreezingCard : SpecialCard
             yield return Main.Levels[Main.Instance.IndexLevel].Rival.EndTurn();
             Object.Destroy(handSlot.OldSlot.gameObject);
         }
+    }
+    public override void PlaySound()
+    {
+        Main.Instance.PlaySound(Main.Instance.AudioFreezing, 1, 1);
     }
     public override bool TryExpose(Slot slot)
     {

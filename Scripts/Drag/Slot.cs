@@ -24,7 +24,7 @@ public class Slot : MonoBehaviour
         CardData = new FigureData(0, 0, "", TypeFigure.None)
         {
             NotNull = false,
-            Icon = null
+            Icon = null,
         };
         FigureImage.color = new Color(1, 1, 1, 0);
     }

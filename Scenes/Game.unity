@@ -2209,6 +2209,7 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2290,6 +2291,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7674a8cfb9743b4f850571d85478756, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &525839766
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4084,7 +4097,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 907448960}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4098,7 +4111,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -0.000030517578}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &908554766
@@ -6407,7 +6420,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -7551,7 +7564,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!223 &1491200051
 Canvas:
   m_ObjectHideFlags: 0
@@ -7561,7 +7574,7 @@ Canvas:
   m_GameObject: {fileID: 1491200048}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
+  m_RenderMode: 2
   m_Camera: {fileID: 519420031}
   m_PlaneDistance: 10
   m_PixelPerfect: 0
@@ -7584,17 +7597,17 @@ RectTransform:
   m_GameObject: {fileID: 1491200048}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.00925926, y: 0.00925926, z: 0.00925926}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2047469499}
+  - {fileID: 907448961}
   - {fileID: 1282008598}
   - {fileID: 516172561}
   - {fileID: 41494646}
   - {fileID: 1055860712}
   - {fileID: 402295921}
   - {fileID: 1863241509}
-  - {fileID: 907448961}
   - {fileID: 107901370}
   - {fileID: 967604125}
   - {fileID: 256433962}
@@ -7603,8 +7616,8 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
+  m_SizeDelta: {x: 1920.0001, y: 1080}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &1491986199
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8871,7 +8884,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -9888,8 +9901,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Sound: {fileID: 8300000, guid: 135d6b91720c2aa4099ddabd85e67dc6, type: 3}
   AudioExposeFigure: {fileID: 8300000, guid: a31aa6293dc609d42b31e89d51316563, type: 3}
+  AudioExposeCard: {fileID: 8300000, guid: f5db5870e8b64bd45a6f7f3e0fd1779a, type: 3}
+  AudioExposeBarrel: {fileID: 8300000, guid: 0db89be8ad0564745b04617594fcebdb, type: 3}
+  AudioTakeCard: {fileID: 8300000, guid: e13c90d4f0ae2544e8a3e49e4212a581, type: 3}
   AudioWin: {fileID: 8300000, guid: f461b0217cd265d42947a8c3148923f4, type: 3}
   AudioLose: {fileID: 8300000, guid: 513ab7e590c96ba439ee6deb72a136f3, type: 3}
+  AudioFreezing: {fileID: 8300000, guid: 953c038e50b35aa4780a9a1ccbfdc8f2, type: 3}
   DeckData: {fileID: 935253451}
   Factory:
     _creators: []
@@ -9915,7 +9932,6 @@ MonoBehaviour:
   - {fileID: 1635067788}
   Ivent: {fileID: 0}
   IndexLevel: 0
-  TryUpdate: 0
 --- !u!82 &2007165838
 AudioSource:
   m_ObjectHideFlags: 0

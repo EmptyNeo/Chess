@@ -84,7 +84,7 @@ public class Level4 : Level
             new Pawn(5,1, "b_pawn", TypeFigure.Black)
         });
 
-        Main.Instance.Ivent =  Object.Instantiate(PrefabUtil.Load("Winter"), Main.Instance.BoardParent).GetComponent<Event>();
+        Main.Instance.Ivent =  Object.Instantiate(PrefabUtil.Load("Winter"), Main.Instance.GUI).GetComponent<Event>();
     }
 }
 public class Level5 : Level
@@ -99,7 +99,7 @@ public class Level5 : Level
             new Pawn(5,1, "b_pawn", TypeFigure.Black)
         });
 
-        Main.Instance.Ivent = Object.Instantiate(PrefabUtil.Load("Smoke"), Main.Instance.BoardParent).GetComponent<Event>();
+        Main.Instance.Ivent = Object.Instantiate(PrefabUtil.Load("Smoke"), Main.Instance.GUI).GetComponent<Event>();
     }
 }
 public class Level6 : Level
@@ -113,6 +113,6 @@ public class Level6 : Level
             new Pawn(4,1, "b_pawn", TypeFigure.Black),
             new Pawn(5,1, "b_pawn", TypeFigure.Black)
         });
-
+        Main.Instance.Ivent = Object.Instantiate(PrefabUtil.Load("Treason"), Main.Instance.GUI.parent).GetComponent<Event>();
     }
 }

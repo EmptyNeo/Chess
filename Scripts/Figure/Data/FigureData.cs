@@ -71,9 +71,4 @@ public class FigureData : CardData
             LimitMove = LimitMove
         };
     }
-
-    public override void PlaySound()
-    {
-        Main.Instance.PlaySound(Main.Instance.AudioExposeFigure, 2, 1);
-    }
 }

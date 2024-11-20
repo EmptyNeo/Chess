@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class BarrelCard : SpecialCard
 {
+
     public BarrelCard(int x, int y, string nameSprite, TypeFigure typeFigure) : base(x, y, nameSprite, typeFigure)
     {
         Icon = SpriteUtil.Load("special_card", nameSprite);
@@ -11,6 +12,7 @@ public class BarrelCard : SpecialCard
     }
     public override void ZeroAction()
     {
+
         if (X + 1 < Board.Instance.Slots.GetLength(1) && Board.Instance.Slots[Y, X + 1].CardData.NotNull)
         {
             Board.Instance.Slots[Y, X + 1].Nullify();
@@ -38,22 +40,42 @@ public class BarrelCard : SpecialCard
             newSlot.SetCard(this);
             newSlot.DragSlot.TryDrag = false;
             int index = handSlot.OldSlot.transform.GetSiblingIndex();
-            handSlot.OldSlot.Hand.DisplayedSlot.Add(newSlot);
             handSlot.OldSlot.Hand.RemoveFromHand(index);
 
             if (newSlot.X + 1 < Board.Instance.Slots.GetLength(1) && Board.Instance.Slots[newSlot.Y, newSlot.X + 1].CardData.NotNull == false)
             {
-                Board.Instance.Slots[newSlot.Y, newSlot.X + 1].SetCard(new BarrelCard(newSlot.X + 1, newSlot.Y, "barrel", TypeFigure.Special));
+                Slot slot = Board.Instance.Slots[newSlot.Y, newSlot.X + 1];
+                slot.SetCard(new BarrelCard(newSlot.X + 1, newSlot.Y, "barrel", TypeFigure.Special));
+                slot.DragSlot.transform.SetParent(slot.DragSlot.transform.parent.parent);
+                slot.DragSlot.transform.position = newSlot.transform.position;
+                Main.Instance.StartCoroutine(Movement.Smooth(slot.DragSlot.transform,
+                                             0.5f,
+                                             slot.DragSlot.transform.position,
+                                             slot.DragSlot.OldSlot.transform.position));
+
+                slot.DragSlot.transform.SetParent(slot.DragSlot.OldSlot.transform);
             }
             if (newSlot.X - 1 > -1 && Board.Instance.Slots[newSlot.Y, newSlot.X - 1].CardData.NotNull == false)
             {
-                Board.Instance.Slots[newSlot.Y, newSlot.X - 1].SetCard(new BarrelCard(newSlot.X - 1, newSlot.Y, "barrel", TypeFigure.Special));
+                Slot slot = Board.Instance.Slots[newSlot.Y, newSlot.X - 1];
+                slot.SetCard(new BarrelCard(newSlot.X - 1, newSlot.Y, "barrel", TypeFigure.Special));
+                slot.DragSlot.transform.position = newSlot.transform.position;
+
+                slot.DragSlot.transform.SetParent(slot.DragSlot.transform.parent.parent);
+                Main.Instance.StartCoroutine(Movement.Smooth(slot.DragSlot.transform,
+                                             0.5f,
+                                             slot.DragSlot.transform.position,
+                                             slot.DragSlot.OldSlot.transform.position));
+
+
+                slot.DragSlot.transform.SetParent(slot.DragSlot.OldSlot.transform);
             }
-            
+            yield return new WaitForSeconds(0.5f);
             yield return Main.Levels[Main.Instance.IndexLevel].Rival.EndTurn();
             Object.Destroy(handSlot.OldSlot.gameObject);
         }
     }
+
     public override bool TryExpose(Slot slot)
     {
         if (slot.Y > 4 && slot.CardData.NotNull == false)
@@ -70,8 +92,8 @@ public class BarrelCard : SpecialCard
             Icon = Icon
         };
     }
-    /*public override void PlaySound()
+    public override void PlaySound()
     {
-        
-    }*/
+        Main.Instance.PlaySound(Main.Instance.AudioExposeBarrel, 1, 1);
+    }
 }

@@ -25,7 +25,7 @@ public class CardData : Data
 
     public override void PlaySound()
     {
-        Main.Instance.PlaySound(Main.Instance.AudioExposeFigure, 2, 1);
+        Main.Instance.PlaySound(Main.Instance.AudioExposeCard, 1, 1);
     }
 
     public override bool TryExpose(Slot slot)

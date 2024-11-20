@@ -1,5 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 
 public class EarthquakeEvent : Event
@@ -11,25 +13,58 @@ public class EarthquakeEvent : Event
     {
         Amount = MaxAmount;
         Counter.text = $"Earthquake Left <size=45><color=red>{Amount}</color></size> Turn";
+
+        Panel.transform.SetParent(transform.parent.parent);
     }
-    public override void StartEvent()
+    public override IEnumerator StartEvent()
     {
         Amount--;
         Counter.text = $"Earthquake Left <size=45><color=red>{Amount}</color></size> Turn";
         if (Amount == 0)
         {
+            if (IsDisplayedSlotNotNull(Main.Instance.Hand.DisplayedSlot))
+            {
+                Panel.SetActive(true);
+                yield return new WaitForSeconds(2f);
+                Panel.SetActive(false);
+            }
             Amount = MaxAmount;
             Counter.text = $"Earthquake Left <size=45><color=red>{Amount}</color></size> Turn";
-            RearrangingSlots(Main.Instance.Hand.DisplayedSlot);
+            Main.Instance.Board.DisableDragFigure();
+            yield return RearrangingSlots(Main.Instance.Hand.DisplayedSlot);
+
+            Main.Instance.Board.EnableDragFigure();
         }
     }
-    private void RearrangingSlots(List<Slot> displayedSlot)
+    public bool IsDisplayedSlotNotNull(List<Slot> displayedSlot)
+    {
+        foreach (var slot in displayedSlot)
+        {
+            if (slot.Y > 4 && slot.CardData.NotNull)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    private IEnumerator RearrangingSlots(List<Slot> displayedSlot)
     {
         List<Slot> rechargeSlots = new();
         List<Slot> deleteSlots = new();
+
+     
         foreach (var slot in displayedSlot)
         {
-            Debug.Log(slot.Y);
+            if (slot.Y > 4)
+            {
+                StartCoroutine(Movement.AddSmooth(slot.DragSlot.transform, 1, 1.3f, 1));
+            }
+        }
+        StartCoroutine(CameraShake.Instance.ShakeCamera(0.05f));
+
+        yield return new WaitForSeconds(0.15f);
+        foreach (var slot in displayedSlot)
+        {
             if (slot.Y > 4)
             {
                 int randomY = Random.Range(5, 8);
@@ -38,18 +73,28 @@ public class EarthquakeEvent : Event
                 {
                     Reroll(ref randomY, ref randomX);
                 }
+                slot.DragSlot.transform.SetParent(Board.Instance.Slots[randomY, randomX].transform.parent.parent);
+                StartCoroutine(Movement.Smooth(slot.DragSlot.transform, 0.25f, slot.DragSlot.transform.position, Board.Instance.Slots[randomY, randomX].transform.position));
+                yield return new WaitForSeconds(0.15f);
+                StartCoroutine(Movement.TakeSmooth(slot.DragSlot.transform, 1.3f, 1, 1));
+                yield return new WaitForSeconds(0.15f);
+                Main.Instance.PlaySound(Main.Instance.AudioExposeFigure, 1, 1);
+                slot.DragSlot.transform.SetParent(slot.DragSlot.OldSlot.transform);
                 Board.Instance.Slots[randomY, randomX].SetCard(slot.CardData);
+                slot.DragSlot.transform.position = slot.DragSlot.OldSlot.transform.position;
+                slot.DragSlot.transform.position = slot.DragSlot.OldSlot.transform.position;
                 rechargeSlots.Add(Board.Instance.Slots[randomY, randomX]);
                 deleteSlots.Add(slot);
                 slot.Nullify();
             }
         }
+        CameraShake.Instance.StopShake();
+        foreach (var slot in deleteSlots)
+            displayedSlot.Remove(slot);
 
         foreach (var slot in rechargeSlots)
             displayedSlot.Add(slot);
 
-        foreach (var slot in deleteSlots)
-            displayedSlot.Remove(slot);
 
     }
     private void Reroll(ref int randomY, ref int randomX)

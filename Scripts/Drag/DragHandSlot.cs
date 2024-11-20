@@ -28,6 +28,7 @@ public class DragHandSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
 
         if (OldSlot.CardData.NotNull && TryDrag)
         {
+            Main.Instance.PlaySound(Main.Instance.AudioTakeCard, 1, 1);
             Vector2 pos = transform.position;
             GetComponentInChildren<RectTransform>().localScale = new Vector2(1.25f, 1.25f);
             transform.position = pos;
@@ -41,7 +42,6 @@ public class DragHandSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
         }
 
     }
-    int j;
     public void OnPointerUp(PointerEventData eventData)
     {
         if (OldSlot.CardData.NotNull && TryDrag)
@@ -91,11 +91,12 @@ public class DragHandSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
         }
         else
         {
+
+            OldSlot.CardData.PlaySound();
             objDelete = true;
             Icon.SetActive(false);
             yield return Movement.TakeOpacity(transform, newSlot.transform.position, Image, 1, 10);
             yield return new WaitForSeconds(0.01f);
-            OldSlot.CardData.PlaySound();
             Characteristics.Instance.TakeMana(OldSlot.CardData.Cost);
             newSlot.SetCard(OldSlot.CardData);
             newSlot.DragSlot.TryDrag = false;

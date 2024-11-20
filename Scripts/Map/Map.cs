@@ -19,17 +19,8 @@ public class Map : MonoBehaviour
         if (PlayerPrefs.HasKey("index"))
         {
             int index = PlayerPrefs.GetInt("index");
-            if (IndexLevel < Point[^1].Index)
-            {
-                Vector3 pos = Point[index].transform.position;
-                Player.transform.position = new Vector3(pos.x, pos.y + 0.5f, 0);
-            }
-            else
-            {
-                SceneManager.LoadScene("Victory");
-                BinarySavingSystem.DeleteDeck();
-                PlayerPrefs.DeleteAll();
-            }
+            Vector3 pos = Point[index].transform.position;
+            Player.transform.position = new Vector3(pos.x, pos.y + 0.5f, 0);
         }
     }
     private void Update()
@@ -50,7 +41,7 @@ public class Map : MonoBehaviour
     public IEnumerator ChoiceLevel(int index)
     {
         PlayerAnimator.SetBool("walk", true);
-        yield return Movement.Smooth(Player, 1, Player.position, Point[index].transform.position + new Vector3(0, 0.5f,0));
+        yield return Movement.Smooth(Player, 1, Player.position, Point[index].transform.position + new Vector3(0, 0.5f, 0));
         PlayerAnimator.SetBool("walk", false);
         PlayerPrefs.SetInt("index", index);
         PlayerPrefs.SetInt("IndexLevel", Point[index].Index);

@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Xml.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Main : Sounds
 {
     public AudioClip AudioExposeFigure;
+    public AudioClip AudioExposeCard;
+    public AudioClip AudioExposeBarrel;
+    public AudioClip AudioTakeCard;
     public AudioClip AudioWin;
     public AudioClip AudioLose;
+    public AudioClip AudioFreezing;
     public Deck DeckData;
     public Factory Factory;
     public Characteristics Characteristics;
@@ -53,11 +56,15 @@ public class Main : Sounds
         DataDeck deck = BinarySavingSystem.LoadDeck();
         DeckData.GiveDeckCards(deck, Factory);
         Board.DisableDragFigure();
+        DeckData.AddToDeck(Factory.GetFigure("barrel"));
         if (PlayerPrefs.HasKey("IndexLevel"))
         {
             IndexLevel = PlayerPrefs.GetInt("IndexLevel");
         }
         Levels[IndexLevel].Init();
+        if (Ivent != null)
+            StartCoroutine(Ivent.StartEvent());
+
     }
 
 
@@ -75,8 +82,8 @@ public class Main : Sounds
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
-            Pick.SetActive(true);
-            GiveRandomCardToDeck();
+            PlaySound(AudioWin, 0.2f, 1);
+            Win.SetActive(true);
         }
     }
     public void StartEndTurn()
@@ -102,14 +109,12 @@ public class Main : Sounds
             if (Hand.DisplayedSlot.Count > 0)
             {
 
-                if (IsPossibleMove() == false)
+                if (IsPossibleMove() == false || Hand.IsOnlySpecialCard())
                 {
                     yield return Back();
                 }
-                if (Hand.IsOnlySpecialCard())
-                    yield return Back();
             }
-            if (Hand.DisplayedSlot.Count == 0)
+            else if (Hand.DisplayedSlot.Count == 0)
                 yield return Back();
 
 
@@ -140,10 +145,25 @@ public class Main : Sounds
         {
             Hand.DisplayedSlot[i].CardData.LimitMove--;
         }
-
-        Ivent.StartEvent();
+        if (Levels[IndexLevel].Rival.DisplayedSlot.Count == 0
+            && Levels[IndexLevel].Rival.Figure.Count == 0)
+        {
+            PlaySound(AudioWin, 0.2f, 1);
+            Win.SetActive(true);
+        }
+        else if (Hand.DisplayedSlot.Count == 0 && DeckData.Cards.Count == 0 && Hand.Slots.Count == 0)
+        {
+            PlaySound(AudioLose, 0.2f, 1);
+            Lose.SetActive(true);
+        }
+        else
+        {
+            if (Ivent != null)
+                yield return Ivent.StartEvent();
+        }
         if (Hand.Slots.Count > 0 || DeckData.Cards.Count > 0)
         {
+          
             Board.DisableDragFigure();
             yield return new WaitForSeconds(0.25f);
             yield return Movement.TakeSmooth(BoardParent.transform, 1.3f, 1, 1.5f);
@@ -166,22 +186,12 @@ public class Main : Sounds
 
             _tryEndTurn = true;
         }
-        else if(IsPossibleMove() == false || Hand.IsOnlySpecialCard())
+        else if (IsPossibleMove() == false || Hand.IsOnlySpecialCard())
         {
+            yield return new WaitForSeconds(1f);
             yield return Back();
         }
-        if (Levels[IndexLevel].Rival.DisplayedSlot.Count == 0
-            && Levels[IndexLevel].Rival.Figure.Count == 0)
-        {
-            PlaySound(AudioWin, 1, 1);
-            Win.SetActive(true);
-        }
-        else if (Hand.DisplayedSlot.Count == 0 && DeckData.Cards.Count == 0 && Hand.Slots.Count == 0)
-        {
-            PlaySound(AudioLose, 1, 1);
-            Lose.SetActive(true);
-        }
-
+        
     }
     public void Restart()
     {
@@ -189,10 +199,22 @@ public class Main : Sounds
     }
     public void Continue()
     {
-        Win.SetActive(false);
-        Pick.SetActive(true);
-
-        GiveRandomCardToDeck();
+        if (PlayerPrefs.HasKey("index"))
+        {
+            int index = PlayerPrefs.GetInt("index");
+            if (index < Levels.Count)
+            {
+                Win.SetActive(false);
+                Pick.SetActive(true);
+                GiveRandomCardToDeck();
+            }
+            else
+            {
+                SceneManager.LoadScene("Victory");
+                BinarySavingSystem.DeleteDeck();
+                PlayerPrefs.DeleteAll();
+            }
+        }
     }
     public void Skip()
     {
@@ -209,6 +231,14 @@ public class Main : Sounds
                     creators.Add(f);
                 else
                     Pick.transform.GetChild(0).gameObject.SetActive(true);
+            }
+        }
+        foreach (string name in DeckData.NameFigures)
+        {
+            if (name == "w_queen")
+            {
+                creators.RemoveAll(f => f.Name == "w_queen");
+                break;
             }
         }
         if (creators.Count > 0)

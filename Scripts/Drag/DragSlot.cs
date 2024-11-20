@@ -67,7 +67,7 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
             {
                 if (OldSlot.CardData is FigureData figure && figure.CanMove(slot))
                 {
-                    RechargeSlot(slot);
+                    StartCoroutine(RechargeSlot(slot));
                     transform.position = OldSlot.transform.position;
                 }
                 else
@@ -80,6 +80,7 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
                 StartCoroutine(ReturnToSlot());
             }
 
+            transform.SetParent(OldSlot.transform);
             Board.Instance.HideHints();
             Board.Instance.HideBacklight();
         }
@@ -88,17 +89,19 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
     {
         yield return Movement.Smooth(transform, 0.2f, transform.position, OldSlot.transform.position);
         yield return new WaitForSeconds(0.2f);
-        transform.SetParent(OldSlot.transform);
     }
-    public void RechargeSlot(Slot newSlot)
+    public IEnumerator RechargeSlot(Slot newSlot)
     {
-        Main.Instance.PlaySound(Main.Instance.AudioExposeFigure, 1, 1);
+        Main.Instance.PlaySound(Main.Instance.AudioExposeFigure, 2, 1);
         CardData cardData = OldSlot.CardData;
         OldSlot.Nullify();
         int index = Main.Instance.Hand.FindDisplayedSlot(OldSlot);
         bool back = true;
+
         if (newSlot.CardData.NotNull)
         {
+
+            StartCoroutine(CameraShake.Instance.ShakeCamera(0.1f, 0.05f));
             newSlot.Nullify();
             Main.Levels[Main.Instance.IndexLevel].Rival.DisplayedSlot.Remove(newSlot);
             newSlot.SetCard(cardData);
@@ -117,6 +120,9 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
         }
         Main.Instance.Hand.DisplayedSlot[index] = newSlot;
         if (back)
-            StartCoroutine(Main.Instance.Back());
+        {
+            yield return new WaitForSeconds(0.3f);
+            yield return Main.Instance.Back();
+        }
     }
 }

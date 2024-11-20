@@ -3422,6 +3422,7 @@ MonoBehaviour:
   - {fileID: 8976156255810399386}
   - {fileID: 8976156256396508462}
   - {fileID: 8976156256880893331}
+  IndexLevel: 0
 --- !u!1 &354692301
 GameObject:
   m_ObjectHideFlags: 0

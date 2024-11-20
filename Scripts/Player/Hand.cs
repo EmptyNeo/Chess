@@ -9,7 +9,15 @@ public class Hand : MonoBehaviour
     public List<HandSlot> AlignetSet = new();
     public List<Slot> DisplayedSlot;
     public float Spacing = 1f;
-
+    public bool IsOnlySpecialCard()
+    {
+        foreach (var slot in DisplayedSlot)
+        {
+            if (slot.CardData.TypeFigure != TypeFigure.Special)
+                return false;
+        }
+        return true;
+    }
     public IEnumerator AddToHand(HandSlot slot)
     {
         Slots.Add(slot);

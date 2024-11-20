@@ -23,7 +23,7 @@ public class Deck : MonoBehaviour
         HandSlot slot = Instantiate(HandSlot, DeckPoint.position, Quaternion.identity, Hand.transform).GetComponent<HandSlot>();
 
         StartCoroutine(Hand.AddToHand(slot));
-        slot.SetFigure(cardData);
+        slot.SetCard(cardData);
         slot.SetAmountMana(cardData.Cost);
         Cards.RemoveAt(0);
         TAmount.text = $"x{--Amount}";
@@ -33,7 +33,7 @@ public class Deck : MonoBehaviour
         int index = Random.Range(0, Cards.Count);
         HandSlot slot = Instantiate(HandSlot, DeckPoint.position, Quaternion.identity, Hand.transform).GetComponent<HandSlot>();
         StartCoroutine(Hand.AddToHand(slot));
-        slot.SetFigure(Cards[index]);
+        slot.SetCard(Cards[index]);
         slot.SetAmountMana(Cards[index].Cost);
         Cards.RemoveAt(index);
         TAmount.text = $"x{--Amount}";

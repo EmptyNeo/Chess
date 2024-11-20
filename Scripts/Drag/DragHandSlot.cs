@@ -97,7 +97,7 @@ public class DragHandSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
             yield return new WaitForSeconds(0.01f);
             OldSlot.CardData.PlaySound();
             Characteristics.Instance.TakeMana(OldSlot.CardData.Cost);
-            newSlot.SetFigure(OldSlot.CardData);
+            newSlot.SetCard(OldSlot.CardData);
             newSlot.DragSlot.TryDrag = false;
             int index = OldSlot.transform.GetSiblingIndex();
             OldSlot.Hand.DisplayedSlot.Add(newSlot);

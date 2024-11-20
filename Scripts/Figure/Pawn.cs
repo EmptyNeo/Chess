@@ -66,7 +66,8 @@
             NotNull = true,
             Icon = Icon,
             IsProtected = IsProtected,
-            FreezeName = color + "f_" + Name.Split("_")[1]
+            FreezeName = color + "f_" + Name.Split("_")[1],
+            LimitMove = LimitMove
         };
     }
 }

@@ -15,7 +15,7 @@ public class BarrelCard : SpecialCard
         {
             Board.Instance.Slots[Y, X + 1].Nullify();
         }
-        if (X - 1 > 0 && Board.Instance.Slots[Y, X - 1].CardData.NotNull)
+        if (X - 1 > -1 && Board.Instance.Slots[Y, X - 1].CardData.NotNull)
         {
             Board.Instance.Slots[Y, X - 1].Nullify();
         }
@@ -35,7 +35,7 @@ public class BarrelCard : SpecialCard
             yield return new WaitForSeconds(0.01f);
             handSlot.OldSlot.CardData.PlaySound();
             Characteristics.Instance.TakeMana(Cost);
-            newSlot.SetFigure(this);
+            newSlot.SetCard(this);
             newSlot.DragSlot.TryDrag = false;
             int index = handSlot.OldSlot.transform.GetSiblingIndex();
             handSlot.OldSlot.Hand.DisplayedSlot.Add(newSlot);
@@ -43,11 +43,11 @@ public class BarrelCard : SpecialCard
 
             if (newSlot.X + 1 < Board.Instance.Slots.GetLength(1) && Board.Instance.Slots[newSlot.Y, newSlot.X + 1].CardData.NotNull == false)
             {
-                Board.Instance.Slots[newSlot.Y, newSlot.X + 1].SetFigure(new BarrelCard(newSlot.X + 1, newSlot.Y, "barrel", TypeFigure.Special));
+                Board.Instance.Slots[newSlot.Y, newSlot.X + 1].SetCard(new BarrelCard(newSlot.X + 1, newSlot.Y, "barrel", TypeFigure.Special));
             }
-            if (newSlot.X - 1 > 0 && Board.Instance.Slots[newSlot.Y, newSlot.X - 1].CardData.NotNull == false)
+            if (newSlot.X - 1 > -1 && Board.Instance.Slots[newSlot.Y, newSlot.X - 1].CardData.NotNull == false)
             {
-                Board.Instance.Slots[newSlot.Y, newSlot.X - 1].SetFigure(new BarrelCard(newSlot.X - 1, newSlot.Y, "barrel", TypeFigure.Special));
+                Board.Instance.Slots[newSlot.Y, newSlot.X - 1].SetCard(new BarrelCard(newSlot.X - 1, newSlot.Y, "barrel", TypeFigure.Special));
             }
             
             yield return Main.Levels[Main.Instance.IndexLevel].Rival.EndTurn();

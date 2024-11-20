@@ -40,10 +40,18 @@ public class Bishop : FigureData
 
     public override object Clone()
     {
+        string color;
+        if (TypeFigure == TypeFigure.White)
+            color = "w";
+        else
+            color = "b";
         return new Bishop(X, Y, Name, TypeFigure)
         {
             NotNull = true,
-            Icon = Icon
+            Icon = Icon,
+            IsProtected = IsProtected,
+            FreezeName = color + "f_" + Name.Split("_")[1],
+            LimitMove = LimitMove
         };
     }
 }

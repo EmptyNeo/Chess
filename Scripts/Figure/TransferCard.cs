@@ -27,9 +27,7 @@ public class TransferCard : SpecialCard
 
             if (newSlot.CardData is FigureData figure)
             {
-                Debug.Log(figure);
                 figure.IsTravel = true;
-                Debug.Log(figure.IsTravel);
                 newSlot.DragSlot.TryDrag = true;
             }
 

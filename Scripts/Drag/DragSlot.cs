@@ -101,7 +101,7 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
         {
             newSlot.Nullify();
             Main.Levels[Main.Instance.IndexLevel].Rival.DisplayedSlot.Remove(newSlot);
-            newSlot.SetFigure(cardData);
+            newSlot.SetCard(cardData);
             Main.Instance.Hand.DisplayedSlot[index] = newSlot;
         }
         else
@@ -113,7 +113,7 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
                 figure.IsTravel = false;
                 back = false;
             }
-            newSlot.SetFigure(cardData);
+            newSlot.SetCard(cardData);
         }
         Main.Instance.Hand.DisplayedSlot[index] = newSlot;
         if (back)

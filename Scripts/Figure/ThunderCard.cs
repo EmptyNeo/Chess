@@ -22,7 +22,7 @@ public class ThunderCard : SpecialCard
             yield return new WaitForSeconds(0.01f);
             handSlot.OldSlot.CardData.PlaySound();
             Characteristics.Instance.TakeMana(Cost);
-            newSlot.SetFigure(this);
+            newSlot.SetCard(this);
             newSlot.DragSlot.TryDrag = false;
             int index = handSlot.OldSlot.transform.GetSiblingIndex();
             handSlot.OldSlot.Hand.DisplayedSlot.Add(newSlot);

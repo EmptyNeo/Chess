@@ -11,7 +11,7 @@ public class Slot : MonoBehaviour
     public Image Backlight;
     public DragSlot DragSlot;
 
-    public void SetFigure(CardData cardData)
+    public void SetCard(CardData cardData)
     {
         CardData = (CardData)cardData.Clone();
         CardData.X = X;

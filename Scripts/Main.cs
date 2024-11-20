@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -23,9 +24,11 @@ public class Main : Sounds
     public GameObject Win;
     public GameObject Lose;
     public GameObject Pick;
+    public Transform BoardParent;
     public TutorialText TutorialText;
     public Card Card;
     public Transform[] CardPoint;
+    public Ivent Ivent;
     public static Main Instance { get; private set; }
     public int IndexLevel;
     public static List<Level> Levels = new()
@@ -36,9 +39,7 @@ public class Main : Sounds
         new Level3(),
         new Level4(),
         new Level5(),
-        new Level6(),
-        new Level7(),
-        new Level8()
+        new Level6()
     };
     private void Start()
     {
@@ -65,11 +66,11 @@ public class Main : Sounds
         if (Input.GetKeyDown(KeyCode.C))
         {
             int index = Random.Range(0, Factory.Creators.Count);
-            DeckData.AddToDeck(Factory.Creators[index]);    
+            DeckData.AddToDeck(Factory.Creators[index]);
         }
         if (Input.GetKeyUp(KeyCode.V))
         {
-            if(DeckData.Cards.Count > 0)
+            if (DeckData.Cards.Count > 0)
                 DeckData.SpawnFigure();
         }
         if (Input.GetKeyDown(KeyCode.W))
@@ -84,41 +85,69 @@ public class Main : Sounds
 
     }
     private bool _tryEndTurn = true;
-
     private IEnumerator EndTurn()
     {
-        
         if (_tryEndTurn)
         {
             _tryEndTurn = false;
-
             yield return Movement.Smooth(GUI, 0.25f, GUI.position, GUIEndPoint.position);
-            yield return Movement.Smooth(Board.transform, 0.25f, Board.transform.position, BoardEndPoint.position);
-            yield return Movement.AddSmooth(Board.transform, 1, 1.3f, 1.5f);
+            yield return Movement.Smooth(BoardParent.transform, 0.25f, BoardParent.transform.position, BoardEndPoint.position);
+            yield return Movement.AddSmooth(BoardParent.transform, 1, 1.3f, 1.5f);
             yield return new WaitForSeconds(0.25f);
             foreach (var s in Hand.Slots)
             {
                 s.Drag.TryDrag = false;
             }
             Board.EnableDragFigure();
+            if (Hand.DisplayedSlot.Count > 0)
+            {
 
+                if (IsPossibleMove() == false)
+                {
+                    yield return Back();
+                }
+                if (Hand.IsOnlySpecialCard())
+                    yield return Back();
+            }
             if (Hand.DisplayedSlot.Count == 0)
                 yield return Back();
+
+
         }
+    }
+    public bool IsPossibleMove()
+    {
+        bool[] isPossible = new bool[Hand.DisplayedSlot.Count];
+        for (int i = 0; i < Hand.DisplayedSlot.Count; i++)
+        {
+            if (Hand.DisplayedSlot[i].CardData is FigureData figure)
+            {
+                isPossible[i] = Board.TryPossibleMove(figure) && figure.LimitMove == 0;
+            }
+        }
+        for (int i = 0; i < isPossible.Length; i++)
+        {
+            if (isPossible[i] == true)
+                return true;
+        }
+        return false;
     }
     public IEnumerator Back()
     {
+        yield return new WaitForSeconds(0.15f);
+
         for (int i = 0; i < Hand.DisplayedSlot.Count; i++)
         {
             Hand.DisplayedSlot[i].CardData.LimitMove--;
         }
-        
+
+        Ivent.StartIvent();
         if (Hand.Slots.Count > 0 || DeckData.Cards.Count > 0)
         {
             Board.DisableDragFigure();
             yield return new WaitForSeconds(0.25f);
-            yield return Movement.TakeSmooth(Board.transform, 1.3f, 1, 1.5f);
-            yield return Movement.Smooth(Board.transform, 0.25f, BoardEndPoint.position, BoardStart.position);
+            yield return Movement.TakeSmooth(BoardParent.transform, 1.3f, 1, 1.5f);
+            yield return Movement.Smooth(BoardParent.transform, 0.25f, BoardEndPoint.position, BoardStart.position);
             yield return Movement.Smooth(GUI, 0.25f, GUI.position, GUIStart.position);
 
             yield return new WaitForSeconds(0.3f);
@@ -137,7 +166,10 @@ public class Main : Sounds
 
             _tryEndTurn = true;
         }
-
+        else if(IsPossibleMove() == false || Hand.IsOnlySpecialCard())
+        {
+            yield return Back();
+        }
         if (Levels[IndexLevel].Rival.DisplayedSlot.Count == 0
             && Levels[IndexLevel].Rival.Figure.Count == 0)
         {

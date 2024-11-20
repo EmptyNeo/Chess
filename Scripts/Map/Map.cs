@@ -42,7 +42,6 @@ public class Map : MonoBehaviour
     }
     public void OnStart(int index)
     {
-        Debug.Log(Main.Instance.IndexLevel);
         if (IndexLevel != Point[index].Index && Point[index].Index == IndexLevel + 1)
         {
             StartCoroutine(ChoiceLevel(index));

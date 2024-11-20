@@ -18,7 +18,8 @@ public class CardData : Data
         return new CardData(X, Y, Name, TypeFigure)
         {
             NotNull = true,
-            Icon = Icon
+            Icon = Icon,
+            LimitMove = LimitMove
         };
     }
 

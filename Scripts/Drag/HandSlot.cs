@@ -19,7 +19,7 @@ public class HandSlot : MonoBehaviour
     {
         Cost.text = cost.ToString();
     }
-    public void SetFigure(CardData figure)
+    public void SetCard(CardData figure)
     {
         CardData = (CardData)figure.Clone();
         CardData.X = X;

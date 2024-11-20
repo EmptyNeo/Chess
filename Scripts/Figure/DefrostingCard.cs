@@ -23,16 +23,19 @@ public class DefrostingCard : SpecialCard
             handSlot.OldSlot.CardData.PlaySound();
             Characteristics.Instance.TakeMana(Cost);
             int index = handSlot.OldSlot.transform.GetSiblingIndex();
-            handSlot.OldSlot.Hand.RemoveFromHand(index);
+            Main.Instance.Hand.RemoveFromHand(index);
 
             foreach (var card in Main.Instance.Hand.DisplayedSlot)
             {
-                if (card.CardData is FigureData figure && card.FigureImage.sprite.name == figure.FreezeName)
+                if (card.CardData is FigureData figure)
                 {
-                    figure.LimitMove = -1;
+                    if (card.FigureImage.sprite.name == figure.FreezeName)
+                    {
+                        figure.LimitMove = -1;
+                    }
                 }
             }
-
+         
 
             yield return Main.Levels[Main.Instance.IndexLevel].Rival.EndTurn();
             Object.Destroy(handSlot.OldSlot.gameObject);

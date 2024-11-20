@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Object = UnityEngine.Object;
 [Serializable]
 public class Level
 {
@@ -37,6 +38,8 @@ public class Level1 : Level
             new Pawn(4,2, "b_pawn", TypeFigure.Black),
             new Pawn(5,2, "b_pawn", TypeFigure.Black)
         });
+
+        Main.Instance.Ivent = Object.Instantiate(PrefabUtil.Load("Earthquake"), Main.Instance.GUI).GetComponent<Ivent>();
     }
 }
 public class Level2: Level
@@ -50,6 +53,8 @@ public class Level2: Level
             new Pawn(4,1, "b_pawn", TypeFigure.Black),
             new Pawn(5,1, "b_pawn", TypeFigure.Black)
         });
+
+        Main.Instance.Ivent = Object.Instantiate(PrefabUtil.Load("Earthquake"), Main.Instance.GUI).GetComponent<Ivent>();
     }
 }
 public class Level3 : Level
@@ -63,6 +68,8 @@ public class Level3 : Level
             new Pawn(4,1, "b_pawn", TypeFigure.Black),
             new Pawn(5,1, "b_pawn", TypeFigure.Black)
         });
+
+        Main.Instance.Ivent = Object.Instantiate(PrefabUtil.Load("Winter"), Main.Instance.GUI).GetComponent<Ivent>();
     }
 }
 public class Level4 : Level
@@ -76,6 +83,8 @@ public class Level4 : Level
             new Pawn(4,1, "b_pawn", TypeFigure.Black),
             new Pawn(5,1, "b_pawn", TypeFigure.Black)
         });
+
+        Main.Instance.Ivent =  Object.Instantiate(PrefabUtil.Load("Winter"), Main.Instance.BoardParent).GetComponent<Ivent>();
     }
 }
 public class Level5 : Level
@@ -89,6 +98,8 @@ public class Level5 : Level
             new Pawn(4,1, "b_pawn", TypeFigure.Black),
             new Pawn(5,1, "b_pawn", TypeFigure.Black)
         });
+
+        Main.Instance.Ivent = Object.Instantiate(PrefabUtil.Load("Smoke"), Main.Instance.BoardParent).GetComponent<Ivent>();
     }
 }
 public class Level6 : Level
@@ -102,31 +113,6 @@ public class Level6 : Level
             new Pawn(4,1, "b_pawn", TypeFigure.Black),
             new Pawn(5,1, "b_pawn", TypeFigure.Black)
         });
-    }
-}
-public class Level7 : Level
-{
-    public override void Init()
-    {
-        Rival = new Rival(new List<FigureData>()
-        {
-            new Pawn(2,1, "b_pawn", TypeFigure.Black),
-            new Pawn(3,1, "b_pawn", TypeFigure.Black),
-            new Pawn(4,1, "b_pawn", TypeFigure.Black),
-            new Pawn(5,1, "b_pawn", TypeFigure.Black)
-        });
-    }
-}
-public class Level8 : Level
-{
-    public override void Init()
-    {
-        Rival = new Rival(new List<FigureData>()
-        {
-            new Pawn(2,1, "b_pawn", TypeFigure.Black),
-            new Pawn(3,1, "b_pawn", TypeFigure.Black),
-            new Pawn(4,1, "b_pawn", TypeFigure.Black),
-            new Pawn(5,1, "b_pawn", TypeFigure.Black)
-        });
+
     }
 }

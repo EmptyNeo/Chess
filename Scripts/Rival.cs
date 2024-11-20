@@ -27,7 +27,7 @@ public class Rival
     public void StartFigure(int x, int y, FigureData figure)
     {
         Slot boardSlot = board.Slots[y, x];
-        boardSlot.SetFigure(figure);
+        boardSlot.SetCard(figure);
         DisplayedSlot.Add(boardSlot);
     }
     public IEnumerator EndTurn()
@@ -42,13 +42,13 @@ public class Rival
             Slot boardSlot = board.Slots[y, x];
             int index = Figure.IndexOf(Figure.OrderByDescending(card => card.Priority).Last());
             HandSlot handSlot = Object.Instantiate(PrefabUtil.Load("HandSlot"), main.RivalHand).GetComponent<HandSlot>();
-            handSlot.SetFigure(Figure[index]);
+            handSlot.SetCard(Figure[index]);
 
             yield return Movement.Smooth(handSlot.transform, 0.25f, handSlot.transform.position, boardSlot.transform.position);
             yield return new WaitForSeconds(0.15f);
 
             main.PlaySound(main.AudioExposeFigure, 1, 1);
-            boardSlot.SetFigure(handSlot.CardData);
+            boardSlot.SetCard(handSlot.CardData);
             Object.Destroy(handSlot.gameObject);
             DisplayedSlot.Add(boardSlot);
             Figure.RemoveAt(index);

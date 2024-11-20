@@ -1,6 +1,6 @@
 ﻿using TMPro;
 
-public class WinterIvent : Ivent
+public class WinterEvent : Event
 {
     public int Amount;
     public int MaxAmount;
@@ -10,7 +10,7 @@ public class WinterIvent : Ivent
         Amount = MaxAmount;
         Counter.text = $"Freezing Left <size=45><color=red>{Amount}</color></size> Turn";
     }
-    public override void StartIvent()
+    public override void StartEvent()
     {
         Amount--;
         if (Amount == 0)

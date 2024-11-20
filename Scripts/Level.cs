@@ -39,7 +39,7 @@ public class Level1 : Level
             new Pawn(5,2, "b_pawn", TypeFigure.Black)
         });
 
-        Main.Instance.Ivent = Object.Instantiate(PrefabUtil.Load("Earthquake"), Main.Instance.GUI).GetComponent<Ivent>();
+        Main.Instance.Ivent = Object.Instantiate(PrefabUtil.Load("Earthquake"), Main.Instance.GUI).GetComponent<Event>();
     }
 }
 public class Level2: Level
@@ -54,7 +54,7 @@ public class Level2: Level
             new Pawn(5,1, "b_pawn", TypeFigure.Black)
         });
 
-        Main.Instance.Ivent = Object.Instantiate(PrefabUtil.Load("Earthquake"), Main.Instance.GUI).GetComponent<Ivent>();
+        Main.Instance.Ivent = Object.Instantiate(PrefabUtil.Load("Earthquake"), Main.Instance.GUI).GetComponent<Event>();
     }
 }
 public class Level3 : Level
@@ -69,7 +69,7 @@ public class Level3 : Level
             new Pawn(5,1, "b_pawn", TypeFigure.Black)
         });
 
-        Main.Instance.Ivent = Object.Instantiate(PrefabUtil.Load("Winter"), Main.Instance.GUI).GetComponent<Ivent>();
+        Main.Instance.Ivent = Object.Instantiate(PrefabUtil.Load("Winter"), Main.Instance.GUI).GetComponent<Event>();
     }
 }
 public class Level4 : Level
@@ -84,7 +84,7 @@ public class Level4 : Level
             new Pawn(5,1, "b_pawn", TypeFigure.Black)
         });
 
-        Main.Instance.Ivent =  Object.Instantiate(PrefabUtil.Load("Winter"), Main.Instance.BoardParent).GetComponent<Ivent>();
+        Main.Instance.Ivent =  Object.Instantiate(PrefabUtil.Load("Winter"), Main.Instance.BoardParent).GetComponent<Event>();
     }
 }
 public class Level5 : Level
@@ -99,7 +99,7 @@ public class Level5 : Level
             new Pawn(5,1, "b_pawn", TypeFigure.Black)
         });
 
-        Main.Instance.Ivent = Object.Instantiate(PrefabUtil.Load("Smoke"), Main.Instance.BoardParent).GetComponent<Ivent>();
+        Main.Instance.Ivent = Object.Instantiate(PrefabUtil.Load("Smoke"), Main.Instance.BoardParent).GetComponent<Event>();
     }
 }
 public class Level6 : Level

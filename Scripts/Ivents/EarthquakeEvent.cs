@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class EarthquakeIvent : Ivent
+public class EarthquakeEvent : Event
 {
     public int Amount;
     public int MaxAmount;
@@ -12,7 +12,7 @@ public class EarthquakeIvent : Ivent
         Amount = MaxAmount;
         Counter.text = $"Freezing Left <size=45><color=red>{Amount}</color></size> Turn";
     }
-    public override void StartIvent()
+    public override void StartEvent()
     {
         Amount--;
         Counter.text = $"Earthquake Left <size=45><color=red>{Amount}</color></size> Turn";

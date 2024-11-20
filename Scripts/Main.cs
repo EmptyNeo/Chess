@@ -28,7 +28,7 @@ public class Main : Sounds
     public TutorialText TutorialText;
     public Card Card;
     public Transform[] CardPoint;
-    public Ivent Ivent;
+    public Event Ivent;
     public static Main Instance { get; private set; }
     public int IndexLevel;
     public static List<Level> Levels = new()
@@ -141,7 +141,7 @@ public class Main : Sounds
             Hand.DisplayedSlot[i].CardData.LimitMove--;
         }
 
-        Ivent.StartIvent();
+        Ivent.StartEvent();
         if (Hand.Slots.Count > 0 || DeckData.Cards.Count > 0)
         {
             Board.DisableDragFigure();

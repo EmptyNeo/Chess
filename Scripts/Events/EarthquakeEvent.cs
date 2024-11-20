@@ -10,7 +10,7 @@ public class EarthquakeEvent : Event
     private void Start()
     {
         Amount = MaxAmount;
-        Counter.text = $"Freezing Left <size=45><color=red>{Amount}</color></size> Turn";
+        Counter.text = $"Earthquake Left <size=45><color=red>{Amount}</color></size> Turn";
     }
     public override void StartEvent()
     {
@@ -29,16 +29,20 @@ public class EarthquakeEvent : Event
         List<Slot> deleteSlots = new();
         foreach (var slot in displayedSlot)
         {
-            int randomY = Random.Range(1, Board.Instance.Slots.GetLength(0) - 1);
-            int randomX = Random.Range(0, Board.Instance.Slots.GetLength(1));
-            if (Board.Instance.Slots[randomY, randomX].CardData.NotNull)
+            Debug.Log(slot.Y);
+            if (slot.Y > 4)
             {
-                Reroll(ref randomY, ref randomX);
+                int randomY = Random.Range(5, 8);
+                int randomX = Random.Range(0, Board.Instance.Slots.GetLength(1));
+                if (Board.Instance.Slots[randomY, randomX].CardData.NotNull)
+                {
+                    Reroll(ref randomY, ref randomX);
+                }
+                Board.Instance.Slots[randomY, randomX].SetCard(slot.CardData);
+                rechargeSlots.Add(Board.Instance.Slots[randomY, randomX]);
+                deleteSlots.Add(slot);
+                slot.Nullify();
             }
-            Board.Instance.Slots[randomY, randomX].SetCard(slot.CardData);
-            rechargeSlots.Add(Board.Instance.Slots[randomY, randomX]);
-            deleteSlots.Add(slot);
-            slot.Nullify();
         }
 
         foreach (var slot in rechargeSlots)
@@ -50,7 +54,7 @@ public class EarthquakeEvent : Event
     }
     private void Reroll(ref int randomY, ref int randomX)
     {
-        randomY = Random.Range(1, Board.Instance.Slots.GetLength(0) - 1);
+        randomY = Random.Range(5, 8);
         randomX = Random.Range(0, Board.Instance.Slots.GetLength(1));
         if (Board.Instance.Slots[randomY, randomX].CardData.NotNull)
         {

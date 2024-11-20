@@ -24,9 +24,26 @@ public class FreezingCard : SpecialCard
             Characteristics.Instance.TakeMana(Cost);
             int index = handSlot.OldSlot.transform.GetSiblingIndex();
             handSlot.OldSlot.Hand.RemoveFromHand(index);
-            newSlot.DragSlot.OldSlot.CardData.LimitMove+=2;
-            if (newSlot.DragSlot.OldSlot.CardData is FigureData figure)
-                newSlot.DragSlot.OldSlot.FigureImage.sprite = SpriteUtil.Load("pieces", figure.FreezeName);
+            for (int i = -1; i <= 1; i++)
+            {
+                for (int j = -1; j <= 1; j++)
+                {
+                    int Y = newSlot.Y - i;
+                    int X = newSlot.X - j;
+                    bool tryOutBordersY = Y > -1 || Y < Board.Instance.Slots.GetLength(0);
+                    bool tryOutBordersX = X > -1 || X < Board.Instance.Slots.GetLength(1);
+                    if (tryOutBordersY && tryOutBordersX)
+                    {
+                        CardData card = Board.Instance.Slots[Y, X].CardData;
+                        if (card.NotNull && card is FigureData figure)
+                        {
+                            figure.LimitMove += 2;
+                            Board.Instance.Slots[Y, X].FigureImage.sprite = SpriteUtil.Load("pieces", figure.FreezeName);
+                        }
+                    }
+                }
+            }
+
             yield return Main.Levels[Main.Instance.IndexLevel].Rival.EndTurn();
             Object.Destroy(handSlot.OldSlot.gameObject);
         }

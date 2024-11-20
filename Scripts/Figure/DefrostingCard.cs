@@ -25,17 +25,24 @@ public class DefrostingCard : SpecialCard
             int index = handSlot.OldSlot.transform.GetSiblingIndex();
             Main.Instance.Hand.RemoveFromHand(index);
 
-            foreach (var card in Main.Instance.Hand.DisplayedSlot)
+            for (int i = -1; i <= 1; i++)
             {
-                if (card.CardData is FigureData figure)
+                for (int j = -1; j <= 1; j++)
                 {
-                    if (card.FigureImage.sprite.name == figure.FreezeName)
+                    int Y = newSlot.Y - i;
+                    int X = newSlot.X - j;
+                    bool tryOutBordersY = Y > -1 || Y < Board.Instance.Slots.GetLength(0);
+                    bool tryOutBordersX = X > -1 || X < Board.Instance.Slots.GetLength(1);
+                    if (tryOutBordersY && tryOutBordersX)
                     {
-                        figure.LimitMove = -1;
+                        Slot slot = Board.Instance.Slots[Y, X];
+                        if (slot.CardData.NotNull && slot.CardData is FigureData figure && slot.FigureImage.sprite.name == figure.FreezeName)
+                        {
+                            figure.LimitMove = 0;
+                        }
                     }
                 }
             }
-         
 
             yield return Main.Levels[Main.Instance.IndexLevel].Rival.EndTurn();
             Object.Destroy(handSlot.OldSlot.gameObject);

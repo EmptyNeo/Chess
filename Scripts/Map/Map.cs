@@ -5,9 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class Map : MonoBehaviour
 {
-
-    public Transform Player;
-    public Animator PlayerAnimator;
+    public Transform PlayerTransform;
+    public ImageAnimation Player;
     public List<MapPoint> Point = new();
     public int IndexLevel;
     private void Start()
@@ -20,7 +19,7 @@ public class Map : MonoBehaviour
         {
             int index = PlayerPrefs.GetInt("index");
             Vector3 pos = Point[index].transform.position;
-            Player.transform.position = new Vector3(pos.x, pos.y + 0.5f, 0);
+            Player.transform.position = new Vector3(pos.x, pos.y + 0.4f, 0);
         }
     }
     private void Update()
@@ -40,9 +39,9 @@ public class Map : MonoBehaviour
     }
     public IEnumerator ChoiceLevel(int index)
     {
-        PlayerAnimator.SetBool("walk", true);
-        yield return Movement.Smooth(Player, 1, Player.position, Point[index].transform.position + new Vector3(0, 0.5f, 0));
-        PlayerAnimator.SetBool("walk", false);
+        Player.StateAnimation = StateAnimation.Walk;
+        yield return Movement.Smooth(PlayerTransform.transform, 1, PlayerTransform.position, Point[index].transform.position + new Vector3(0, 0.4f, 0));
+        Player.StateAnimation = StateAnimation.Idle;
         PlayerPrefs.SetInt("index", index);
         PlayerPrefs.SetInt("IndexLevel", Point[index].Index);
         PlayerPrefs.Save();

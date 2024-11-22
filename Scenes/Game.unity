@@ -2492,10 +2492,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slot
       objectReference: {fileID: 0}
-    - target: {fileID: 2448717209722883975, guid: 9e9e3ac8b45328f459df05212533c2e1, type: 3}
-      propertyPath: Backlight
-      value: 
-      objectReference: {fileID: 1063262592}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5400,17 +5396,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1063262592 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2485924939732013007, guid: 9e9e3ac8b45328f459df05212533c2e1, type: 3}
-  m_PrefabInstance: {fileID: 533811608}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1069143251
 GameObject:
   m_ObjectHideFlags: 0
@@ -8814,7 +8799,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a3ffe3c90c44e434d8dd1962ec09ab8c, type: 3}
+  m_Sprite: {fileID: -2130380024, guid: a3ffe3c90c44e434d8dd1962ec09ab8c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -9899,14 +9884,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a601145eff63977428bb9fe09003c16f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Sound: {fileID: 8300000, guid: 135d6b91720c2aa4099ddabd85e67dc6, type: 3}
-  AudioExposeFigure: {fileID: 8300000, guid: a31aa6293dc609d42b31e89d51316563, type: 3}
-  AudioExposeCard: {fileID: 8300000, guid: f5db5870e8b64bd45a6f7f3e0fd1779a, type: 3}
-  AudioExposeBarrel: {fileID: 8300000, guid: 0db89be8ad0564745b04617594fcebdb, type: 3}
-  AudioTakeCard: {fileID: 8300000, guid: e13c90d4f0ae2544e8a3e49e4212a581, type: 3}
-  AudioWin: {fileID: 8300000, guid: f461b0217cd265d42947a8c3148923f4, type: 3}
-  AudioLose: {fileID: 8300000, guid: 513ab7e590c96ba439ee6deb72a136f3, type: 3}
-  AudioFreezing: {fileID: 8300000, guid: 953c038e50b35aa4780a9a1ccbfdc8f2, type: 3}
   DeckData: {fileID: 935253451}
   Factory:
     _creators: []

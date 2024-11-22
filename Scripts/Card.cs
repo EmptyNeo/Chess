@@ -21,7 +21,7 @@ public class Card : MonoBehaviour
     }
     public IEnumerator Click()
     {
-        Main.Instance.PlaySound(Main.Instance.AudioTakeCard, 1, 1);
+        Sounds.PlaySound(Sounds.Get("take_card"), 1, 1);
         Vector2 pos = transform.position;
         pos -= Vector2.up * 8;
         pos = new Vector2(0, pos.y);

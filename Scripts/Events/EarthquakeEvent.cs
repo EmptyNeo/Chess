@@ -30,10 +30,10 @@ public class EarthquakeEvent : Event
             }
             Amount = MaxAmount;
             Counter.text = $"Earthquake Left <size=45><color=red>{Amount}</color></size> Turn";
-            Main.Instance.Board.DisableDragFigure();
-            yield return RearrangingSlots(Main.Instance.Hand.DisplayedSlot);
 
-            Main.Instance.Board.EnableDragFigure();
+            Main.Instance.IsCanMove = false;
+            yield return RearrangingSlots(Main.Instance.Hand.DisplayedSlot);
+            Main.Instance.IsCanMove = true;
         }
     }
     public bool IsDisplayedSlotNotNull(List<Slot> displayedSlot)
@@ -52,17 +52,21 @@ public class EarthquakeEvent : Event
         List<Slot> rechargeSlots = new();
         List<Slot> deleteSlots = new();
 
-     
+        int amountSlotMoveThanFour = 0;
         foreach (var slot in displayedSlot)
         {
             if (slot.Y > 4)
             {
+                amountSlotMoveThanFour++;
                 StartCoroutine(Movement.AddSmooth(slot.DragSlot.transform, 1, 1.3f, 1));
             }
         }
-        StartCoroutine(CameraShake.Instance.ShakeCamera(0.05f));
-
-        yield return new WaitForSeconds(0.15f);
+        if (amountSlotMoveThanFour > 0)
+        {
+            StartCoroutine(CameraShake.Instance.ShakeCamera(0.05f));
+            Sounds.PlaySound(Sounds.Get("earthquake"), 1, 1);
+            yield return new WaitForSeconds(0.15f);
+        }
         foreach (var slot in displayedSlot)
         {
             if (slot.Y > 4)
@@ -78,7 +82,7 @@ public class EarthquakeEvent : Event
                 yield return new WaitForSeconds(0.15f);
                 StartCoroutine(Movement.TakeSmooth(slot.DragSlot.transform, 1.3f, 1, 1));
                 yield return new WaitForSeconds(0.15f);
-                Main.Instance.PlaySound(Main.Instance.AudioExposeFigure, 1, 1);
+                Sounds.PlaySound(Sounds.Get("expose_figure"), 1, 1);
                 slot.DragSlot.transform.SetParent(slot.DragSlot.OldSlot.transform);
                 Board.Instance.Slots[randomY, randomX].SetCard(slot.CardData);
                 slot.DragSlot.transform.position = slot.DragSlot.OldSlot.transform.position;

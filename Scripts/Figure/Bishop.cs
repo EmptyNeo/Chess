@@ -18,7 +18,6 @@ public class Bishop : FigureData
 
         if (targetSlot.X == X && targetSlot.Y == Y)
         {
-            Debug.Log("Выбранная ячейка равна ячейке, на которой находится фигура");
             return false;
         }
         if (Mathf.Abs(targetSlot.X - X) == Mathf.Abs(targetSlot.Y - Y))

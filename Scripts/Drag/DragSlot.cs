@@ -12,7 +12,7 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
     {
         if (OldSlot.CardData.LimitMove > 0 || OldSlot.CardData.TypeFigure != TypeFigure.White)
             return;
-        if (OldSlot.CardData.NotNull && TryDrag)
+        if (OldSlot.CardData.NotNull && Main.Instance.IsCanMove && TryDrag)
         {
             transform.position = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
@@ -24,7 +24,7 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
         if (OldSlot.CardData.LimitMove > 0 || OldSlot.CardData.TypeFigure != TypeFigure.White)
             return;
 
-        if (TryDrag)
+        if (Main.Instance.IsCanMove && TryDrag)
         {
             if (OldSlot.CardData.NotNull)
             {
@@ -57,7 +57,7 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
         if (OldSlot.CardData.LimitMove > 0 || OldSlot.CardData.TypeFigure != TypeFigure.White)
             return;
 
-        if (TryDrag && OldSlot.CardData.NotNull)
+        if (Main.Instance.IsCanMove && TryDrag && OldSlot.CardData.NotNull)
         {
             GetComponentInChildren<Image>().color = new Color(1, 1, 1, 1f);
             GetComponentInChildren<Image>().raycastTarget = true;
@@ -92,7 +92,11 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
     }
     public IEnumerator RechargeSlot(Slot newSlot)
     {
-        Main.Instance.PlaySound(Main.Instance.AudioExposeFigure, 2, 1);
+        if(Main.Instance.DeckData.Cards.Count > 0 && Main.Instance.Hand.Slots.Count > 0)
+            Main.Instance.IsCanMove = false;
+
+        Sounds.PlaySound(Sounds.Get("expose_figure"), 2, 1);
+
         CardData cardData = OldSlot.CardData;
         OldSlot.Nullify();
         int index = Main.Instance.Hand.FindDisplayedSlot(OldSlot);
@@ -112,7 +116,9 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
 
             if (cardData is FigureData figure && figure.IsTravel)
             {
-                TryDrag = false;
+                newSlot.DragSlot.TryDrag = false;
+                Board.Instance.EnableDragFigure();
+                Main.Instance.IsCanMove = false;
                 figure.IsTravel = false;
                 back = false;
             }

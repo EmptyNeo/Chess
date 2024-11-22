@@ -1,8 +1,9 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class HandSlot : MonoBehaviour
+public class HandSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public int X, Y;
     public CardData CardData;
@@ -35,14 +36,14 @@ public class HandSlot : MonoBehaviour
         FigureImage.color = new Color(1, 1, 1, 0);
     }
 
-/*    public void OnPointerEnter(PointerEventData eventData)
+    public void OnPointerEnter(PointerEventData eventData)
     {
         foreach (var slot in Main.Instance.Hand.Slots)
         {
             if (slot.Drag.IsDragging)
                 return;
         }
-        if(!Drag.IsDragging && !Drag.objDelete)
+        if (!Drag.IsDragging && !Drag.objDelete)
             StartCoroutine(Movement.Smooth(Drag.transform, 0.1f, Drag.transform.position, Drag.transform.position + new Vector3(0, 0.2f, 0)));
     }
 
@@ -56,5 +57,5 @@ public class HandSlot : MonoBehaviour
         }
         if (!Drag.IsDragging && !Drag.objDelete)
             StartCoroutine(Movement.Smooth(Drag.transform, 0.1f, Drag.transform.position, Drag.OldSlot.transform.position));
-    }*/
+    }
 }

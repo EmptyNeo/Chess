@@ -38,6 +38,7 @@ public class BarrelCard : SpecialCard
             handSlot.OldSlot.CardData.PlaySound();
             Characteristics.Instance.TakeMana(Cost);
             newSlot.SetCard(this);
+
             newSlot.DragSlot.TryDrag = false;
             int index = handSlot.OldSlot.transform.GetSiblingIndex();
             handSlot.OldSlot.Hand.RemoveFromHand(index);
@@ -94,6 +95,6 @@ public class BarrelCard : SpecialCard
     }
     public override void PlaySound()
     {
-        Main.Instance.PlaySound(Main.Instance.AudioExposeBarrel, 1, 1);
+        Sounds.PlaySound(Sounds.Get("expose_barrel"), 1, 1);
     }
 }

@@ -29,6 +29,10 @@ public class AccelerationCard : SpecialCard
             Object.Destroy(handSlot.OldSlot.gameObject);
         }
     }
+    public override void PlaySound()
+    {
+
+    }
     public override bool TryExpose(Slot newSlot)
     {
         if (newSlot.CardData.TypeFigure == TypeFigure.White && newSlot.CardData.NotNull)

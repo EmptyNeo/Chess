@@ -28,7 +28,7 @@ public class DragHandSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
 
         if (OldSlot.CardData.NotNull && TryDrag)
         {
-            Main.Instance.PlaySound(Main.Instance.AudioTakeCard, 1, 1);
+            Sounds.PlaySound(Sounds.Get("take_card"), 1, 1);
             Vector2 pos = transform.position;
             GetComponentInChildren<RectTransform>().localScale = new Vector2(1.25f, 1.25f);
             transform.position = pos;
@@ -99,7 +99,6 @@ public class DragHandSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
             yield return new WaitForSeconds(0.01f);
             Characteristics.Instance.TakeMana(OldSlot.CardData.Cost);
             newSlot.SetCard(OldSlot.CardData);
-            newSlot.DragSlot.TryDrag = false;
             int index = OldSlot.transform.GetSiblingIndex();
             OldSlot.Hand.DisplayedSlot.Add(newSlot);
             OldSlot.Hand.RemoveFromHand(index);

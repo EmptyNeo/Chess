@@ -24,13 +24,15 @@ public class DecelerationCard : SpecialCard
             Characteristics.Instance.TakeMana(Cost);
             int index = handSlot.OldSlot.transform.GetSiblingIndex();
             handSlot.OldSlot.Hand.RemoveFromHand(index);
-            Debug.Log(newSlot.DragSlot.OldSlot.CardData.LimitMove);
             newSlot.DragSlot.OldSlot.CardData.LimitMove++;
-            Debug.Log(newSlot.DragSlot.OldSlot.CardData.LimitMove);
 
             yield return Main.Levels[Main.Instance.IndexLevel].Rival.EndTurn();
             Object.Destroy(handSlot.OldSlot.gameObject);
         }
+    }
+    public override void PlaySound()
+    {
+
     }
     public override bool TryExpose(Slot newSlot)
     {

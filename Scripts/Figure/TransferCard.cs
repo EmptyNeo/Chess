@@ -27,6 +27,8 @@ public class TransferCard : SpecialCard
 
             if (newSlot.CardData is FigureData figure)
             {
+                Board.Instance.DisableDragFigure();
+                Main.Instance.IsCanMove = true;
                 figure.IsTravel = true;
                 newSlot.DragSlot.TryDrag = true;
             }
@@ -34,6 +36,10 @@ public class TransferCard : SpecialCard
             yield return Main.Levels[Main.Instance.IndexLevel].Rival.EndTurn();
             Object.Destroy(handSlot.OldSlot.gameObject);
         }
+    }
+    public override void PlaySound()
+    {
+
     }
     public override bool TryExpose(Slot slot)
     {

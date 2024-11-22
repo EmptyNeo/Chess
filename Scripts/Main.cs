@@ -1,17 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Main : Sounds
 {
-    public AudioClip AudioExposeFigure;
-    public AudioClip AudioExposeCard;
-    public AudioClip AudioExposeBarrel;
-    public AudioClip AudioTakeCard;
-    public AudioClip AudioWin;
-    public AudioClip AudioLose;
-    public AudioClip AudioFreezing;
     public Deck DeckData;
     public Factory Factory;
     public Characteristics Characteristics;
@@ -32,6 +27,7 @@ public class Main : Sounds
     public Card Card;
     public Transform[] CardPoint;
     public Event Ivent;
+    public bool IsCanMove;
     public static Main Instance { get; private set; }
     public int IndexLevel;
     public static List<Level> Levels = new()
@@ -52,10 +48,9 @@ public class Main : Sounds
         Instance = this;
         Factory = new Factory();
         DeckData.GiveDefaultDeck(Factory);
-        StartCoroutine(DeckData.GiveFigure(this, Sound, Factory.GetFigure("w_pawn")));
+        StartCoroutine(DeckData.GiveFigure(Get("give_card"), Factory.GetFigure("w_pawn")));
         DataDeck deck = BinarySavingSystem.LoadDeck();
         DeckData.GiveDeckCards(deck, Factory);
-        Board.DisableDragFigure();
         DeckData.AddToDeck(Factory.GetFigure("barrel"));
         if (PlayerPrefs.HasKey("IndexLevel"))
         {
@@ -82,7 +77,7 @@ public class Main : Sounds
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
-            PlaySound(AudioWin, 0.2f, 1);
+            PlaySound(Get("win"), 0.2f, 1);
             Win.SetActive(true);
         }
     }
@@ -105,7 +100,7 @@ public class Main : Sounds
             {
                 s.Drag.TryDrag = false;
             }
-            Board.EnableDragFigure();
+            IsCanMove = true;
             if (Hand.DisplayedSlot.Count > 0)
             {
 
@@ -116,7 +111,6 @@ public class Main : Sounds
             }
             else if (Hand.DisplayedSlot.Count == 0)
                 yield return Back();
-
 
         }
     }
@@ -139,8 +133,8 @@ public class Main : Sounds
     }
     public IEnumerator Back()
     {
-        yield return new WaitForSeconds(0.15f);
 
+        yield return new WaitForSeconds(0.15f);
         for (int i = 0; i < Hand.DisplayedSlot.Count; i++)
         {
             Hand.DisplayedSlot[i].CardData.LimitMove--;
@@ -148,12 +142,12 @@ public class Main : Sounds
         if (Levels[IndexLevel].Rival.DisplayedSlot.Count == 0
             && Levels[IndexLevel].Rival.Figure.Count == 0)
         {
-            PlaySound(AudioWin, 0.2f, 1);
+            PlaySound(Get("win"), 0.2f, 1);
             Win.SetActive(true);
         }
         else if (Hand.DisplayedSlot.Count == 0 && DeckData.Cards.Count == 0 && Hand.Slots.Count == 0)
         {
-            PlaySound(AudioLose, 0.2f, 1);
+            PlaySound(Get("lose"), 0.2f, 1);
             Lose.SetActive(true);
         }
         else
@@ -163,15 +157,23 @@ public class Main : Sounds
         }
         if (Hand.Slots.Count > 0 || DeckData.Cards.Count > 0)
         {
-          
-            Board.DisableDragFigure();
+            for (int i = 0; i < Hand.DisplayedSlot.Count; i++)
+            {
+                StartCoroutine(Hand.DisplayedSlot[i].DragSlot.ReturnToSlot());
+                Board.Instance.HideHints();
+                Board.Instance.HideBacklight();
+                Hand.DisplayedSlot[i].DragSlot.GetComponentInChildren<Image>().color = new Color(1, 1, 1, 1f);
+                Hand.DisplayedSlot[i].DragSlot.GetComponentInChildren<Image>().raycastTarget = true;
+                Hand.DisplayedSlot[i].DragSlot.GetComponentInChildren<RectTransform>().localScale = new Vector2(1f, 1f);
+                Hand.DisplayedSlot[i].CardData.LimitMove--;
+            }
             yield return new WaitForSeconds(0.25f);
             yield return Movement.TakeSmooth(BoardParent.transform, 1.3f, 1, 1.5f);
             yield return Movement.Smooth(BoardParent.transform, 0.25f, BoardEndPoint.position, BoardStart.position);
             yield return Movement.Smooth(GUI, 0.25f, GUI.position, GUIStart.position);
 
             yield return new WaitForSeconds(0.3f);
-            yield return DeckData.GiveFigure(this, Sound);
+            yield return DeckData.GiveFigure(Get("give_card"));
 
             if (Hand.Slots.Count > 0)
             {
@@ -191,7 +193,8 @@ public class Main : Sounds
             yield return new WaitForSeconds(1f);
             yield return Back();
         }
-        
+
+
     }
     public void Restart()
     {
@@ -214,6 +217,12 @@ public class Main : Sounds
                 BinarySavingSystem.DeleteDeck();
                 PlayerPrefs.DeleteAll();
             }
+        }
+        else
+        {
+            Win.SetActive(false);
+            Pick.SetActive(true);
+            GiveRandomCardToDeck();
         }
     }
     public void Skip()
@@ -241,16 +250,38 @@ public class Main : Sounds
                 break;
             }
         }
+        int randomIndex = Random.Range(0, 4);
         if (creators.Count > 0)
         {
             for (int i = 0; i < 3; i++)
             {
+                int index;
                 Card card = Instantiate(Card.gameObject, CardPoint[i].transform.position, Quaternion.identity, Pick.transform).GetComponent<Card>();
-                int index = Random.Range(0, creators.Count);
+                if (i == randomIndex)
+                {
+                    index = Random.Range(0, creators.Where(f => f.TypeFigure == TypeFigure.White).Count());
+                }
+                else
+                    index = Random.Range(0, creators.Count);
+
                 card.SetCard(creators[index]);
                 creators.RemoveAt(index);
             }
         }
     }
+    public void GiveRandomCardToDeck(List<CardData> specials)
+    {
+        if (specials.Count > 0)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                
+                Card card = Instantiate(Card.gameObject, CardPoint[i].transform.position, Quaternion.identity, Pick.transform).GetComponent<Card>();
+                int index = Random.Range(0, specials.Count);
 
+                card.SetCard(specials[index]);
+                specials.RemoveAt(index);
+            }
+        }
+    }
 }

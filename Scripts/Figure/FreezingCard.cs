@@ -51,7 +51,7 @@ public class FreezingCard : SpecialCard
     }
     public override void PlaySound()
     {
-        Main.Instance.PlaySound(Main.Instance.AudioFreezing, 1, 1);
+        Sounds.PlaySound(Sounds.Get("freezing"), 1, 1);
     }
     public override bool TryExpose(Slot slot)
     {

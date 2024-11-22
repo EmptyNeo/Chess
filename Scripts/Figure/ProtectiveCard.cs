@@ -34,6 +34,10 @@ public class ProtectiveCard : SpecialCard
             Object.Destroy(handSlot.OldSlot.gameObject);
         }
     }
+    public override void PlaySound()
+    {
+        Sounds.PlaySound(Sounds.Get("shield"), 1, 1);
+    }
     public override bool TryExpose(Slot slot)
     {
         if (slot.CardData is FigureData figure)

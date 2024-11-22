@@ -15,6 +15,7 @@ public class Factory
         Register(new Rook(0, 0, "w_rook", TypeFigure.White));
         Register(new Knight(0, 0, "w_knight", TypeFigure.White));
         Register(new Queen(0, 0, "w_queen", TypeFigure.White));
+        Register(new Wolf(0, 0, "b_wolf", TypeFigure.White));
         Register(new Pawn(0, 0, "b_pawn", TypeFigure.Black));
         Register(new Bishop(0, 0, "b_bishop", TypeFigure.Black));
         Register(new Rook(0, 0, "b_rook", TypeFigure.Black));

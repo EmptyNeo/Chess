@@ -35,6 +35,10 @@ public class ThunderCard : SpecialCard
             Object.Destroy(handSlot.OldSlot.gameObject);
         }
     }
+    public override void PlaySound()
+    {
+        Sounds.PlaySound(Sounds.Get("thunder"), 1, 1);
+    }
     public override bool TryExpose(Slot slot)
     {
 

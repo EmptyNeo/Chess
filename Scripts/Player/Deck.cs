@@ -54,7 +54,7 @@ public class Deck : MonoBehaviour
             }
         }
     }
-    public IEnumerator GiveFigure(Sounds sounds, AudioClip sound)
+    public IEnumerator GiveFigure(AudioClip sound)
     {
         if (Cards.Count == 0)
             yield return null;
@@ -63,14 +63,14 @@ public class Deck : MonoBehaviour
         {
             if (Cards.Count > 0)
             {
-                sounds.PlaySound(sound, 1, 1);
+                Sounds.PlaySound(sound, 1, 1);
                 SpawnFigure();
                 yield return new WaitForSeconds(0.2f);
             }
         }
 
     }
-    public IEnumerator GiveFigure(Sounds sounds, AudioClip sound, CardData cardData)
+    public IEnumerator GiveFigure(AudioClip sound, CardData cardData)
     {
         if (Cards.Count == 0)
             yield return null;
@@ -79,7 +79,7 @@ public class Deck : MonoBehaviour
         {
             if (Cards.Count > 0)
             {
-                sounds.PlaySound(sound, 1, 1);
+                Sounds.PlaySound(sound, 1, 1);
                 SpawnFigure(cardData);
                 yield return new WaitForSeconds(0.2f);
             }

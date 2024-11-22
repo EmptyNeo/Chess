@@ -5,8 +5,6 @@ public class TreasonEvent : Event
 {
     public override IEnumerator StartEvent()
     {
-
-        Main.Instance.Board.DisableDragFigure();
         Slot changeSlot = null;
         for (int i = 0; i < Board.Instance.Slots.GetLength(0); i++)
         {
@@ -26,6 +24,8 @@ public class TreasonEvent : Event
         {
             if (slot.CardData is Queen && slot.CardData.TypeFigure == TypeFigure.White)
             {
+
+                Main.Instance.IsCanMove = false;
                 Panel.SetActive(true);
                 yield return new WaitForSeconds(2f);
                 Panel.SetActive(false);
@@ -35,15 +35,15 @@ public class TreasonEvent : Event
                 yield return new WaitForSeconds(0.5f);
                 changeSlot.SetCard(slot.CardData);
                 changeSlot.CardData.TypeFigure = TypeFigure.Black;
-                Main.Instance.PlaySound(Main.Instance.AudioExposeFigure, 1, 1);
+                Sounds.PlaySound(Sounds.Get("expose_figure"), 1, 1);
                 slot.DragSlot.transform.position = slot.DragSlot.OldSlot.transform.position;
                 slot.Nullify();
                 Main.Levels[Main.Instance.IndexLevel].Rival.DisplayedSlot.Add(changeSlot);
                 Main.Instance.Hand.DisplayedSlot.Remove(slot);
+
+                Main.Instance.IsCanMove = true;
                 break;
             }
         }
-
-        Main.Instance.Board.EnableDragFigure();
     }
 }

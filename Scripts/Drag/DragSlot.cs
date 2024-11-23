@@ -12,7 +12,7 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
     {
         if (OldSlot.CardData.LimitMove > 0 || OldSlot.CardData.TypeFigure != TypeFigure.White)
             return;
-        if (OldSlot.CardData.NotNull && Main.Instance.IsCanMove && TryDrag)
+        if (Main.Instance.IsCanMove && OldSlot.CardData.NotNull && TryDrag)
         {
             transform.position = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
@@ -67,6 +67,11 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
             {
                 if (OldSlot.CardData is FigureData figure && figure.CanMove(slot))
                 {
+                    if (Main.Instance.DeckData.Cards.Count > 0 || Main.Instance.Hand.Slots.Count > 0)
+                    {
+                        Main.Instance.IsCanMove = false;
+                    }
+
                     StartCoroutine(RechargeSlot(slot));
                     transform.position = OldSlot.transform.position;
                 }
@@ -92,16 +97,13 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
     }
     public IEnumerator RechargeSlot(Slot newSlot)
     {
-        if(Main.Instance.DeckData.Cards.Count > 0 && Main.Instance.Hand.Slots.Count > 0)
-            Main.Instance.IsCanMove = false;
-
+       
         Sounds.PlaySound(Sounds.Get("expose_figure"), 2, 1);
 
         CardData cardData = OldSlot.CardData;
         OldSlot.Nullify();
         int index = Main.Instance.Hand.FindDisplayedSlot(OldSlot);
         bool back = true;
-
         if (newSlot.CardData.NotNull)
         {
 
@@ -116,6 +118,7 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
 
             if (cardData is FigureData figure && figure.IsTravel)
             {
+
                 newSlot.DragSlot.TryDrag = false;
                 Board.Instance.EnableDragFigure();
                 Main.Instance.IsCanMove = false;

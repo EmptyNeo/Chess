@@ -12,15 +12,7 @@ public class BarrelCard : SpecialCard
     }
     public override void ZeroAction()
     {
-
-        if (X + 1 < Board.Instance.Slots.GetLength(1) && Board.Instance.Slots[Y, X + 1].CardData.NotNull)
-        {
-            Board.Instance.Slots[Y, X + 1].Nullify();
-        }
-        if (X - 1 > -1 && Board.Instance.Slots[Y, X - 1].CardData.NotNull)
-        {
-            Board.Instance.Slots[Y, X - 1].Nullify();
-        }
+        Main.Instance.Hand.DisplayedSlot.Remove(Board.Instance.Slots[Y, X]);
         Board.Instance.Slots[Y, X].Nullify();
     }
     public override IEnumerator Recharge(DragHandSlot handSlot, Slot newSlot)
@@ -42,7 +34,7 @@ public class BarrelCard : SpecialCard
             newSlot.DragSlot.TryDrag = false;
             int index = handSlot.OldSlot.transform.GetSiblingIndex();
             handSlot.OldSlot.Hand.RemoveFromHand(index);
-
+            Main.Instance.Hand.DisplayedSlot.Add(newSlot);
             if (newSlot.X + 1 < Board.Instance.Slots.GetLength(1) && Board.Instance.Slots[newSlot.Y, newSlot.X + 1].CardData.NotNull == false)
             {
                 Slot slot = Board.Instance.Slots[newSlot.Y, newSlot.X + 1];
@@ -55,6 +47,7 @@ public class BarrelCard : SpecialCard
                                              slot.DragSlot.OldSlot.transform.position));
 
                 slot.DragSlot.transform.SetParent(slot.DragSlot.OldSlot.transform);
+                Main.Instance.Hand.DisplayedSlot.Add(slot);
             }
             if (newSlot.X - 1 > -1 && Board.Instance.Slots[newSlot.Y, newSlot.X - 1].CardData.NotNull == false)
             {
@@ -70,6 +63,7 @@ public class BarrelCard : SpecialCard
 
 
                 slot.DragSlot.transform.SetParent(slot.DragSlot.OldSlot.transform);
+                Main.Instance.Hand.DisplayedSlot.Add(slot);
             }
             yield return new WaitForSeconds(0.5f);
             yield return Main.Levels[Main.Instance.IndexLevel].Rival.EndTurn();
@@ -90,7 +84,8 @@ public class BarrelCard : SpecialCard
         return new BarrelCard(X, Y, Name, TypeFigure)
         {
             NotNull = true,
-            Icon = Icon
+            Icon = Icon,
+            LimitMove = LimitMove
         };
     }
     public override void PlaySound()

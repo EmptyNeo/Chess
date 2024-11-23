@@ -10,9 +10,8 @@ public class SpecialCard : CardData, ICloneable
         get => _limitMove;
         set
         {
-            if (value < 0)
+            if (value == 0)
             {
-                LimitMove = 0;
                 ZeroAction();
             }
             else

@@ -133,12 +133,12 @@ public class Main : Sounds
     }
     public IEnumerator Back()
     {
-
-        yield return new WaitForSeconds(0.15f);
-        for (int i = 0; i < Hand.DisplayedSlot.Count; i++)
+        foreach (Slot slot in Board.Slots)
         {
-            Hand.DisplayedSlot[i].CardData.LimitMove--;
+            if (slot.CardData.NotNull)
+                slot.CardData.LimitMove--;
         }
+        yield return new WaitForSeconds(0.15f);
         if (Levels[IndexLevel].Rival.DisplayedSlot.Count == 0
             && Levels[IndexLevel].Rival.Figure.Count == 0)
         {
@@ -165,7 +165,6 @@ public class Main : Sounds
                 Hand.DisplayedSlot[i].DragSlot.GetComponentInChildren<Image>().color = new Color(1, 1, 1, 1f);
                 Hand.DisplayedSlot[i].DragSlot.GetComponentInChildren<Image>().raycastTarget = true;
                 Hand.DisplayedSlot[i].DragSlot.GetComponentInChildren<RectTransform>().localScale = new Vector2(1f, 1f);
-                Hand.DisplayedSlot[i].CardData.LimitMove--;
             }
             yield return new WaitForSeconds(0.25f);
             yield return Movement.TakeSmooth(BoardParent.transform, 1.3f, 1, 1.5f);
@@ -188,6 +187,7 @@ public class Main : Sounds
 
             _tryEndTurn = true;
         }
+
         else if (IsPossibleMove() == false || Hand.IsOnlySpecialCard())
         {
             yield return new WaitForSeconds(1f);
@@ -229,6 +229,7 @@ public class Main : Sounds
     {
         SceneManager.LoadScene("Map");
     }
+    public int AmountChoiceCard;
     public void GiveRandomCardToDeck()
     {
         List<CardData> creators = new();
@@ -275,7 +276,7 @@ public class Main : Sounds
         {
             for (int i = 0; i < 3; i++)
             {
-                
+
                 Card card = Instantiate(Card.gameObject, CardPoint[i].transform.position, Quaternion.identity, Pick.transform).GetComponent<Card>();
                 int index = Random.Range(0, specials.Count);
 

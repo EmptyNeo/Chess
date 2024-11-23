@@ -13,7 +13,7 @@ public abstract class Data : ICloneable
     public string Name;
     public TypeFigure TypeFigure;
     public int Priority;
-    protected int _limitMove;
+    public int _limitMove;
     public virtual int LimitMove
     {
         get { return _limitMove; }

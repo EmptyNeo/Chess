@@ -25,7 +25,7 @@ public class CardData : Data
 
     public override void PlaySound()
     {
-        Sounds.PlaySound(Sounds.Get("expose_card"), 1, 1);
+        Sounds.PlaySound(Sounds.Get<SoundExposeCard>(), 1, 1);
     }
 
     public override bool TryExpose(Slot slot)

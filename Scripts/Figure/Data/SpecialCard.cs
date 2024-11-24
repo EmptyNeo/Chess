@@ -27,7 +27,7 @@ public class SpecialCard : CardData, ICloneable
     }
     public override void PlaySound()
     {
-        Sounds.PlaySound(Sounds.Get("expose_figure"), 2, 1);
+        Sounds.PlaySound(Sounds.Get<SoundExposeFigure>(), 2, 1);
     }
     public virtual IEnumerator Recharge(DragHandSlot handSlot, Slot newSlot)
     {

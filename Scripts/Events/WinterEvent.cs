@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -37,22 +38,20 @@ public class WinterEvent : Event
             Panel.SetActive(false);
             Amount = MaxAmount;
 
-            Sounds.PlaySound(Sounds.Get("freezing"), 1, 1);
-            GameObject snowWave = Instantiate(PrefabUtil.Load("SnowWave"));
-            StartCoroutine(Movement.Smooth(snowWave.transform, 2, snowWave.transform.position, snowWave.transform.position + Vector3.right * 7));
-            yield return new WaitForSeconds(2f);
-            Destroy(snowWave);
-            foreach (var slot in Main.Levels[Main.Instance.IndexLevel].Rival.DisplayedSlot)
+            Sounds.PlaySound(Sounds.Get<SoundFreezing>(), 1, 1);
+         
+            for (int i = 0; i < Board.Instance.Slots.GetLength(0); i++)
             {
-                slot.CardData.LimitMove += 2;
-                if (slot.DragSlot.OldSlot.CardData is FigureData figure)
-                    slot.DragSlot.OldSlot.FigureImage.sprite = SpriteUtil.Load("pieces", figure.FreezeName);
-            }
-            foreach (var slot in Main.Instance.Hand.DisplayedSlot)
-            {
-                slot.CardData.LimitMove += 2;
-                if (slot.DragSlot.OldSlot.CardData is FigureData figure)
-                    slot.DragSlot.OldSlot.FigureImage.sprite = SpriteUtil.Load("pieces", figure.FreezeName);
+                for (int j = 0; j < Board.Instance.Slots.GetLength(1); j++)
+                {
+                    if (Board.Instance.Slots[j, i].CardData.NotNull)
+                    {
+                        Board.Instance.Slots[j, i].CardData.LimitMove += 2;
+                        if (Board.Instance.Slots[j, i].DragSlot.OldSlot.CardData is FigureData figure)
+                            Board.Instance.Slots[j, i].DragSlot.OldSlot.FigureImage.sprite = SpriteUtil.Load("pieces", figure.FreezeName);
+                    }
+                }
+                        yield return new WaitForSeconds(0.25f);
             }
         }
         Counter.text = $"Freezing Left <size=45><color=red>{Amount}</color></size> Turn";

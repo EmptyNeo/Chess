@@ -30,6 +30,7 @@ public class Main : Sounds
     public bool IsCanMove;
     public static Main Instance { get; private set; }
     public int IndexLevel;
+    public Canvas Canvas;
     public static List<Level> Levels = new()
     {
         new Level0(),
@@ -48,7 +49,7 @@ public class Main : Sounds
         Instance = this;
         Factory = new Factory();
         DeckData.GiveDefaultDeck(Factory);
-        StartCoroutine(DeckData.GiveFigure(Get("give_card"), Factory.GetFigure("w_pawn")));
+        StartCoroutine(DeckData.GiveFigure(Get<SoundGiveCard>(), Factory.GetFigure("w_pawn")));
         DataDeck deck = BinarySavingSystem.LoadDeck();
         DeckData.GiveDeckCards(deck, Factory);
         DeckData.AddToDeck(Factory.GetFigure("barrel"));
@@ -77,7 +78,7 @@ public class Main : Sounds
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
-            PlaySound(Get("win"), 0.2f, 1);
+            PlaySound(Get<SoundWin>(), 0.2f, 1);
             Win.SetActive(true);
         }
     }
@@ -142,12 +143,12 @@ public class Main : Sounds
         if (Levels[IndexLevel].Rival.DisplayedSlot.Count == 0
             && Levels[IndexLevel].Rival.Figure.Count == 0)
         {
-            PlaySound(Get("win"), 0.2f, 1);
+            PlaySound(Get<SoundWin>(), 0.2f, 1);
             Win.SetActive(true);
         }
         else if (Hand.DisplayedSlot.Count == 0 && DeckData.Cards.Count == 0 && Hand.Slots.Count == 0)
         {
-            PlaySound(Get("lose"), 0.2f, 1);
+            PlaySound(Get<SoundLose>(), 0.2f, 1);
             Lose.SetActive(true);
         }
         else
@@ -172,7 +173,7 @@ public class Main : Sounds
             yield return Movement.Smooth(GUI, 0.25f, GUI.position, GUIStart.position);
 
             yield return new WaitForSeconds(0.3f);
-            yield return DeckData.GiveFigure(Get("give_card"));
+            yield return DeckData.GiveFigure(Get<SoundGiveCard>());
 
             if (Hand.Slots.Count > 0)
             {

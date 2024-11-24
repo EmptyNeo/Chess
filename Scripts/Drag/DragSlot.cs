@@ -98,7 +98,7 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
     public IEnumerator RechargeSlot(Slot newSlot)
     {
        
-        Sounds.PlaySound(Sounds.Get("expose_figure"), 2, 1);
+        Sounds.PlaySound(Sounds.Get<SoundExposeFigure>(), 2, 1);
 
         CardData cardData = OldSlot.CardData;
         OldSlot.Nullify();
@@ -107,7 +107,7 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
         if (newSlot.CardData.NotNull)
         {
 
-            StartCoroutine(CameraShake.Instance.ShakeCamera(0.1f, 0.05f));
+            StartCoroutine(ShakeUtil.Instance.Shake(0.1f, 0.05f));
             newSlot.Nullify();
             Main.Levels[Main.Instance.IndexLevel].Rival.DisplayedSlot.Remove(newSlot);
             newSlot.SetCard(cardData);

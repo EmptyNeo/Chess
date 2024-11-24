@@ -63,8 +63,10 @@ public class EarthquakeEvent : Event
         }
         if (amountSlotMoveThanFour > 0)
         {
-            StartCoroutine(CameraShake.Instance.ShakeCamera(0.05f));
-            Sounds.PlaySound(Sounds.Get("earthquake"), 1, 1);
+
+            Main.Instance.Canvas.renderMode = RenderMode.WorldSpace;
+            StartCoroutine(ShakeUtil.Instance.Shake(1f));
+            Sounds.PlaySound(Sounds.Get<SoundEarthquake>(), 1, 1);
             yield return new WaitForSeconds(0.15f);
         }
         foreach (var slot in displayedSlot)
@@ -82,7 +84,7 @@ public class EarthquakeEvent : Event
                 yield return new WaitForSeconds(0.15f);
                 StartCoroutine(Movement.TakeSmooth(slot.DragSlot.transform, 1.3f, 1, 1));
                 yield return new WaitForSeconds(0.15f);
-                Sounds.PlaySound(Sounds.Get("expose_figure"), 1, 1);
+                Sounds.PlaySound(Sounds.Get<SoundExposeFigure>(), 1, 1);
                 slot.DragSlot.transform.SetParent(slot.DragSlot.OldSlot.transform);
                 Board.Instance.Slots[randomY, randomX].SetCard(slot.CardData);
                 slot.DragSlot.transform.position = slot.DragSlot.OldSlot.transform.position;
@@ -92,7 +94,9 @@ public class EarthquakeEvent : Event
                 slot.Nullify();
             }
         }
-        CameraShake.Instance.StopShake();
+        ShakeUtil.Instance.StopShake();
+
+        Main.Instance.Canvas.renderMode = RenderMode.ScreenSpaceCamera;
         foreach (var slot in deleteSlots)
             displayedSlot.Remove(slot);
 

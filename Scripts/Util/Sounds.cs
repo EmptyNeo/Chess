@@ -2,13 +2,6 @@ using UnityEngine;
 
 public class Sounds : MonoBehaviour
 {
-    //sound = give_card
-    //expose card = expose_card
-    //expose barrel = expose_barrel 
-    //take card = take_card
-    //win = win
-    //lose = lose
-    //freezing = freezing
     public static AudioSource AudioSource;
     private void Awake()
     {
@@ -21,8 +14,5 @@ public class Sounds : MonoBehaviour
         AudioSource.pitch = p;
         AudioSource.PlayOneShot(clip, volume);
     }
-    public static AudioClip Get(string name)
-    {
-        return Resources.Load<AudioClip>("Sounds/" + name);
-    }
+    public static AudioClip Get<T>() where T : SoundFX, new() => new T().Clip;
 }

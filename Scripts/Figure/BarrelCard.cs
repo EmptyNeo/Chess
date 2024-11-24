@@ -90,6 +90,6 @@ public class BarrelCard : SpecialCard
     }
     public override void PlaySound()
     {
-        Sounds.PlaySound(Sounds.Get("expose_barrel"), 1, 1);
+        Sounds.PlaySound(Sounds.Get<SoundExposeBarrel>(), 1, 1);
     }
 }

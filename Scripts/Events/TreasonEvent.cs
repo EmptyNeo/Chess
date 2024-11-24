@@ -35,7 +35,7 @@ public class TreasonEvent : Event
                 yield return new WaitForSeconds(0.5f);
                 changeSlot.SetCard(slot.CardData);
                 changeSlot.CardData.TypeFigure = TypeFigure.Black;
-                Sounds.PlaySound(Sounds.Get("expose_figure"), 1, 1);
+                Sounds.PlaySound(Sounds.Get<SoundExposeFigure>(), 1, 1);
                 slot.DragSlot.transform.position = slot.DragSlot.OldSlot.transform.position;
                 slot.Nullify();
                 Main.Levels[Main.Instance.IndexLevel].Rival.DisplayedSlot.Add(changeSlot);

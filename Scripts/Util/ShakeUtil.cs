@@ -1,26 +1,31 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class CameraShake : MonoBehaviour
+public class ShakeUtil : MonoBehaviour
 {
-    public static CameraShake Instance { get; private set; }
+    public static ShakeUtil Instance { get; private set; }
     public void Start()
     {
         Instance = this;
     }
     private Vector3 originalPosition;
-    public IEnumerator ShakeCamera(float duration,float intensity)
+    public IEnumerator Shake(float duration,float intensity)
     {
+        Main.Instance.Canvas.renderMode = RenderMode.WorldSpace;
         originalPosition = transform.localPosition;
         InvokeRepeating(nameof(DoShake), 0, intensity);
         Invoke(nameof(StopShake), duration);
+        yield return new WaitForSeconds(duration);
+        Main.Instance.Canvas.renderMode = RenderMode.ScreenSpaceCamera;
         yield return null;
     }
 
-    public IEnumerator ShakeCamera(float intensity)
+    public IEnumerator Shake(float intensity)
     {
+
         originalPosition = transform.localPosition;
         InvokeRepeating(nameof(DoShake), 0, intensity);
+
         yield return null;
     }
 

@@ -22,7 +22,7 @@ public class Card : MonoBehaviour
     public IEnumerator Click()
     {
 
-        Sounds.PlaySound(Sounds.Get("take_card"), 1, 1);
+        Sounds.PlaySound(Sounds.Get<SoundTakeCard>(), 1, 1);
         Vector2 pos = new(0, transform.position.y - Vector2.up.y * 8);
         yield return Movement.Smooth(transform, 0.5f, transform.position, pos);
         yield return new WaitForSeconds(0.2f);

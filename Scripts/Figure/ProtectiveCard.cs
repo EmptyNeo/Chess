@@ -36,7 +36,7 @@ public class ProtectiveCard : SpecialCard
     }
     public override void PlaySound()
     {
-        Sounds.PlaySound(Sounds.Get("shield"), 1, 1);
+        Sounds.PlaySound(Sounds.Get<SoundShield>(), 1, 1);
     }
     public override bool TryExpose(Slot slot)
     {

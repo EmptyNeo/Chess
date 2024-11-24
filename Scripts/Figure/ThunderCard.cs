@@ -37,7 +37,7 @@ public class ThunderCard : SpecialCard
     }
     public override void PlaySound()
     {
-        Sounds.PlaySound(Sounds.Get("thunder"), 1, 1);
+        Sounds.PlaySound(Sounds.Get<SoundThunder>(), 1, 1);
     }
     public override bool TryExpose(Slot slot)
     {

@@ -50,7 +50,7 @@ public class DefrostingCard : SpecialCard
     }
     public override void PlaySound()
     {
-        Sounds.PlaySound(Sounds.Get("defrosting"), 1, 1);
+        Sounds.PlaySound(Sounds.Get<SoundDefrosting>(), 1, 1);
     }
     public override bool TryExpose(Slot slot)
     {

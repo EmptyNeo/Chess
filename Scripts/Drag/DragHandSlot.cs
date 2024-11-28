@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -7,6 +6,7 @@ using UnityEngine.UI;
 
 public class DragHandSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler
 {
+   
     public HandSlot OldSlot;
     public bool IsDragging;
 
@@ -28,6 +28,7 @@ public class DragHandSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
 
         if (OldSlot.CardData.NotNull && TryDrag)
         {
+            OldSlot.Tooltip.View.SetActive(false);
             Sounds.PlaySound(Sounds.Get<SoundTakeCard>(), 1, 1);
             Vector2 pos = transform.position;
             GetComponentInChildren<RectTransform>().localScale = new Vector2(1.25f, 1.25f);
@@ -42,7 +43,7 @@ public class DragHandSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
         }
 
     }
-    public void OnPointerUp(PointerEventData eventData)
+    public IEnumerator OnPointerUp()
     {
         if (OldSlot.CardData.NotNull && TryDrag)
         {
@@ -65,24 +66,31 @@ public class DragHandSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
             }
             else
             {
-                StartCoroutine(Movement.Smooth(transform, 0.2f, transform.position, OldSlot.transform.position));
+               StartCoroutine(Movement.Smooth(transform, 0.2f, transform.position, OldSlot.transform.position));
 
             }
 
 
             Board.Instance.HideBacklight();
-            Image.raycastTarget = true;
+           
             IsDragging = false;
             Main.Instance.HintPanel.SetActive(false);
-            transform.SetParent(OldSlot.transform);
             if (!objDelete)
             {
                 Main.Instance.Hand.ResetAlignetSet();
                 Main.Instance.Hand.SmoothMovement();
+                yield return new WaitForSeconds(0.25f);
+                transform.SetParent(OldSlot.transform);
+                Image.raycastTarget = true;
             }
         }
 
     }
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        StartCoroutine(OnPointerUp());
+    }
+
     public IEnumerator RechargeSlot(Slot newSlot)
     {
         if (Characteristics.Instance.Mana < OldSlot.CardData.Cost || OldSlot.CardData.TryExpose(newSlot) == false)
@@ -102,8 +110,9 @@ public class DragHandSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
             int index = OldSlot.transform.GetSiblingIndex();
             OldSlot.Hand.DisplayedSlot.Add(newSlot);
             OldSlot.Hand.RemoveFromHand(index);
-            yield return Main.Levels[Main.Instance.IndexLevel].Rival.EndTurn();
+            transform.SetParent(OldSlot.transform);
             Destroy(OldSlot.gameObject);
+            yield return Main.Levels[Main.Instance.IndexLevel].Rival.EndTurn();
         }
     }
 }

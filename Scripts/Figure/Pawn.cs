@@ -3,10 +3,13 @@
 
     public Pawn(int x, int y, string nameSprite, TypeFigure typeFigure) : base(x, y, nameSprite, typeFigure)
     {
+        Name = "Pawn";
         LimitMove = 0;
         Icon = SpriteUtil.Load("pieces", nameSprite);
-        Cost = 0;
+        Cost = 1;
         Priority = 1;
+        Description =  "It may moves one square forward\n" +
+                      "Attacks diagonally one square ahead";
     }
 
     public override bool CanMove(Slot targetSlot)
@@ -61,12 +64,12 @@
             color = "w";
         else
             color = "b";
-        return new Pawn(X, Y, Name, TypeFigure)
+        return new Pawn(X, Y, NameSprite, TypeFigure)
         {
             NotNull = true,
             Icon = Icon,
             IsProtected = IsProtected,
-            FreezeName = color + "f_" + Name.Split("_")[1],
+            FreezeName = color + "f_" + NameSprite.Split("_")[1],
             LimitMove = LimitMove
         };
     }

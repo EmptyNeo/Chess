@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEngine;
 
 [Serializable]
 public class FigureData : CardData
@@ -16,8 +15,8 @@ public class FigureData : CardData
             else
             {
                 _limitMove = value;
-                if (_limitMove == 0)
-                    Board.Instance.Slots[Y, X].FigureImage.sprite = SpriteUtil.Load("pieces", Name);
+                if (_limitMove == 0 && Board.Instance != null)
+                    Board.Instance.Slots[Y, X].FigureImage.sprite = SpriteUtil.Load("pieces", NameSprite);
             }
 
            
@@ -32,7 +31,7 @@ public class FigureData : CardData
     {
         X = x;
         Y = y; 
-        Name = nameSprite;
+        NameSprite = nameSprite;
         TypeFigure = typeFigure;
         LimitMove = 1;
     }
@@ -63,11 +62,11 @@ public class FigureData : CardData
             color = "w";
         else
             color = "b";
-        return new FigureData(X, Y, Name, TypeFigure)
+        return new FigureData(X, Y, NameSprite, TypeFigure)
         {
             NotNull = true,
             Icon = Icon,
-            FreezeName = color + "f_" + Name.Split("_")[1],
+            FreezeName = color + "f_" + NameSprite.Split("_")[1],
             LimitMove = LimitMove
         };
     }

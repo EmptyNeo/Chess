@@ -6,9 +6,11 @@ public class BarrelCard : SpecialCard
 
     public BarrelCard(int x, int y, string nameSprite, TypeFigure typeFigure) : base(x, y, nameSprite, typeFigure)
     {
+        Name = "Barrel Card";
         Icon = SpriteUtil.Load("special_card", nameSprite);
         Cost = 1;
         LimitMove = 2;
+        Description = "Puts <size=25>3</size> barrels ";
     }
     public override void ZeroAction()
     {
@@ -67,6 +69,7 @@ public class BarrelCard : SpecialCard
             }
             yield return new WaitForSeconds(0.5f);
             yield return Main.Levels[Main.Instance.IndexLevel].Rival.EndTurn();
+            handSlot.transform.SetParent(handSlot.OldSlot.transform);
             Object.Destroy(handSlot.OldSlot.gameObject);
         }
     }
@@ -81,7 +84,7 @@ public class BarrelCard : SpecialCard
 
     public override object Clone()
     {
-        return new BarrelCard(X, Y, Name, TypeFigure)
+        return new BarrelCard(X, Y, NameSprite, TypeFigure)
         {
             NotNull = true,
             Icon = Icon,

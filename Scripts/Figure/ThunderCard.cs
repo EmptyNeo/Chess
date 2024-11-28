@@ -5,8 +5,10 @@ public class ThunderCard : SpecialCard
 {
     public ThunderCard(int x, int y, string nameSprite, TypeFigure typeFigure) : base(x, y, nameSprite, typeFigure)
     {
+        Name = "Thunder Card";
         Icon = SpriteUtil.Load("special_card", nameSprite);
         Cost = 0;
+        Description = "Attacks the selected figure with lightning";
     }
     public override IEnumerator Recharge(DragHandSlot handSlot, Slot newSlot)
     {
@@ -32,6 +34,7 @@ public class ThunderCard : SpecialCard
             Main.Levels[Main.Instance.IndexLevel].Rival.DisplayedSlot.Remove(Board.Instance.Slots[newSlot.Y, newSlot.X]);
 
             yield return Main.Levels[Main.Instance.IndexLevel].Rival.EndTurn();
+            handSlot.transform.SetParent(handSlot.OldSlot.transform);
             Object.Destroy(handSlot.OldSlot.gameObject);
         }
     }
@@ -53,7 +56,7 @@ public class ThunderCard : SpecialCard
 
     public override object Clone()
     {
-        return new ThunderCard(X, Y, Name, TypeFigure)
+        return new ThunderCard(X, Y, NameSprite, TypeFigure)
         {
             NotNull = true,
             Icon = Icon

@@ -1,12 +1,16 @@
 ﻿using System.Collections;
 using UnityEngine;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class AccelerationCard : SpecialCard
 {
     public AccelerationCard(int x, int y, string nameSprite, TypeFigure typeFigure) : base(x, y, nameSprite, typeFigure)
     {
+        Name = "Acceleration Card";
         Icon = SpriteUtil.Load("special_card", nameSprite);
         Cost = 1;
+        Description = "Speeds up the operation\n" +
+                "of the selected card";
     }
     public override IEnumerator Recharge(DragHandSlot handSlot, Slot newSlot)
     {
@@ -26,6 +30,7 @@ public class AccelerationCard : SpecialCard
             handSlot.OldSlot.Hand.RemoveFromHand(index);
             newSlot.DragSlot.OldSlot.CardData.LimitMove--;
             yield return Main.Levels[Main.Instance.IndexLevel].Rival.EndTurn();
+            handSlot.transform.SetParent(handSlot.OldSlot.transform);
             Object.Destroy(handSlot.OldSlot.gameObject);
         }
     }
@@ -41,7 +46,7 @@ public class AccelerationCard : SpecialCard
     }
     public override object Clone()
     {
-        return new AccelerationCard(X, Y, Name, TypeFigure)
+        return new AccelerationCard(X, Y, NameSprite, TypeFigure)
         {
             NotNull = true,
             Icon = Icon

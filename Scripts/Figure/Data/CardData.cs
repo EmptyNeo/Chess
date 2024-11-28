@@ -9,13 +9,13 @@ public class CardData : Data
     {
         X = x;
         Y = y;
-        Name = nameSprite;
+        NameSprite = nameSprite;
         TypeFigure = typeFigure;
     }
 
     public override object Clone()
     {
-        return new CardData(X, Y, Name, TypeFigure)
+        return new CardData(X, Y, NameSprite, TypeFigure)
         {
             NotNull = true,
             Icon = Icon,

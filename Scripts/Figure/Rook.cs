@@ -4,10 +4,11 @@ public class Rook : FigureData
 {
     public Rook(int x, int y, string nameSprite, TypeFigure typeFigure) : base(x, y, nameSprite, typeFigure)
     {
+        Name = "Rook";
         Icon = SpriteUtil.Load("pieces", nameSprite);
         Cost = 1;
-
         Priority = 5;
+        Description = "It may move horizontally or vertically";
     }
     public override bool CanMove(Slot targetSlot)
     {
@@ -65,12 +66,12 @@ public class Rook : FigureData
             color = "w";
         else
             color = "b";
-        return new Rook(X, Y, Name, TypeFigure)
+        return new Rook(X, Y, NameSprite, TypeFigure)
         {
             NotNull = true,
             Icon = Icon,
             IsProtected = IsProtected,
-            FreezeName = color + "f_" + Name.Split("_")[1],
+            FreezeName = color + "f_" + NameSprite.Split("_")[1],
             LimitMove = LimitMove
         };
 

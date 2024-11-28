@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Sounds : MonoBehaviour
@@ -13,6 +14,16 @@ public class Sounds : MonoBehaviour
         AudioSource.clip = clip;
         AudioSource.pitch = p;
         AudioSource.PlayOneShot(clip, volume);
+    }
+    public static IEnumerator GraduallyReducingVolume()
+    {
+       float startVolume = AudioSource.volume;
+       for (int i = 0; i < 300; i++)
+       {
+            AudioSource.volume -= 0.01f;
+            yield return new WaitForSeconds(0.01f);
+       }
+       AudioSource.volume = startVolume;
     }
     public static AudioClip Get<T>() where T : SoundFX, new() => new T().Clip;
 }

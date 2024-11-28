@@ -5,8 +5,10 @@ public class DecelerationCard : SpecialCard
 {
     public DecelerationCard(int x, int y, string nameSprite, TypeFigure colorFigure) : base(x, y, nameSprite, colorFigure)
     {
+        Name = "Snail Card";
         Icon = SpriteUtil.Load("special_card", nameSprite);
         Cost = 0;
+        Description = "Slows down the selected card";
     }
     public override IEnumerator Recharge(DragHandSlot handSlot, Slot newSlot)
     {
@@ -25,8 +27,8 @@ public class DecelerationCard : SpecialCard
             int index = handSlot.OldSlot.transform.GetSiblingIndex();
             handSlot.OldSlot.Hand.RemoveFromHand(index);
             newSlot.DragSlot.OldSlot.CardData.LimitMove++;
-
             yield return Main.Levels[Main.Instance.IndexLevel].Rival.EndTurn();
+            handSlot.transform.SetParent(handSlot.OldSlot.transform);
             Object.Destroy(handSlot.OldSlot.gameObject);
         }
     }
@@ -43,7 +45,7 @@ public class DecelerationCard : SpecialCard
     }
     public override object Clone()
     {
-        return new DecelerationCard(X, Y, Name, TypeFigure)
+        return new DecelerationCard(X, Y, NameSprite, TypeFigure)
         {
             NotNull = true,
             Icon = Icon

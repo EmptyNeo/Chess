@@ -4,10 +4,11 @@ public class Bishop : FigureData
 {
     public Bishop(int x, int y, string nameSprite, TypeFigure typeFigure) : base(x, y, nameSprite, typeFigure)
     {
+        Name = "Bishop";
         Icon = SpriteUtil.Load("pieces", nameSprite);
         Cost = 1;
-
         Priority = 3;
+        Description =  "It may moves diagonally";
     }
     public override bool CanMove(Slot targetSlot)
     {
@@ -44,12 +45,12 @@ public class Bishop : FigureData
             color = "w";
         else
             color = "b";
-        return new Bishop(X, Y, Name, TypeFigure)
+        return new Bishop(X, Y, NameSprite, TypeFigure)
         {
             NotNull = true,
             Icon = Icon,
             IsProtected = IsProtected,
-            FreezeName = color + "f_" + Name.Split("_")[1],
+            FreezeName = color + "f_" + NameSprite.Split("_")[1],
             LimitMove = LimitMove
         };
     }

@@ -4,10 +4,13 @@ public class Queen : FigureData
 {
     public Queen(int x, int y, string nameSprite, TypeFigure typeFigure) : base(x, y, nameSprite, typeFigure)
     {
+        Name = "Queen";
         Icon = SpriteUtil.Load("pieces", nameSprite);
         Cost = 2;
-
         Priority = 9;
+        Description = "It can move any number of squares\n" +
+                      "vertically, horizontally or diagonally\n" +
+                      "combining the powers of the rook and bishop";
     }
     public override bool CanMove(Slot targetSlot)
     {
@@ -91,12 +94,12 @@ public class Queen : FigureData
             color = "w";
         else
             color = "b";
-        return new Queen(X, Y, Name, TypeFigure)
+        return new Queen(X, Y, NameSprite, TypeFigure)
         {
             NotNull = true,
             Icon = Icon,
             IsProtected = IsProtected,
-            FreezeName = color + "f_" + Name.Split("_")[1],
+            FreezeName = color + "f_" + NameSprite.Split("_")[1],
             LimitMove = LimitMove
         };
     }

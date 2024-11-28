@@ -36,12 +36,12 @@ public class Wolf : FigureData
             color = "w";
         else
             color = "b";
-        return new Wolf(X, Y, Name, TypeFigure)
+        return new Wolf(X, Y, NameSprite, TypeFigure)
         {
             NotNull = true,
             Icon = Icon,
             IsProtected = IsProtected,
-            FreezeName = color + "f_" + Name.Split("_")[1],
+            FreezeName = color + "f_" + NameSprite.Split("_")[1],
             LimitMove = LimitMove
         };
     }

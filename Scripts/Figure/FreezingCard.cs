@@ -5,8 +5,11 @@ public class FreezingCard : SpecialCard
 {
     public FreezingCard(int x, int y, string nameSprite, TypeFigure typeFigure) : base(x, y, nameSprite, typeFigure)
     {
+        Name = "Snowball";
         Icon = SpriteUtil.Load("special_card", nameSprite);
         Cost = 2;
+        Description =  "Freezes shapes\n" +
+                      "within a 3 by 3 radius";
     }
     public override IEnumerator Recharge(DragHandSlot handSlot, Slot newSlot)
     {
@@ -46,6 +49,7 @@ public class FreezingCard : SpecialCard
             }
 
             yield return Main.Levels[Main.Instance.IndexLevel].Rival.EndTurn();
+            handSlot.transform.SetParent(handSlot.OldSlot.transform);
             Object.Destroy(handSlot.OldSlot.gameObject);
         }
     }
@@ -64,7 +68,7 @@ public class FreezingCard : SpecialCard
     }
     public override object Clone()
     {
-        return new FreezingCard(X, Y, Name, TypeFigure)
+        return new FreezingCard(X, Y, NameSprite, TypeFigure)
         {
             NotNull = true,
             Icon = Icon

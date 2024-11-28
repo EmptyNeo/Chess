@@ -7,10 +7,12 @@ public abstract class Data : ICloneable
     public int X;
     public int Y;
     #endregion
+    public string Description;
     public Sprite Icon;
     public int Cost;
     public bool NotNull;
     public string Name;
+    public string NameSprite;
     public TypeFigure TypeFigure;
     public int Priority;
     public int _limitMove;

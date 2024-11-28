@@ -27,6 +27,7 @@ public class Main : Sounds
     public Card Card;
     public Transform[] CardPoint;
     public Event Ivent;
+    public Tooltip Tooltip;
     public bool IsCanMove;
     public static Main Instance { get; private set; }
     public int IndexLevel;
@@ -134,10 +135,16 @@ public class Main : Sounds
     }
     public IEnumerator Back()
     {
+        yield return Levels[IndexLevel].Rival.Move();
         foreach (Slot slot in Board.Slots)
         {
             if (slot.CardData.NotNull)
                 slot.CardData.LimitMove--;
+        }
+        foreach (Slot slot in Board.Slots)
+        {
+            if (slot.CardData is FigureData figure && figure.IsProtected)
+                figure.IsProtected = false;
         }
         yield return new WaitForSeconds(0.15f);
         if (Levels[IndexLevel].Rival.DisplayedSlot.Count == 0
@@ -236,7 +243,7 @@ public class Main : Sounds
         List<CardData> creators = new();
         foreach (CardData f in Factory.Creators)
         {
-            if ((f.TypeFigure == TypeFigure.White || f.TypeFigure == TypeFigure.Special) && f.Name != "w_pawn")
+            if ((f.TypeFigure == TypeFigure.White || f.TypeFigure == TypeFigure.Special) && f.NameSprite != "w_pawn")
             {
                 if (DeckData.NameFigures.Count + 8 < 16)
                     creators.Add(f);
@@ -248,7 +255,7 @@ public class Main : Sounds
         {
             if (name == "w_queen")
             {
-                creators.RemoveAll(f => f.Name == "w_queen");
+                creators.RemoveAll(f => f.NameSprite == "w_queen");
                 break;
             }
         }

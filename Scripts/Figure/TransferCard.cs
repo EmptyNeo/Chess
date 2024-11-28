@@ -5,8 +5,11 @@ public class TransferCard : SpecialCard
 {
     public TransferCard(int x, int y, string nameSprite, TypeFigure TypeFigure) : base(x, y, nameSprite, TypeFigure)
     {
+        Name = "Transfer Card";
         Icon = SpriteUtil.Load("special_card", nameSprite);
         Cost = 2;
+        Description = "Makes it possible to move the shape\n" +
+                      "to the first three lines";
     }
     public override IEnumerator Recharge(DragHandSlot handSlot, Slot newSlot)
     {
@@ -34,6 +37,7 @@ public class TransferCard : SpecialCard
             }
 
             yield return Main.Levels[Main.Instance.IndexLevel].Rival.EndTurn();
+            handSlot.transform.SetParent(handSlot.OldSlot.transform);
             Object.Destroy(handSlot.OldSlot.gameObject);
         }
     }
@@ -54,7 +58,7 @@ public class TransferCard : SpecialCard
     }
     public override object Clone()
     {
-        return new TransferCard(X, Y, Name, TypeFigure)
+        return new TransferCard(X, Y, NameSprite, TypeFigure)
         {
             NotNull = true,
             Icon = Icon

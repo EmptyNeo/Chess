@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
-
+public enum Rare { }
 [Serializable]
 public class SpecialCard : CardData, ICloneable
 {
+    public int Rare;
     public override int LimitMove 
     { 
         get => _limitMove;

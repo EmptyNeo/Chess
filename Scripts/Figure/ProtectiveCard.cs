@@ -5,8 +5,10 @@ public class ProtectiveCard : SpecialCard
 {
     public ProtectiveCard(int x, int y, string nameSprite, TypeFigure TypeFigure) : base(x, y, nameSprite, TypeFigure)
     {
+        Name = "Shield Card";
         Icon = SpriteUtil.Load("special_card", nameSprite);
         Cost = 1;
+        Description =  "Protects the selected card for one turn";
     }
     public override IEnumerator Recharge(DragHandSlot handSlot, Slot newSlot)
     {
@@ -31,6 +33,7 @@ public class ProtectiveCard : SpecialCard
             }
 
             yield return Main.Levels[Main.Instance.IndexLevel].Rival.EndTurn();
+            handSlot.transform.SetParent(handSlot.OldSlot.transform);
             Object.Destroy(handSlot.OldSlot.gameObject);
         }
     }
@@ -51,7 +54,7 @@ public class ProtectiveCard : SpecialCard
     }
     public override object Clone()
     {
-        return new ProtectiveCard(X, Y, Name, TypeFigure)
+        return new ProtectiveCard(X, Y, NameSprite, TypeFigure)
         {
             NotNull = true,
             Icon = Icon

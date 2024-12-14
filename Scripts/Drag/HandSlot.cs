@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class HandSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public int X, Y;
     public CardData CardData;
     public Image FigureImage;
     public TMP_Text Cost;
@@ -24,9 +23,15 @@ public class HandSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     }
     public void SetCard(CardData figure)
     {
-        CardData = (CardData)figure.Clone();
-        CardData.X = X;
-        CardData.Y = Y;
+        CardData.NotNull = true;
+        CardData.Icon = figure.Icon;
+        CardData.LimitMove = figure.LimitMove;
+        CardData.Description = figure.Description;
+        CardData.Name = figure.Name;
+        CardData.TypeFigure = figure.TypeFigure;
+        CardData.Cost = figure.Cost;
+        CardData.NameSprite = figure.NameSprite;
+        CardData.Priority = figure.Priority;
         FigureImage.sprite = CardData.Icon;
         FigureImage.color = new Color(1, 1, 1, 1);
     }

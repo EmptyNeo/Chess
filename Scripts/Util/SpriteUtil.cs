@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SpriteUtil : MonoBehaviour
+public static class SpriteUtil 
 {
     public static Sprite Load(string imageName, string spriteName)
     {

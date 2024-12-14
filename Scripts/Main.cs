@@ -51,6 +51,8 @@ public class Main : Sounds
                 StartCoroutine(Tutorial.Enable(TutorialText));*/
         Instance = this;
         Factory = new Factory();
+        
+      
         DeckData.GiveDefaultDeck(Factory);
         StartCoroutine(DeckData.GiveFigure(Get<SoundGiveCard>(), Factory.GetFigure<Pawn>(TypeFigure.White)));
         DataDeck deck = BinarySavingSystem.LoadDeck();

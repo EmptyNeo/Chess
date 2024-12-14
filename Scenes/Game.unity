@@ -2876,6 +2876,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slot
       objectReference: {fileID: 0}
+    - target: {fileID: 2448717209722883975, guid: 9e9e3ac8b45328f459df05212533c2e1, type: 3}
+      propertyPath: X
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2448717209722883975, guid: 9e9e3ac8b45328f459df05212533c2e1, type: 3}
+      propertyPath: Y
+      value: -1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

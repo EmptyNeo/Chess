@@ -44,7 +44,7 @@ public class Rival
             main.StartCoroutine(Movement.Smooth(handSlot.gameObject.transform, 0.25f, handSlot.gameObject.transform.position, boardSlot.transform.position));
             await Task.Delay(250);
             Sounds.PlaySound(Sounds.Get<SoundExposeCard>(), 1, 1);
-            boardSlot.SetCard(Deck[index]);
+            boardSlot.SetCard(handSlot.CardData);
             Object.Destroy(handSlot.gameObject);
             DisplayedSlot.Add(boardSlot);
             Deck.RemoveAt(index);

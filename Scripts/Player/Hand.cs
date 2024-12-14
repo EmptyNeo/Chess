@@ -11,9 +11,9 @@ public class Hand : MonoBehaviour
     public float Spacing = 1f;
     public bool IsOnlySpecialCard()
     {
-        foreach (var slot in DisplayedSlot)
+        foreach(var slot in DisplayedSlot)
         {
-            if (slot.CardData.TypeFigure != TypeFigure.Special)
+            if(slot.CardData is not SpecialCard)
                 return false;
         }
         return true;

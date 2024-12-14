@@ -7,7 +7,7 @@ public static class Movement
     public static IEnumerator Smooth(Transform transform, float duration, Vector3 a, Vector3 b)
     {
         float time = 0f;
-
+        Debug.Log("Alo");
         while (time < duration)
         {
             time += Time.deltaTime;
@@ -16,7 +16,7 @@ public static class Movement
             yield return null;
         }
 
-    }
+   }
     public static IEnumerator TakeOpacity(Transform transform, Vector3 b,Image image, float duration, float speed)
     {
         float time = duration;

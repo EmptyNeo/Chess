@@ -58,7 +58,7 @@ public class EarthquakeEvent : Event
         List<Slot> rivalDeleteSlots = new();
 
         bool IsSlotMoveThanFour = displayedSlot?.Any(slot => slot.Y > 4) ?? false;
-        bool IsSlotMoveLessThanThree = displayedSlot?.Any(slot => slot.Y < 3) ?? false;
+        bool IsSlotMoveLessThanThree = rivalDisplayedSlot?.Any(slot => slot.Y < 3) ?? false;
 
         foreach (var slot in displayedSlot)
         {
@@ -80,6 +80,7 @@ public class EarthquakeEvent : Event
             StartCoroutine(ShakeUtil.Instance.Shake(0.05f));
             Sounds.PlaySound(Sounds.Get<SoundEarthquake>(), 1, 1);
         }
+        yield return new WaitForSeconds(0.5f);
         foreach (var slot in displayedSlot)
         {
             if (slot.Y > 4)
@@ -145,18 +146,6 @@ public class EarthquakeEvent : Event
             rivalDisplayedSlot.Add(slot);
 
 
-    }
-    private int AmountSlotMoveThan(List<Slot> displayedSlot,bool isThan)
-    {
-        int amountSlotMoveThan = 0;
-        foreach (var slot in displayedSlot)
-        {
-            if (isThan)
-            {
-                amountSlotMoveThan++;
-            }
-        }
-        return amountSlotMoveThan;
     }
     private void Reroll(ref int randomY, ref int randomX, int start, int end)
     {

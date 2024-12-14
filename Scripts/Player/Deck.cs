@@ -41,7 +41,7 @@ public class Deck : MonoBehaviour
     public void GiveDefaultDeck(Factory factory)
     {
         for (int i = 0; i < 5; i++)
-            AddToDeck(factory.GetFigure("w_pawn"));
+            AddToDeck(factory.GetFigure<Pawn>(TypeFigure.White));
     }
     public void GiveDeckCards(DataDeck dataDeck,Factory factory)
     {

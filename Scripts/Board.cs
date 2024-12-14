@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -129,7 +128,6 @@ public class Board : MonoBehaviour
         foreach (Slot slot in Slots)
         {
             slot.DragSlot.TryDrag = true;
-
         }
     }
     public void DisableDragFigure()

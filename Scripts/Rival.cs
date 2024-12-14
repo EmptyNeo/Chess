@@ -5,11 +5,12 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using Object = UnityEngine.Object;
+using System.Threading.Tasks;
 
 [Serializable]
 public class Rival
 {
-    public List<FigureData> Figure = new();
+    public List<FigureData> Deck = new();
 
     public List<Slot> DisplayedSlot = new();
     private Main main;
@@ -20,16 +21,16 @@ public class Rival
     {
         main = Main.Instance;
         board = Board.Instance;
-        for (int i = 0; i < figure.Count; i++)
+        for (int i = 0; i < figure?.Count; i++)
         {
             Slot boardSlot = board.Slots[figure[i].Y, figure[i].X];
             boardSlot.SetCard(figure[i]);
             DisplayedSlot.Add(boardSlot);
         }
     }
-    public IEnumerator EndTurn()
+    public async void IssueCard()
     {
-        if (Figure.Count > 0)
+        if (Deck.Count > 0)
         {
             int y = Random.Range(0, 3);
             int x = Random.Range(0, board.Slots.GetLength(1));
@@ -37,19 +38,17 @@ public class Rival
                 RerollSlot(board, ref y, ref x);
 
             Slot boardSlot = board.Slots[y, x];
-            int index = Figure.IndexOf(Figure.OrderByDescending(card => card.Priority).Last());
+            int index = Deck.IndexOf(Deck.OrderByDescending(card => card.Priority).Last());
             HandSlot handSlot = Object.Instantiate(PrefabUtil.Load("HandSlot"), main.RivalHand).GetComponent<HandSlot>();
-            handSlot.SetCard(Figure[index]);
-
-            yield return Movement.Smooth(handSlot.transform, 0.25f, handSlot.transform.position, boardSlot.transform.position);
-            yield return new WaitForSeconds(0.15f);
+            handSlot.SetCard(Deck[index]);
+            main.StartCoroutine(Movement.Smooth(handSlot.gameObject.transform, 0.25f, handSlot.gameObject.transform.position, boardSlot.transform.position));
+            await Task.Delay(250);
             Sounds.PlaySound(Sounds.Get<SoundExposeCard>(), 1, 1);
-            boardSlot.SetCard(handSlot.CardData);
+            boardSlot.SetCard(Deck[index]);
             Object.Destroy(handSlot.gameObject);
             DisplayedSlot.Add(boardSlot);
-            Figure.RemoveAt(index);
+            Deck.RemoveAt(index);
         }
-        else yield return null;
     }
     private int _counterAccessMotions;
     public IEnumerator Move()
@@ -76,7 +75,10 @@ public class Rival
                 Vector2 oldPos = DisplayedSlot[indexDisplayedSlot].DragSlot.transform.position;
 
                 DisplayedSlot[indexDisplayedSlot].DragSlot.transform.SetParent(DisplayedSlot[indexDisplayedSlot].DragSlot.transform.parent.parent);
-                yield return Movement.Smooth(DisplayedSlot[indexDisplayedSlot].DragSlot.transform, 0.25f, DisplayedSlot[indexDisplayedSlot].DragSlot.transform.position, _accessMotions[indexAccessMotion].DragSlot.transform.position);
+                yield return Movement.Smooth(DisplayedSlot[indexDisplayedSlot].DragSlot.transform,
+                                             0.25f,
+                                             DisplayedSlot[indexDisplayedSlot].DragSlot.transform.position,
+                                             _accessMotions[indexAccessMotion].DragSlot.transform.position);
                 yield return new WaitForSeconds(0.15f);
                 Sounds.PlaySound(Sounds.Get<SoundExposeFigure>(), 1, 1);
                 DisplayedSlot[indexDisplayedSlot].DragSlot.transform.SetParent(DisplayedSlot[indexDisplayedSlot].DragSlot.OldSlot.transform);
@@ -87,8 +89,12 @@ public class Rival
                 DisplayedSlot[indexDisplayedSlot].DragSlot.transform.position = oldPos;
                 DisplayedSlot[indexDisplayedSlot].Nullify();
                 DisplayedSlot[indexDisplayedSlot] = _accessMotions[indexAccessMotion];
+                if (DisplayedSlot[indexDisplayedSlot].Y > 6 && DisplayedSlot[indexDisplayedSlot].CardData is Pawn)
+                {
+                    DisplayedSlot[indexDisplayedSlot].SetCard(TransformationFigure.Instance.FiguresDataBlack[Random.Range(0, TransformationFigure.Instance.FiguresDataBlack.Count)]);
+                }
             }
-            else if(_accessMotions.Count == 0 && _counterAccessMotions <= Figure.Count)
+            else if(_accessMotions.Count == 0 && _counterAccessMotions <= Deck.Count)
             {
                 yield return Move();
             }

@@ -40,7 +40,9 @@ public class Main : Sounds
         new Level3(),
         new Level4(),
         new Level5(),
-        new Level6()
+        new Level6(),
+        new Level7(),
+        new Level8()
     };
     private void Start()
     {
@@ -50,10 +52,9 @@ public class Main : Sounds
         Instance = this;
         Factory = new Factory();
         DeckData.GiveDefaultDeck(Factory);
-        StartCoroutine(DeckData.GiveFigure(Get<SoundGiveCard>(), Factory.GetFigure("w_pawn")));
+        StartCoroutine(DeckData.GiveFigure(Get<SoundGiveCard>(), Factory.GetFigure<Pawn>(TypeFigure.White)));
         DataDeck deck = BinarySavingSystem.LoadDeck();
         DeckData.GiveDeckCards(deck, Factory);
-        DeckData.AddToDeck(Factory.GetFigure("barrel"));
         if (PlayerPrefs.HasKey("IndexLevel"))
         {
             IndexLevel = PlayerPrefs.GetInt("IndexLevel");
@@ -61,7 +62,6 @@ public class Main : Sounds
         Levels[IndexLevel].Init();
         if (Ivent != null)
             StartCoroutine(Ivent.StartEvent());
-
     }
 
 
@@ -148,7 +148,7 @@ public class Main : Sounds
         }
         yield return new WaitForSeconds(0.15f);
         if (Levels[IndexLevel].Rival.DisplayedSlot.Count == 0
-            && Levels[IndexLevel].Rival.Figure.Count == 0)
+            && Levels[IndexLevel].Rival.Deck.Count == 0)
         {
             PlaySound(Get<SoundWin>(), 0.2f, 1);
             Win.SetActive(true);
@@ -243,7 +243,7 @@ public class Main : Sounds
         List<CardData> creators = new();
         foreach (CardData f in Factory.Creators)
         {
-            if ((f.TypeFigure == TypeFigure.White || f.TypeFigure == TypeFigure.Special) && f.NameSprite != "w_pawn")
+            if (f.TypeFigure == TypeFigure.White || f is SpecialCard && f.NameSprite != "w_pawn")
             {
                 if (DeckData.NameFigures.Count + 8 < 16)
                     creators.Add(f);
@@ -251,6 +251,7 @@ public class Main : Sounds
                     Pick.transform.GetChild(0).gameObject.SetActive(true);
             }
         }
+        
         foreach (string name in DeckData.NameFigures)
         {
             if (name == "w_queen")
@@ -284,7 +285,6 @@ public class Main : Sounds
         {
             for (int i = 0; i < 3; i++)
             {
-
                 Card card = Instantiate(Card.gameObject, CardPoint[i].transform.position, Quaternion.identity, Pick.transform).GetComponent<Card>();
                 int index = Random.Range(0, specials.Count);
 

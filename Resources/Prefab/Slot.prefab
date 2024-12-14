@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 2448717209722883975}
   - component: {fileID: -3048324125417512765}
   - component: {fileID: 2852885800145952572}
-  - component: {fileID: 2433223824237658985}
   m_Layer: 6
   m_Name: Slot
   m_TagString: Untagged
@@ -67,12 +66,15 @@ MonoBehaviour:
   CardData:
     X: 0
     Y: 0
+    Description: 
     Icon: {fileID: 0}
     Cost: 0
     NotNull: 0
     Name: 
+    NameSprite: 
     TypeFigure: 0
     Priority: 0
+    _limitMove: 0
   FigureImage: {fileID: 9089779374991447307}
   Outline: {fileID: 909876086326832746}
   Hint: {fileID: 8018871171618475947}
@@ -86,6 +88,7 @@ BoxCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1660664233040164560}
   m_Enabled: 1
+  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -109,7 +112,8 @@ BoxCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
@@ -120,7 +124,6 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  serializedVersion: 2
   m_Size: {x: 80, y: 80}
   m_EdgeRadius: 0
 --- !u!114 &2852885800145952572
@@ -153,18 +156,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!210 &2433223824237658985
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1660664233040164560}
-  m_Enabled: 1
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_SortAtRoot: 0
 --- !u!1 &4930380229432981912
 GameObject:
   m_ObjectHideFlags: 0

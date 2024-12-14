@@ -112,7 +112,7 @@ public class DragHandSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
             OldSlot.Hand.RemoveFromHand(index);
             transform.SetParent(OldSlot.transform);
             Destroy(OldSlot.gameObject);
-            yield return Main.Levels[Main.Instance.IndexLevel].Rival.EndTurn();
+            Main.Levels[Main.Instance.IndexLevel].Rival.IssueCard();
         }
     }
 }

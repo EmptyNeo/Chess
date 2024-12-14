@@ -97,45 +97,44 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
     }
     public IEnumerator RechargeSlot(Slot newSlot)
     {
-            Sounds.PlaySound(Sounds.Get<SoundExposeFigure>(), 2, 1);
+        Slot oldSlot = OldSlot;
+        Sounds.PlaySound(Sounds.Get<SoundExposeFigure>(), 2, 1);
 
-            CardData cardData = OldSlot.CardData;
-            OldSlot.Nullify();
-            int index = Main.Instance.Hand.FindDisplayedSlot(OldSlot);
-            bool back = true;
-            if (newSlot.CardData.NotNull)
-            {
+        CardData cardData = OldSlot.CardData;
+        OldSlot.Nullify();
+        int index = Main.Instance.Hand.FindDisplayedSlot(OldSlot);
+        bool back = true;
+        if (newSlot.CardData.NotNull)
+        {
 
-                StartCoroutine(ShakeUtil.Instance.Shake(0.1f, 0.05f));
-                newSlot.Nullify();
-                Main.Levels[Main.Instance.IndexLevel].Rival.DisplayedSlot.Remove(newSlot);
-                newSlot.SetCard(cardData);
-                Main.Instance.Hand.DisplayedSlot[index] = newSlot;
-            }
-            else
-            {
-
-                if (cardData is FigureData figure && figure.IsTravel)
-                {
-
-                    newSlot.DragSlot.TryDrag = false;
-                    Board.Instance.EnableDragFigure();
-                    Main.Instance.IsCanMove = false;
-                    figure.IsTravel = false;
-                    back = false;
-                }
-                newSlot.SetCard(cardData);
-            }
+            StartCoroutine(ShakeUtil.Instance.Shake(0.1f, 0.05f));
+            newSlot.Nullify();
+            Main.Levels[Main.Instance.IndexLevel].Rival.DisplayedSlot.Remove(newSlot);
+            newSlot.SetCard(cardData);
             Main.Instance.Hand.DisplayedSlot[index] = newSlot;
-            if (newSlot.Y == 0)
+        }
+        else
+        {
+            if (cardData is FigureData figure && figure.IsTravel)
             {
-                Sounds.PlaySound(Sounds.Get<SoundWin>(), 0.2f, 1);
-                Main.Instance.Win.SetActive(true);
+
+                newSlot.DragSlot.TryDrag = false;
+                Board.Instance.EnableDragFigure();
+                Main.Instance.IsCanMove = false;
+                figure.IsTravel = false;
+                back = false;
             }
-            else if (back)
-            {
-                yield return new WaitForSeconds(0.3f);
-                yield return Main.Instance.Back();
-            }
+            newSlot.SetCard(cardData);
+        }
+        Main.Instance.Hand.DisplayedSlot[index] = newSlot;
+        if (newSlot.Y < 1 && newSlot.CardData is Pawn)
+        {
+            TransformationFigure.Instance.Init(oldSlot, newSlot);
+        }
+        else if (back)
+        {
+            yield return new WaitForSeconds(0.3f);
+            yield return Main.Instance.Back();
+        }
     }
 }

@@ -19,7 +19,7 @@ public class Level0 : Level
         int maxLength = 4;
         int maxAmountX = 8;
         int maxAmountY = 2;
-        List<FigureData> figureDatas = new();
+        List<CardData> figureDatas = new();
         for (int i = 0; i < maxLength; i++)
             figureDatas.Add(new Pawn(Random.Range(0, maxAmountX), Random.Range(0, maxAmountY), "b_pawn", TypeFigure.Black));
 
@@ -33,8 +33,8 @@ public class Level1 : Level
         int maxLength = 4;
         int maxAmountX = 8;
         int maxAmountY = 2;
-        List<FigureData> figureDatas = new();
-        List<FigureData> deck = new();
+        List<CardData> figureDatas = new();
+        List<CardData> deck = new();
 
         for (int i = 0; i < maxLength; i++)
             figureDatas.Add(new Pawn(Random.Range(0, maxAmountX), Random.Range(0, maxAmountY), "b_pawn", TypeFigure.Black));
@@ -53,7 +53,7 @@ public class Level2 : Level
 {
     public override void Init()
     {
-        Rival = new Rival(new List<FigureData>()
+        Rival = new Rival(new List<CardData>()
         {
             new Pawn(2,1, "b_pawn", TypeFigure.Black),
             new Pawn(3,1, "b_pawn", TypeFigure.Black),
@@ -70,7 +70,7 @@ public class Level3: Level
     public override void Init()
     {
         int randomIvent = Random.Range(0, 2);
-        List<FigureData> figures = new();
+        List<CardData> figures = new();
         switch (randomIvent)
         {
             case 0:
@@ -93,14 +93,17 @@ public class Level4 : Level
 {
     public override void Init()
     {
-        Rival = new Rival(new List<FigureData>()
+        Rival = new Rival(new List<CardData>()
         {
-            new Pawn(2,1, "b_pawn", TypeFigure.Black),
-            new Pawn(3,1, "b_pawn", TypeFigure.Black),
-            new Pawn(4,1, "b_pawn", TypeFigure.Black),
-            new Pawn(5,1, "b_pawn", TypeFigure.Black)
+            new Knight(1,1, "b_knight", TypeFigure.Black),
+            new Knight(6,1, "b_knight", TypeFigure.Black),
+            new Pawn(1,2, "b_pawn", TypeFigure.Black),
+            new Pawn(2,2, "b_pawn", TypeFigure.Black),
+            new Pawn(3,2, "b_pawn", TypeFigure.Black),
+            new Pawn(4,2, "b_pawn", TypeFigure.Black),
+            new Pawn(5,2, "b_pawn", TypeFigure.Black),
+            new Pawn(6,2, "b_pawn", TypeFigure.Black)
         });
-
         Main.Instance.Ivent = Object.Instantiate(PrefabUtil.Load("Winter"), Main.Instance.GUI).GetComponent<Event>();
     }
 }
@@ -108,7 +111,7 @@ public class Level5 : Level
 {
     public override void Init()
     {
-        Rival = new Rival(new List<FigureData>()
+        Rival = new Rival(new List<CardData>()
         {
             new Pawn(2,1, "b_pawn", TypeFigure.Black),
             new Pawn(3,1, "b_pawn", TypeFigure.Black),
@@ -124,7 +127,7 @@ public class Level6 : Level
     public override void Init()
     {
         int randomIvent = Random.Range(0, 2);
-        List<FigureData> figures = new();
+        List<CardData> figures = new();
         switch (randomIvent)
         {
             case 0:
@@ -142,7 +145,6 @@ public class Level6 : Level
         }
         Rival = new Rival(figures);
 
-
         Main.Instance.Ivent = Object.Instantiate(PrefabUtil.Load("Smoke"), Main.Instance.GUI).GetComponent<Event>();
     }
 }
@@ -151,8 +153,8 @@ public class Level7 : Level
     public override void Init()
     {
         int randomIvent = Random.Range(0, 2);
-        List<FigureData> figures = new();
-        List<FigureData> deck = new();
+        List<CardData> figures = new();
+        List<CardData> deck = new();
         switch (randomIvent)
         {
             case 0:
@@ -185,7 +187,7 @@ public class Level8 : Level
 {
     public override void Init()
     {
-        Rival = new Rival(new List<FigureData>()
+        Rival = new Rival(new List<CardData>()
         {
             new Pawn(2,1, "b_pawn", TypeFigure.Black),
             new Pawn(3,1, "b_pawn", TypeFigure.Black),

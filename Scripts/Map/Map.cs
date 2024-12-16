@@ -8,12 +8,12 @@ public class Map : MonoBehaviour
     public Transform PlayerTransform;
     public ImageAnimation Player;
     public List<MapPoint> Point = new();
-    public int IndexLevel;
+    public int Index;
     private void Start()
     {
-        if (PlayerPrefs.HasKey("IndexLevel"))
+        if (PlayerPrefs.HasKey("Index"))
         {
-            IndexLevel = PlayerPrefs.GetInt("IndexLevel");
+            Index = PlayerPrefs.GetInt("Index");
         }
         if (PlayerPrefs.HasKey("index"))
         {
@@ -33,8 +33,8 @@ public class Map : MonoBehaviour
     public void OnStart(int index)
     {
         Debug.Log(Point[index].Index);
-        Debug.Log(IndexLevel + 1);
-        if (IndexLevel != Point[index].Index && Point[index].Index == IndexLevel + 1)
+        Debug.Log(Index + 1);
+        if (Index != Point[index].Index && Point[index].Index == Index + 1)
         {
             StartCoroutine(ChoiceLevel(index));
         }
@@ -45,7 +45,8 @@ public class Map : MonoBehaviour
         yield return Movement.Smooth(PlayerTransform.transform, 1, PlayerTransform.position, Point[index].transform.position + new Vector3(0, 0.4f, 0));
         Player.StateAnimation = StateAnimation.Idle;
         PlayerPrefs.SetInt("index", index);
-        PlayerPrefs.SetInt("IndexLevel", Point[index].Index);
+        PlayerPrefs.SetInt("IndexLevel", Point[index].IndexLevel);
+        PlayerPrefs.SetInt("Index", Point[index].Index);
         PlayerPrefs.Save();
         yield return new WaitForSeconds(0.1f);
         SceneManager.LoadScene("Game");

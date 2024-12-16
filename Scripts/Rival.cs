@@ -10,21 +10,21 @@ using System.Threading.Tasks;
 [Serializable]
 public class Rival
 {
-    public List<FigureData> Deck = new();
+    public List<CardData> Deck = new();
 
     public List<Slot> DisplayedSlot = new();
     private Main main;
 
     private Board board;
     private List<Slot> _accessMotions = new();
-    public Rival(List<FigureData> figure)
+    public Rival(List<CardData> cardData)
     {
         main = Main.Instance;
         board = Board.Instance;
-        for (int i = 0; i < figure?.Count; i++)
+        for (int i = 0; i < cardData?.Count; i++)
         {
-            Slot boardSlot = board.Slots[figure[i].Y, figure[i].X];
-            boardSlot.SetCard(figure[i]);
+            Slot boardSlot = board.Slots[cardData[i].Y, cardData[i].X];
+            boardSlot.SetCard(cardData[i]);
             DisplayedSlot.Add(boardSlot);
         }
     }

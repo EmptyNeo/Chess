@@ -29,5 +29,8 @@ public class Slot : MonoBehaviour
         };
         FigureImage.color = new Color(1, 1, 1, 0);
     }
-
+    private void OnDrawGizmos()
+    {
+        DrawText.Set($"X:{X} Y:{Y}", transform.position + Vector3.up, Color.white);
+    }
 }

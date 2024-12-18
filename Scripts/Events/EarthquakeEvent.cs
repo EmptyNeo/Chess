@@ -89,7 +89,7 @@ public class EarthquakeEvent : Event
                 int randomX = Random.Range(0, Board.Instance.Slots.GetLength(1));
                 if (Board.Instance.Slots[randomY, randomX].CardData.NotNull)
                 {
-                    Reroll(ref randomY, ref randomX, 5,8);
+                    Reroll(ref randomY, ref randomX, 5,7);
                 }
                 Slot rechargeSlot = Board.Instance.Slots[randomY, randomX];
                 slot.DragSlot.transform.SetParent(rechargeSlot.transform.parent.parent);
@@ -108,7 +108,7 @@ public class EarthquakeEvent : Event
         {
             if (slot.Y < 3)
             {
-                int randomY = Random.Range(0, 3);
+                int randomY = Random.Range(0, 2);
                 int randomX = Random.Range(0, Board.Instance.Slots.GetLength(1));
                 if (Board.Instance.Slots[randomY, randomX].CardData.NotNull)
                 {

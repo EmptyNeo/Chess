@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class Main : Sounds
 {
     public Deck DeckData;
+    public TransformationFigure TransformationFigure;
     public Factory Factory;
     public Characteristics Characteristics;
     public Board Board;
@@ -51,8 +52,7 @@ public class Main : Sounds
                 StartCoroutine(Tutorial.Enable(TutorialText));*/
         Instance = this;
         Factory = new Factory();
-        
-      
+        TransformationFigure.Init();
         DeckData.GiveDefaultDeck(Factory);
         StartCoroutine(DeckData.GiveFigure(Get<SoundGiveCard>(), Factory.GetFigure<Pawn>(TypeFigure.White)));
         DataDeck deck = BinarySavingSystem.LoadDeck();
@@ -64,6 +64,8 @@ public class Main : Sounds
         Levels[IndexLevel].Init();
         if (Ivent != null)
             StartCoroutine(Ivent.StartEvent());
+
+        IsCanMove = false;
     }
 
 
@@ -104,6 +106,7 @@ public class Main : Sounds
             {
                 s.Drag.TryDrag = false;
             }
+            
             IsCanMove = true;
             if (Hand.DisplayedSlot.Count > 0)
             {
@@ -137,11 +140,15 @@ public class Main : Sounds
     }
     public IEnumerator Back()
     {
-        yield return Levels[IndexLevel].Rival.Move();
+        yield return Levels[IndexLevel].Rival.Attack();
+        if(Levels[IndexLevel].Rival.IsPossibleAttack == false)
+            yield return Levels[IndexLevel].Rival.RandomMove();
         foreach (Slot slot in Board.Slots)
         {
             if (slot.CardData.NotNull)
+            {
                 slot.CardData.LimitMove--;
+            }
         }
         foreach (Slot slot in Board.Slots)
         {

@@ -21,7 +21,7 @@ public class Sounds : MonoBehaviour
        for (int i = 0; i < 300; i++)
        {
             AudioSource.volume -= 0.01f;
-            yield return new WaitForSeconds(0.01f);
+            yield return null;
        }
        AudioSource.volume = startVolume;
     }

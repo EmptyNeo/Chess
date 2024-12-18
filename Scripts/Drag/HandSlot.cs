@@ -24,7 +24,6 @@ public class HandSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public void SetCard(CardData figure)
     {
         CardData = (CardData)figure.Clone();
-        
         CardData.Description = figure.Description;
         CardData.Priority = figure.Priority;
         FigureImage.sprite = CardData.Icon;

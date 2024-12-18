@@ -53,9 +53,10 @@ public class WinterEvent : Event
                 }
                         yield return new WaitForSeconds(0.25f);
             }
+
+            Main.Instance.IsCanMove = true;
         }
         Counter.text = $"Freezing Left <size=45><color=red>{Amount}</color></size> Turn";
-        Main.Instance.IsCanMove = true;
     }
 
 }

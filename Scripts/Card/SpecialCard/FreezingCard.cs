@@ -39,7 +39,7 @@ public class FreezingCard : SpecialCard
                     bool tryOutBordersX = X > -1 || X < Board.Instance.Slots.GetLength(1);
                     if (tryOutBordersY && tryOutBordersX)
                     {
-                        CardData card = Board.Instance.Slots[Y, X].CardData;
+                        Data card = Board.Instance.Slots[Y, X].CardData;
                         if (card.NotNull && card is FigureData figure)
                         {
                             figure.LimitMove += 2;

@@ -109,7 +109,7 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
 
             StartCoroutine(ShakeUtil.Instance.Shake(0.1f, 0.05f));
             newSlot.Nullify();
-            Main.Levels[Main.Instance.IndexLevel].Rival.DisplayedSlot.Remove(newSlot);
+            Main.Levels[Main.Instance.IndexLevel].Rival.DisplayedSlot.RemoveAt(Main.Instance.Hand.FindDisplayedSlot(Main.Levels[Main.Instance.IndexLevel].Rival.DisplayedSlot, newSlot));
             newSlot.SetCard(cardData);
             Main.Instance.Hand.DisplayedSlot[index] = newSlot;
         }
@@ -129,7 +129,7 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
         Main.Instance.Hand.DisplayedSlot[index] = newSlot;
         if (newSlot.Y < 1 && newSlot.CardData is Pawn)
         {
-            TransformationFigure.Instance.Init(oldSlot, newSlot);
+           Main.Instance.TransformationFigure.Init(oldSlot, newSlot);
         }
         else if (back)
         {

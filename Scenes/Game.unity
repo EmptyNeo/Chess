@@ -11445,6 +11445,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DeckData: {fileID: 935253451}
+  TransformationFigure: {fileID: 1919620676}
   Factory:
     _creators: []
   Characteristics: {fileID: 2003259707}

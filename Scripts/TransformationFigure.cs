@@ -3,16 +3,13 @@ using UnityEngine;
 
 public class TransformationFigure : MonoBehaviour
 {
-    public static TransformationFigure Instance { get; private set; }
     public GameObject List;
     public List<FigureData> FiguresDataWhite = new();
     public List<FigureData> FiguresDataBlack = new();
     private Slot _newSlot;
     private Slot _oldSlot;
-
-    public void Start()
+    public void Init()
     {
-        Instance = this;
         FiguresDataWhite.Add((FigureData)Main.Instance.Factory.GetFigure<Knight>(TypeFigure.White));
         FiguresDataWhite.Add((FigureData)Main.Instance.Factory.GetFigure<Rook>(TypeFigure.White));
         FiguresDataWhite.Add((FigureData)Main.Instance.Factory.GetFigure<Bishop>(TypeFigure.White));
@@ -22,6 +19,7 @@ public class TransformationFigure : MonoBehaviour
     }
     public void Init(Slot oldSlot, Slot newSlot)
     {
+       
         _oldSlot = oldSlot;
         _newSlot = newSlot;
         List.SetActive(true);

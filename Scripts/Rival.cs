@@ -13,17 +13,13 @@ public class Rival
     public List<CardData> Deck = new();
 
     public List<Slot> DisplayedSlot = new();
-    private Main main;
 
-    private Board board;
-    private List<Slot> _accessMotions = new();
+
     public Rival(List<CardData> cardData)
     {
-        main = Main.Instance;
-        board = Board.Instance;
         for (int i = 0; i < cardData?.Count; i++)
         {
-            Slot boardSlot = board.Slots[cardData[i].Y, cardData[i].X];
+            Slot boardSlot = Board.Instance.Slots[cardData[i].Y, cardData[i].X];
             boardSlot.SetCard(cardData[i]);
             DisplayedSlot.Add(boardSlot);
         }
@@ -33,15 +29,15 @@ public class Rival
         if (Deck.Count > 0)
         {
             int y = Random.Range(0, 3);
-            int x = Random.Range(0, board.Slots.GetLength(1));
-            if (board.Slots[y, x].CardData.NotNull)
-                RerollSlot(board, ref y, ref x);
+            int x = Random.Range(0, Board.Instance.Slots.GetLength(1));
+            if (Board.Instance.Slots[y, x].CardData.NotNull)
+                RerollSlot(Board.Instance, ref y, ref x);
 
-            Slot boardSlot = board.Slots[y, x];
+            Slot boardSlot = Board.Instance.Slots[y, x];
             int index = Deck.IndexOf(Deck.OrderByDescending(card => card.Priority).Last());
-            HandSlot handSlot = Object.Instantiate(PrefabUtil.Load("HandSlot"), main.RivalHand).GetComponent<HandSlot>();
+            HandSlot handSlot = Object.Instantiate(PrefabUtil.Load("HandSlot"), Main.Instance.RivalHand).GetComponent<HandSlot>();
             handSlot.SetCard(Deck[index]);
-            main.StartCoroutine(Movement.Smooth(handSlot.gameObject.transform, 0.25f, handSlot.gameObject.transform.position, boardSlot.transform.position));
+            Main.Instance.StartCoroutine(Movement.Smooth(handSlot.gameObject.transform, 0.25f, handSlot.gameObject.transform.position, boardSlot.transform.position));
             await Task.Delay(250);
             Sounds.PlaySound(Sounds.Get<SoundExposeCard>(), 1, 1);
             boardSlot.SetCard(handSlot.CardData);
@@ -50,71 +46,142 @@ public class Rival
             Deck.RemoveAt(index);
         }
     }
-    private int _counterAccessMotions;
-    public IEnumerator Move()
+    public bool IsPossibleAttack;
+    public IEnumerator Attack()
     {
+        IsPossibleAttack = false;
+        List<Slot> attackSlots = new();
+        List<Slot> availableDisplayedSlots = new();
         for (int i = 0; i < DisplayedSlot.Count; i++)
         {
-            if (DisplayedSlot[i].CardData.TypeFigure != TypeFigure.Black)
+            if (IsAttackSlot(DisplayedSlot[i]))
             {
-                DisplayedSlot.RemoveAt(i);
+                Debug.Log(i);
+                availableDisplayedSlots.Add(DisplayedSlot[i]);
             }
         }
-        if (DisplayedSlot.Count > 0)
+        if (availableDisplayedSlots.Count > 0)
         {
-            int indexDisplayedSlot = Random.Range(0, DisplayedSlot.Count);
-            _accessMotions.Clear();
-            Debug.Log(DisplayedSlot[indexDisplayedSlot].CardData.NameSprite);
-            if(DisplayedSlot[indexDisplayedSlot].CardData is FigureData figure)
-                AccessMotionFigure(figure);
-
-            if (_accessMotions.Count > 0)
+            int indexAvailableSlots = availableDisplayedSlots.IndexOf(availableDisplayedSlots.OrderByDescending(slot => slot.CardData.Priority).Last());
+            attackSlots = GetAttackSlot(attackSlots, availableDisplayedSlots[indexAvailableSlots]);
+            if (attackSlots.Count > 0)
             {
-                _counterAccessMotions = 0;
-                int indexAccessMotion = Random.Range(0, _accessMotions.Count);
-                Vector2 oldPos = DisplayedSlot[indexDisplayedSlot].DragSlot.transform.position;
-
-                DisplayedSlot[indexDisplayedSlot].DragSlot.transform.SetParent(DisplayedSlot[indexDisplayedSlot].DragSlot.transform.parent.parent);
-                yield return Movement.Smooth(DisplayedSlot[indexDisplayedSlot].DragSlot.transform,
-                                             0.25f,
-                                             DisplayedSlot[indexDisplayedSlot].DragSlot.transform.position,
-                                             _accessMotions[indexAccessMotion].DragSlot.transform.position);
-                yield return new WaitForSeconds(0.15f);
-                Sounds.PlaySound(Sounds.Get<SoundExposeFigure>(), 1, 1);
-                DisplayedSlot[indexDisplayedSlot].DragSlot.transform.SetParent(DisplayedSlot[indexDisplayedSlot].DragSlot.OldSlot.transform);
-                if (_accessMotions[indexAccessMotion].CardData.NotNull)
-                    main.Hand.DisplayedSlot.RemoveAt(main.Hand.FindDisplayedSlot(_accessMotions[indexAccessMotion]));
-
-                _accessMotions[indexAccessMotion].SetCard(DisplayedSlot[indexDisplayedSlot].CardData);
-                DisplayedSlot[indexDisplayedSlot].DragSlot.transform.position = oldPos;
-                DisplayedSlot[indexDisplayedSlot].Nullify();
-                DisplayedSlot[indexDisplayedSlot] = _accessMotions[indexAccessMotion];
-                if (DisplayedSlot[indexDisplayedSlot].Y > 6 && DisplayedSlot[indexDisplayedSlot].CardData is Pawn)
-                {
-                    DisplayedSlot[indexDisplayedSlot].SetCard(TransformationFigure.Instance.FiguresDataBlack[Random.Range(0, TransformationFigure.Instance.FiguresDataBlack.Count)]);
-                }
-            }
-            else if(_accessMotions.Count == 0 && _counterAccessMotions <= Deck.Count)
-            {
-                yield return Move();
+                int indexMostPrioritySlot = attackSlots.IndexOf(attackSlots.OrderByDescending(slot => slot.CardData.Priority).First());
+                availableDisplayedSlots[indexAvailableSlots].DragSlot.transform.SetParent(availableDisplayedSlots[indexAvailableSlots].transform.parent.parent);
+                yield return Movement.Smooth(availableDisplayedSlots[indexAvailableSlots].DragSlot.transform, 0.25f, availableDisplayedSlots[indexAvailableSlots].DragSlot.transform.position, attackSlots[indexMostPrioritySlot].transform.position);
+                availableDisplayedSlots[indexAvailableSlots].DragSlot.transform.SetParent(availableDisplayedSlots[indexAvailableSlots].transform);
+                attackSlots[indexMostPrioritySlot].SetCard(availableDisplayedSlots[indexAvailableSlots].CardData);
+                availableDisplayedSlots[indexAvailableSlots].Nullify();
+                availableDisplayedSlots[indexAvailableSlots].DragSlot.transform.position = availableDisplayedSlots[indexAvailableSlots].transform.position;
+                Main.Instance.Hand.DisplayedSlot.RemoveAt(Main.Instance.Hand.FindDisplayedSlot(availableDisplayedSlots[indexAvailableSlots]));
+                DisplayedSlot[Main.Instance.Hand.FindDisplayedSlot(DisplayedSlot, availableDisplayedSlots[indexAvailableSlots])] = attackSlots[indexMostPrioritySlot];
+                IsPossibleAttack = true;
             }
         }
+        yield return null;
     }
-    public void AccessMotionFigure(FigureData figureData)
+    public IEnumerator RandomMove()
     {
-        _counterAccessMotions++;
-        for (int i = 0; i < board.Slots.GetLength(0); i++)
+        List<Slot> accessSlots = new();
+        List<Slot> availableDisplayedSlots = new();
+        for (int i = 0; i < DisplayedSlot.Count; i++)
         {
-            for (int j = 0; j < board.Slots.GetLength(1); j++)
+            if (IsAccessSlot(DisplayedSlot[i]))
             {
-                if (figureData.CanMove(board.Slots[i, j]))
+                availableDisplayedSlots.Add(DisplayedSlot[i]);
+            }
+        }
+        if (availableDisplayedSlots.Count > 0)
+        {
+            int indexAvailableSlots = Random.Range(0, availableDisplayedSlots.Count);
+            accessSlots = GetAccessSlot(accessSlots, availableDisplayedSlots[indexAvailableSlots]);
+            int indexAccessSlots = Random.Range(0, accessSlots.Count);
+            availableDisplayedSlots[indexAvailableSlots].DragSlot.transform.SetParent(availableDisplayedSlots[indexAvailableSlots].transform.parent.parent);
+            yield return Movement.Smooth(availableDisplayedSlots[indexAvailableSlots].DragSlot.transform, 0.25f, availableDisplayedSlots[indexAvailableSlots].DragSlot.transform.position, accessSlots[indexAccessSlots].transform.position);
+            availableDisplayedSlots[indexAvailableSlots].DragSlot.transform.SetParent(availableDisplayedSlots[indexAvailableSlots].transform);
+            accessSlots[indexAccessSlots].SetCard(availableDisplayedSlots[indexAvailableSlots].CardData);
+            availableDisplayedSlots[indexAvailableSlots].Nullify();
+            availableDisplayedSlots[indexAvailableSlots].DragSlot.transform.position = availableDisplayedSlots[indexAvailableSlots].transform.position;
+            DisplayedSlot[Main.Instance.Hand.FindDisplayedSlot(DisplayedSlot, availableDisplayedSlots[indexAvailableSlots])] = accessSlots[indexAccessSlots];
+        }
+
+    }
+    public bool IsAccessSlot(Slot displayedSlot)
+    {
+        if (displayedSlot.CardData is FigureData figureData)
+        {
+            for (int i = 0; i < Board.Instance.Slots.GetLength(0); i++)
+            {
+                for (int j = 0; j < Board.Instance.Slots.GetLength(1); j++)
                 {
-                    _accessMotions.Add(board.Slots[i, j]);
+                    if (figureData.LimitMove == 0)
+                    {
+                        if (figureData.CanMove(Board.Instance.Slots[i, j]))
+                        {
+                            return true;
+                        }
+                    }
                 }
             }
         }
+        return false;
     }
-    public void RerollSlot(Board board,ref int y, ref int x)
+
+    public List<Slot> GetAccessSlot(List<Slot> accessSlot, Slot displayedSlot)
+    {
+        if (displayedSlot.CardData is FigureData figureData)
+        {
+            for (int i = 0; i < Board.Instance.Slots.GetLength(0); i++)
+            {
+                for (int j = 0; j < Board.Instance.Slots.GetLength(1); j++)
+                {
+                    if (figureData.CanMove(Board.Instance.Slots[i, j]))
+                    {
+                        accessSlot.Add(Board.Instance.Slots[i, j]);
+                    }
+                }
+            }
+        }
+        return accessSlot;
+    }
+    public bool IsAttackSlot(Slot displayedSlot)
+    {
+        if (displayedSlot.CardData is FigureData figureData)
+        {
+            for (int i = 0; i < Board.Instance.Slots.GetLength(0); i++)
+            {
+                for (int j = 0; j < Board.Instance.Slots.GetLength(1); j++)
+                {
+                    if (figureData.LimitMove == 0)
+                    {
+                        if (figureData.CanMove(Board.Instance.Slots[i, j]) && Board.Instance.Slots[i, j].CardData.NotNull)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    public List<Slot> GetAttackSlot(List<Slot> attackSlot, Slot displayedSlot)
+    {
+        if (displayedSlot.CardData is FigureData figureData)
+        {
+            for (int i = 0; i < Board.Instance.Slots.GetLength(0); i++)
+            {
+                for (int j = 0; j < Board.Instance.Slots.GetLength(1); j++)
+                {
+                    if (figureData.CanMove(Board.Instance.Slots[i, j]) && Board.Instance.Slots[i, j].CardData.NotNull)
+                    {
+                        attackSlot.Add(Board.Instance.Slots[i, j]);
+                    }
+                }
+            }
+        }
+        return attackSlot;
+    }
+    public void RerollSlot(Board board, ref int y, ref int x)
     {
         y = Random.Range(0, 3);
         x = Random.Range(0, board.Slots.GetLength(1));

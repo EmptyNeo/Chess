@@ -7,7 +7,6 @@ public static class Movement
     public static IEnumerator Smooth(Transform transform, float duration, Vector3 a, Vector3 b)
     {
         float time = 0f;
-        Debug.Log("Alo");
         while (time < duration)
         {
             time += Time.deltaTime;

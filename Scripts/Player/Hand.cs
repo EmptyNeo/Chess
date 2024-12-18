@@ -65,4 +65,13 @@ public class Hand : MonoBehaviour
         }
         return 0;
     }
+    public int FindDisplayedSlot(List<Slot> displayedSlot, Slot slot)
+    {
+        for (int i = 0; i < displayedSlot.Count; i++)
+        {
+            if (displayedSlot[i] == slot)
+                return i;
+        }
+        return 0;
+    }
 }

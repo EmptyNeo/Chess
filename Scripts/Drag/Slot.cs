@@ -14,7 +14,6 @@ public class Slot : MonoBehaviour
     public void SetCard(CardData cardData)
     {
         CardData = (CardData)cardData.Clone();
-        DragSlot.TryDrag = true;
         CardData.X = X;
         CardData.Y = Y;
         FigureImage.sprite = CardData.Icon;

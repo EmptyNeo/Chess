@@ -33,6 +33,7 @@ public class Main : Sounds
     public static Main Instance { get; private set; }
     public int IndexLevel;
     public Canvas Canvas;
+    public Transition Transition;
     public static List<Level> Levels = new()
     {
         new Level0(),
@@ -47,14 +48,19 @@ public class Main : Sounds
     };
     private void Start()
     {
-
+        StartCoroutine(StartOn());
+        
+    }
+    private IEnumerator StartOn()
+    {
+        Transition.Start();
+        StartCoroutine(Transition.TakeOpacity(0.5f));
         /*        TutorialText.EnablePanel();
                 StartCoroutine(Tutorial.Enable(TutorialText));*/
         Instance = this;
         Factory = new Factory();
         TransformationFigure.Init();
         DeckData.GiveDefaultDeck(Factory);
-        StartCoroutine(DeckData.GiveFigure(Get<SoundGiveCard>(), Factory.GetFigure<Pawn>(TypeFigure.White)));
         DataDeck deck = BinarySavingSystem.LoadDeck();
         DeckData.GiveDeckCards(deck, Factory);
         if (PlayerPrefs.HasKey("IndexLevel"))
@@ -62,12 +68,13 @@ public class Main : Sounds
             IndexLevel = PlayerPrefs.GetInt("IndexLevel");
         }
         Levels[IndexLevel].Init();
+        yield return new WaitForSeconds(1);
+        yield return DeckData.GiveFigure(Get<SoundGiveCard>(), Factory.GetFigure<Pawn>(TypeFigure.White));
         if (Ivent != null)
-            StartCoroutine(Ivent.StartEvent());
+            yield return Ivent.StartEvent();
 
         IsCanMove = false;
     }
-
 
     private void Update()
     {
@@ -79,7 +86,9 @@ public class Main : Sounds
         if (Input.GetKeyUp(KeyCode.V))
         {
             if (DeckData.Cards.Count > 0)
+            {
                 DeckData.SpawnFigure();
+            }
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
@@ -110,7 +119,6 @@ public class Main : Sounds
             IsCanMove = true;
             if (Hand.DisplayedSlot.Count > 0)
             {
-
                 if (IsPossibleMove() == false || Hand.IsOnlySpecialCard())
                 {
                     yield return Back();
@@ -143,11 +151,17 @@ public class Main : Sounds
         yield return Levels[IndexLevel].Rival.Attack();
         if(Levels[IndexLevel].Rival.IsPossibleAttack == false)
             yield return Levels[IndexLevel].Rival.RandomMove();
+
         foreach (Slot slot in Board.Slots)
         {
             if (slot.CardData.NotNull)
             {
                 slot.CardData.LimitMove--;
+                if (slot.CardData is FigureData figure)
+                {
+                    if (figure.LimitMove == 0 && figure.Icon.name == figure.NameSprite)
+                        slot.FigureImage.sprite = SpriteUtil.Load("pieces", figure.NameSprite);
+                }
             }
         }
         foreach (Slot slot in Board.Slots)
@@ -166,6 +180,7 @@ public class Main : Sounds
         {
             PlaySound(Get<SoundLose>(), 0.2f, 1);
             Lose.SetActive(true);
+            Levels[IndexLevel].Rival = null;
         }
         else
         {

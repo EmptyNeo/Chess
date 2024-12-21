@@ -49,7 +49,7 @@ public class Rival
     public bool IsPossibleAttack;
     public IEnumerator Attack()
     {
-        IsPossibleAttack = false;
+
         List<Slot> attackSlots = new();
         List<Slot> availableDisplayedSlots = new();
         for (int i = 0; i < DisplayedSlot.Count; i++)
@@ -73,11 +73,14 @@ public class Rival
                 attackSlots[indexMostPrioritySlot].SetCard(availableDisplayedSlots[indexAvailableSlots].CardData);
                 availableDisplayedSlots[indexAvailableSlots].Nullify();
                 availableDisplayedSlots[indexAvailableSlots].DragSlot.transform.position = availableDisplayedSlots[indexAvailableSlots].transform.position;
-                Main.Instance.Hand.DisplayedSlot.RemoveAt(Main.Instance.Hand.FindDisplayedSlot(availableDisplayedSlots[indexAvailableSlots]));
-                DisplayedSlot[Main.Instance.Hand.FindDisplayedSlot(DisplayedSlot, availableDisplayedSlots[indexAvailableSlots])] = attackSlots[indexMostPrioritySlot];
+                Main.Instance.Hand.DisplayedSlot.RemoveAt(Main.Instance.Hand.FindDisplayedSlot(attackSlots[indexMostPrioritySlot]));
+                DisplayedSlot[Main.Instance.Hand.FindDisplayedSlot(DisplayedSlot, attackSlots[indexMostPrioritySlot])] = attackSlots[indexMostPrioritySlot];
                 IsPossibleAttack = true;
             }
         }
+        else
+            IsPossibleAttack = false;
+
         yield return null;
     }
     public IEnumerator RandomMove()

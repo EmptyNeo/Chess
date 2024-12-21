@@ -21,11 +21,12 @@ public class Slot : MonoBehaviour
     }
     public void Nullify()
     {
-        CardData = new FigureData(0, 0, "", TypeFigure.None)
+        CardData = new CardData(0, 0, "", TypeFigure.None)
         {
             NotNull = false,
-            Icon = null,
+            Icon = null
         };
+        FigureImage.sprite = CardData.Icon; 
         FigureImage.color = new Color(1, 1, 1, 0);
     }
     private void OnDrawGizmos()

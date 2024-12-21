@@ -24,19 +24,10 @@ public class HandSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public void SetCard(CardData figure)
     {
         CardData = (CardData)figure.Clone();
-        CardData.Description = figure.Description;
-        CardData.Priority = figure.Priority;
         FigureImage.sprite = CardData.Icon;
         FigureImage.color = new Color(1, 1, 1, 1);
     }
-    public void Nullify()
-    {
-        CardData.NotNull = false;
-        CardData = null;
-        FigureImage.sprite = null;
-        FigureImage.color = new Color(1, 1, 1, 0);
-    }
-
+   
     public void OnPointerEnter(PointerEventData eventData)
     {
         foreach (var slot in Main.Instance.Hand.Slots)

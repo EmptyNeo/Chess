@@ -3,26 +3,7 @@
 [Serializable]
 public class FigureData : CardData
 {
-    public override int LimitMove
-    {
-        get => _limitMove;
-        set
-        {
-            if (value < 0)
-            {
-                LimitMove = 0;
-            }
-            else
-            {
-                _limitMove = value;
-                if (_limitMove == 0 && Board.Instance != null)
-                    Board.Instance.Slots[Y, X].FigureImage.sprite = SpriteUtil.Load("pieces", NameSprite);
-            }
-
-           
-        }
-    }
-
+    
     public bool IsTravel;
 
     public bool IsProtected;

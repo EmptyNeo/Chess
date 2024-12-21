@@ -113,6 +113,7 @@ public class Board : MonoBehaviour
             }
         }
     }
+    
     public void HideBacklight()
     {
         for (int i = 0; i < Slots.GetLength(0); i++)

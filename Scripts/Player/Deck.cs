@@ -37,6 +37,7 @@ public class Deck : MonoBehaviour
         slot.SetAmountMana(Cards[index].Cost);
         Cards.RemoveAt(index);
         TAmount.text = $"x{--Amount}";
+
     }
     public void GiveDefaultDeck(Factory factory)
     {
@@ -68,10 +69,13 @@ public class Deck : MonoBehaviour
                 yield return new WaitForSeconds(0.2f);
             }
         }
-
     }
     public IEnumerator GiveFigure(AudioClip sound, CardData cardData)
     {
+        foreach (var card in Hand.Slots)
+        {
+            card.Drag.TryDrag = false;
+        }
         if (Cards.Count == 0)
             yield return null;
 
@@ -84,6 +88,11 @@ public class Deck : MonoBehaviour
                 yield return new WaitForSeconds(0.2f);
             }
         }
+        foreach (var card in Hand.Slots)
+        {
+            card.Drag.TryDrag = true;
+        }
+
     }
 }
 

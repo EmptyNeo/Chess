@@ -101,16 +101,14 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
         Sounds.PlaySound(Sounds.Get<SoundExposeFigure>(), 2, 1);
 
         CardData cardData = OldSlot.CardData;
-        OldSlot.Nullify();
         int index = Main.Instance.Hand.FindDisplayedSlot(OldSlot);
         bool back = true;
+        OldSlot.Nullify();
         if (newSlot.CardData.NotNull)
         {
 
             StartCoroutine(ShakeUtil.Instance.Shake(0.1f, 0.05f));
-            newSlot.Nullify();
             Main.Levels[Main.Instance.IndexLevel].Rival.DisplayedSlot.RemoveAt(Main.Instance.Hand.FindDisplayedSlot(Main.Levels[Main.Instance.IndexLevel].Rival.DisplayedSlot, newSlot));
-            newSlot.SetCard(cardData);
             Main.Instance.Hand.DisplayedSlot[index] = newSlot;
         }
         else
@@ -124,8 +122,8 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
                 figure.IsTravel = false;
                 back = false;
             }
-            newSlot.SetCard(cardData);
         }
+        newSlot.SetCard(cardData);
         Main.Instance.Hand.DisplayedSlot[index] = newSlot;
         if (newSlot.Y < 1 && newSlot.CardData is Pawn)
         {

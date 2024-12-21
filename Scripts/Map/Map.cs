@@ -48,7 +48,7 @@ public class Map : MonoBehaviour
         PlayerPrefs.SetInt("IndexLevel", Point[index].IndexLevel);
         PlayerPrefs.SetInt("Index", Point[index].Index);
         PlayerPrefs.Save();
-        yield return new WaitForSeconds(0.1f);
+        yield return Transition.Instance.AddOpacity(2f);
         SceneManager.LoadScene("Game");
     }
 }

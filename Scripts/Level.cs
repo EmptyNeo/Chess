@@ -183,13 +183,36 @@ public class Level6 : Level
 {
     public override void Init()
     {
+        List<CardData> deck = new()
+        {
+            new Pawn(0, 0, "b_pawn", TypeFigure.Black),
+            new Pawn(0, 0, "b_pawn", TypeFigure.Black),
+            new Knight(0, 0, "b_knight", TypeFigure.Black),
+            new Knight(0, 0, "b_knight", TypeFigure.Black),
+            new Rook(0, 0, "b_rook", TypeFigure.Black),
+            new Rook(0, 0, "b_rook", TypeFigure.Black)
+        };
         Rival = new Rival(new List<CardData>()
         {
-            new Pawn(2,1, "b_pawn", TypeFigure.Black),
-            new Pawn(3,1, "b_pawn", TypeFigure.Black),
-            new Pawn(4,1, "b_pawn", TypeFigure.Black),
-            new Pawn(5,1, "b_pawn", TypeFigure.Black)
-        });
+            new Pawn(0,0, "b_pawn", TypeFigure.Black),
+            new Rook(3,1, "b_rook", TypeFigure.Black),
+            new Rook(4,1, "b_rook", TypeFigure.Black),
+            new Knight(1, 1, "b_knight", TypeFigure.Black),
+            new Knight(6, 1, "b_knight", TypeFigure.Black),
+            new Bishop(0, 1, "b_bishop", TypeFigure.Black),
+            new Bishop(7, 1, "b_bishop", TypeFigure.Black),
+            new Pawn(0,2, "b_pawn", TypeFigure.Black),
+            new Pawn(1,2, "b_pawn", TypeFigure.Black),
+            new Pawn(2,2, "b_pawn", TypeFigure.Black),
+            new Pawn(3,2, "b_pawn", TypeFigure.Black),
+            new Pawn(4,2, "b_pawn", TypeFigure.Black),
+            new Pawn(5,2, "b_pawn", TypeFigure.Black),
+            new Pawn(6,2, "b_pawn", TypeFigure.Black),
+            new Pawn(7,2, "b_pawn", TypeFigure.Black)
+        })
+        {
+            Deck = deck
+        };
 
         Main.Instance.Ivent = Object.Instantiate(PrefabUtil.Load("Smoke"), Main.Instance.GUI).GetComponent<Event>();
     }

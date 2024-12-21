@@ -25,15 +25,10 @@ public class ThunderCard : SpecialCard
             yield return new WaitForSeconds(0.01f);
             handSlot.OldSlot.CardData.PlaySound();
             Characteristics.Instance.TakeMana(Cost);
-            newSlot.SetCard(this);
-            newSlot.DragSlot.TryDrag = false;
             int index = handSlot.OldSlot.transform.GetSiblingIndex();
-            handSlot.OldSlot.Hand.DisplayedSlot.Add(newSlot);
             handSlot.OldSlot.Hand.RemoveFromHand(index);
-
             Board.Instance.Slots[newSlot.Y, newSlot.X].Nullify();
             Main.Levels[Main.Instance.IndexLevel].Rival.DisplayedSlot.Remove(Board.Instance.Slots[newSlot.Y, newSlot.X]);
-
             Main.Levels[Main.Instance.IndexLevel].Rival.IssueCard();
             handSlot.transform.SetParent(handSlot.OldSlot.transform);
             Object.Destroy(handSlot.OldSlot.gameObject);

@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Map : MonoBehaviour
+public class Map : Sounds
 {
     public Transform PlayerTransform;
     public ImageAnimation Player;
     public List<MapPoint> Point = new();
-    public int Index;
+    public int Index ;
+    public Transition Transition;
     private void Start()
     {
+        Transition.gameObject.SetActive(true);
+        StartCoroutine(Transition.TakeOpacity(0.5f));
         if (PlayerPrefs.HasKey("Index"))
         {
             Index = PlayerPrefs.GetInt("Index");
@@ -29,11 +32,11 @@ public class Map : MonoBehaviour
             PlayerPrefs.DeleteAll();
             BinarySavingSystem.DeleteDeck();
         }
+        if(Input.GetMouseButtonDown(0))
+            PlaySound(Get<SoundClick>(), 1, 1f);
     }
     public void OnStart(int index)
     {
-        Debug.Log(Point[index].Index);
-        Debug.Log(Index + 1);
         if (Index != Point[index].Index && Point[index].Index == Index + 1)
         {
             StartCoroutine(ChoiceLevel(index));
@@ -48,7 +51,7 @@ public class Map : MonoBehaviour
         PlayerPrefs.SetInt("IndexLevel", Point[index].IndexLevel);
         PlayerPrefs.SetInt("Index", Point[index].Index);
         PlayerPrefs.Save();
-        yield return Transition.Instance.AddOpacity(2f);
+        yield return Transition.AddOpacity(2f);
         SceneManager.LoadScene("Game");
     }
 }

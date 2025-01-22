@@ -6,7 +6,7 @@
         Name = "Pawn";
         LimitMove = 0;
         Icon = SpriteUtil.Load("pieces", nameSprite);
-        Cost = 1;
+        Cost = 0;
         Priority = 1;
         Description =  "It may moves one square forward\n" +
                       "Attacks diagonally one square ahead";

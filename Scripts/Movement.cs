@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,14 +17,97 @@ public static class Movement
         }
 
    }
-    public static IEnumerator TakeOpacity(Transform transform, Vector3 b,Image image, float duration, float speed)
+    public static IEnumerator AddSize(Transform transform, float targetX, float targetY, float duration)
     {
-        float time = duration;
-
-        while (time > 0)
+        Vector3 startScale = transform.localScale;
+        float elapsedTime = 0;
+        while (elapsedTime < duration)
         {
-            time -= Time.deltaTime * speed;
-            image.color = new Color(image.color.r, image.color.g, image.color.b, time);
+            elapsedTime += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsedTime / duration); 
+            float currentX = Mathf.Lerp(startScale.x, targetX, t);
+            float currentY = Mathf.Lerp(startScale.y, targetY, t);
+            transform.localScale = new Vector3(currentX, currentY, 0);
+            yield return null;
+        }
+        transform.localScale = new Vector3(targetX, targetY, 0); 
+    }
+
+    public static IEnumerator TakeSize(Transform transform, float targetX, float targetY, float duration)
+    {
+        Vector3 startScale = transform.localScale;
+        float elapsedTime = 0;
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsedTime / duration);
+            float currentX = Mathf.Lerp(startScale.x, targetX, t);
+            float currentY = Mathf.Lerp(startScale.y, targetY, t);
+            transform.localScale = new Vector3(currentX, currentY, 0);
+            yield return null;
+        }
+        transform.localScale = new Vector3(targetX, targetY, 0);
+    }
+    public static IEnumerator TakeOpacity(Transform transform, Vector3 b, Image image, float opacity, float speed)
+    {
+        while (opacity > 0)
+        {
+            opacity -= Time.deltaTime * speed;
+            image.color = new Color(image.color.r, image.color.g, image.color.b, opacity);
+            transform.position = b;
+            yield return null;
+        }
+
+    }
+    public static IEnumerator TakeOpacity(Image image, float opacity, float speed)
+    {
+        while (opacity > 0)
+        {
+            opacity -= Time.deltaTime * speed;
+            image.color = new Color(image.color.r, image.color.g, image.color.b, opacity);
+            yield return null;
+        }
+
+    }
+    public static IEnumerator TakeOpacity(TMP_Text image, float opacity, float speed)
+    {
+        while (opacity > 0)
+        {
+            opacity -= Time.deltaTime * speed;
+            image.color = new Color(image.color.r, image.color.g, image.color.b, opacity);
+            yield return null;
+        }
+
+    }
+    public static IEnumerator TakeOpacity(ParticleSystem particleSystem, float opacity, float speed)
+    {
+        ParticleSystem.MainModule main = particleSystem.main;
+        while (opacity > 0)
+        {
+            opacity -= Time.deltaTime * speed;
+            main.startColor = new Color(main.startColor.color.r, main.startColor.color.g, main.startColor.color.b, opacity);
+            yield return null;
+        }
+
+    }
+    public static IEnumerator TakeOpacity(Transform transform, Vector3 b, TMP_Text image, float opacity, float speed)
+    {
+        while (opacity > 0)
+        {
+            opacity -= Time.deltaTime * speed;
+            image.color = new Color(image.color.r, image.color.g, image.color.b, opacity);
+            transform.position = b;
+            yield return null;
+        }
+
+    }
+    public static IEnumerator AddOpacity(Transform transform, Vector3 b, Image image, float opacity, float maxOpacity, float speed)
+    {
+
+        while (opacity < maxOpacity)
+        {
+            opacity += Time.deltaTime * speed;
+            image.color = new Color(image.color.r, image.color.g, image.color.b, opacity);
             transform.position = b;
             yield return null;
         }

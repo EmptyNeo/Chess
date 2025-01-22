@@ -34,6 +34,7 @@ public class TransformationFigure : MonoBehaviour
         List.SetActive(false);
         StartCoroutine(Main.Instance.Back());
     }
+   
     public void BackFigure()
     {
         _oldSlot.SetCard(_newSlot.CardData);

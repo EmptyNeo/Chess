@@ -20,8 +20,6 @@ public class AccelerationCard : SpecialCard
         }
         else
         {
-            handSlot.objDelete = true;
-            handSlot.Icon.SetActive(false);
             yield return Movement.TakeOpacity(handSlot.transform, newSlot.transform.position, handSlot.Image, 1, 10);
             yield return new WaitForSeconds(0.01f);
             handSlot.OldSlot.CardData.PlaySound();
@@ -29,7 +27,7 @@ public class AccelerationCard : SpecialCard
             int index = handSlot.OldSlot.transform.GetSiblingIndex();
             handSlot.OldSlot.Hand.RemoveFromHand(index);
             newSlot.DragSlot.OldSlot.CardData.LimitMove--;
-            Main.Levels[Main.Instance.IndexLevel].Rival.IssueCard();
+            Main.Instance.StartCoroutine(Main.Levels[Main.Instance.IndexLevel].Rival.IssueCard());
             handSlot.transform.SetParent(handSlot.OldSlot.transform);
             Object.Destroy(handSlot.OldSlot.gameObject);
         }

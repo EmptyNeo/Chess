@@ -3,9 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Random = UnityEngine.Random;
 using Object = UnityEngine.Object;
-using System.Threading.Tasks;
+using Random = UnityEngine.Random;
 
 [Serializable]
 public class Rival
@@ -24,7 +23,7 @@ public class Rival
             DisplayedSlot.Add(boardSlot);
         }
     }
-    public async void IssueCard()
+    public IEnumerator IssueCard()
     {
         if (Deck.Count > 0)
         {
@@ -37,8 +36,7 @@ public class Rival
             int index = Deck.IndexOf(Deck.OrderByDescending(card => card.Priority).Last());
             HandSlot handSlot = Object.Instantiate(PrefabUtil.Load("HandSlot"), Main.Instance.RivalHand).GetComponent<HandSlot>();
             handSlot.SetCard(Deck[index]);
-            Main.Instance.StartCoroutine(Movement.Smooth(handSlot.gameObject.transform, 0.25f, handSlot.gameObject.transform.position, boardSlot.transform.position));
-            await Task.Delay(250);
+            yield return Movement.Smooth(handSlot.gameObject.transform, 0.25f, handSlot.gameObject.transform.position, boardSlot.transform.position);
             Sounds.PlaySound(Sounds.Get<SoundExposeCard>(), 1, 1);
             boardSlot.SetCard(handSlot.CardData);
             Object.Destroy(handSlot.gameObject);
@@ -49,14 +47,12 @@ public class Rival
     public bool IsPossibleAttack;
     public IEnumerator Attack()
     {
-
         List<Slot> attackSlots = new();
         List<Slot> availableDisplayedSlots = new();
         for (int i = 0; i < DisplayedSlot.Count; i++)
         {
-            if (IsAttackSlot(DisplayedSlot[i]))
+            if (IsFigureInSlotCanAttack(DisplayedSlot[i]))
             {
-                Debug.Log(i);
                 availableDisplayedSlots.Add(DisplayedSlot[i]);
             }
         }
@@ -69,18 +65,27 @@ public class Rival
                 int indexMostPrioritySlot = attackSlots.IndexOf(attackSlots.OrderByDescending(slot => slot.CardData.Priority).First());
                 availableDisplayedSlots[indexAvailableSlots].DragSlot.transform.SetParent(availableDisplayedSlots[indexAvailableSlots].transform.parent.parent);
                 yield return Movement.Smooth(availableDisplayedSlots[indexAvailableSlots].DragSlot.transform, 0.25f, availableDisplayedSlots[indexAvailableSlots].DragSlot.transform.position, attackSlots[indexMostPrioritySlot].transform.position);
+
+                Sounds.PlaySound(Sounds.Get<SoundExposeFigure>(), 2, 1);
                 availableDisplayedSlots[indexAvailableSlots].DragSlot.transform.SetParent(availableDisplayedSlots[indexAvailableSlots].transform);
                 attackSlots[indexMostPrioritySlot].SetCard(availableDisplayedSlots[indexAvailableSlots].CardData);
                 availableDisplayedSlots[indexAvailableSlots].Nullify();
                 availableDisplayedSlots[indexAvailableSlots].DragSlot.transform.position = availableDisplayedSlots[indexAvailableSlots].transform.position;
                 Main.Instance.Hand.DisplayedSlot.RemoveAt(Main.Instance.Hand.FindDisplayedSlot(attackSlots[indexMostPrioritySlot]));
-                DisplayedSlot[Main.Instance.Hand.FindDisplayedSlot(DisplayedSlot, attackSlots[indexMostPrioritySlot])] = attackSlots[indexMostPrioritySlot];
+                DisplayedSlot[Main.Instance.Hand.FindDisplayedSlot(DisplayedSlot, availableDisplayedSlots[indexAvailableSlots])] = attackSlots[indexMostPrioritySlot];
                 IsPossibleAttack = true;
+                if (attackSlots[indexMostPrioritySlot].CardData is Pawn && attackSlots[indexMostPrioritySlot].Y > 6)
+                {
+                    int indexRandomFigure = Random.Range(0, Main.Instance.TransformationFigure.FiguresDataBlack.Count);
+                    attackSlots[indexMostPrioritySlot].SetCard(Main.Instance.TransformationFigure.FiguresDataBlack[indexRandomFigure]);
+                }
+
             }
         }
         else
             IsPossibleAttack = false;
 
+        
         yield return null;
     }
     public IEnumerator RandomMove()
@@ -89,7 +94,7 @@ public class Rival
         List<Slot> availableDisplayedSlots = new();
         for (int i = 0; i < DisplayedSlot.Count; i++)
         {
-            if (IsAccessSlot(DisplayedSlot[i]))
+            if (IsFigureInSlotCanMove(DisplayedSlot[i]))
             {
                 availableDisplayedSlots.Add(DisplayedSlot[i]);
             }
@@ -101,15 +106,21 @@ public class Rival
             int indexAccessSlots = Random.Range(0, accessSlots.Count);
             availableDisplayedSlots[indexAvailableSlots].DragSlot.transform.SetParent(availableDisplayedSlots[indexAvailableSlots].transform.parent.parent);
             yield return Movement.Smooth(availableDisplayedSlots[indexAvailableSlots].DragSlot.transform, 0.25f, availableDisplayedSlots[indexAvailableSlots].DragSlot.transform.position, accessSlots[indexAccessSlots].transform.position);
+            Sounds.PlaySound(Sounds.Get<SoundExposeFigure>(), 2, 1);
             availableDisplayedSlots[indexAvailableSlots].DragSlot.transform.SetParent(availableDisplayedSlots[indexAvailableSlots].transform);
             accessSlots[indexAccessSlots].SetCard(availableDisplayedSlots[indexAvailableSlots].CardData);
             availableDisplayedSlots[indexAvailableSlots].Nullify();
             availableDisplayedSlots[indexAvailableSlots].DragSlot.transform.position = availableDisplayedSlots[indexAvailableSlots].transform.position;
             DisplayedSlot[Main.Instance.Hand.FindDisplayedSlot(DisplayedSlot, availableDisplayedSlots[indexAvailableSlots])] = accessSlots[indexAccessSlots];
+            if (accessSlots[indexAccessSlots].CardData is Pawn && accessSlots[indexAccessSlots].Y > 6)
+            {
+                int indexRandomFigure = Random.Range(0, Main.Instance.TransformationFigure.FiguresDataBlack.Count);
+                accessSlots[indexAccessSlots].SetCard(Main.Instance.TransformationFigure.FiguresDataBlack[indexRandomFigure]);
+            }
         }
 
     }
-    public bool IsAccessSlot(Slot displayedSlot)
+    public bool IsFigureInSlotCanMove(Slot displayedSlot)
     {
         if (displayedSlot.CardData is FigureData figureData)
         {
@@ -138,16 +149,19 @@ public class Rival
             {
                 for (int j = 0; j < Board.Instance.Slots.GetLength(1); j++)
                 {
-                    if (figureData.CanMove(Board.Instance.Slots[i, j]))
+                    if (figureData.LimitMove == 0)
                     {
-                        accessSlot.Add(Board.Instance.Slots[i, j]);
+                        if (figureData.CanMove(Board.Instance.Slots[i, j]))
+                        {
+                            accessSlot.Add(Board.Instance.Slots[i, j]);
+                        }
                     }
                 }
             }
         }
         return accessSlot;
     }
-    public bool IsAttackSlot(Slot displayedSlot)
+    public bool IsFigureInSlotCanAttack(Slot displayedSlot)
     {
         if (displayedSlot.CardData is FigureData figureData)
         {

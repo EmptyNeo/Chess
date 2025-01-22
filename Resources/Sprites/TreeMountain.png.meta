@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 5fbd8d8bf182f8245b89fe5a94f7fc9f
+guid: 38ab8c72db95e214eaf665ad0e0e213e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7167651861497909295
-    second: snowflake_0
+      213: 7879859577508952934
+    second: TreeMountain_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: snowflake_0
+      name: TreeMountain_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 1
         y: 0
-        width: 5
-        height: 5
+        width: 14
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1dfefb99b92678c90800000000000000
-      internalID: -7167651861497909295
+      spriteID: 66b71655982ea5d60800000000000000
+      internalID: 7879859577508952934
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      snowflake_0: -7167651861497909295
+      TreeMountain_0: 7879859577508952934
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

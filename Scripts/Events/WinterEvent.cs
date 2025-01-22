@@ -15,7 +15,7 @@ public class WinterEvent : Event
         Amount = MaxAmount;
         Counter.text = $"Freezing Left <size=45><color=red>{Amount}</color></size> Turn";
 
-        Panel.transform.SetParent(transform.parent.parent);
+      
     }
     public override IEnumerator StartEvent()
     {
@@ -53,8 +53,8 @@ public class WinterEvent : Event
                 }
                         yield return new WaitForSeconds(0.25f);
             }
-
-            Main.Instance.IsCanMove = true;
+            if (Main.Instance.Hand.Slots.Count == 0 && Main.Instance.DeckData.Cards.Count == 0)
+                Main.Instance.IsCanMove = true;
         }
         Counter.text = $"Freezing Left <size=45><color=red>{Amount}</color></size> Turn";
     }

@@ -135,8 +135,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1abea5af125b9e0488fdea2ecd222b98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  X: 0
-  Y: 0
   CardData:
     X: 0
     Y: 0
@@ -150,6 +148,7 @@ MonoBehaviour:
     Priority: 0
     _limitMove: 0
   FigureImage: {fileID: 9089779374991447307}
+  Image: {fileID: 6737629840516719328}
   Cost: {fileID: 1674142561319220526}
   Hand: {fileID: 0}
   Drag: {fileID: 1373619218663875296}
@@ -285,7 +284,6 @@ MonoBehaviour:
   IsDragging: 0
   TryDrag: 1
   Icon: {fileID: 7798401881379653234}
-  objDelete: 0
 --- !u!114 &3793350169291325958
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -444,15 +442,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -578,15 +578,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -664,6 +666,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RectTransform: {fileID: 5368849386349656204}
   Description: {fileID: 5272887343249909299}
+  Name: {fileID: 0}
   View: {fileID: 2104188537460248813}
 --- !u!1 &7798401881379653234
 GameObject:

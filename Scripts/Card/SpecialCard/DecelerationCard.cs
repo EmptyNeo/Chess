@@ -19,7 +19,6 @@ public class DecelerationCard : SpecialCard
         }
         else
         {
-            handSlot.objDelete = true;
             handSlot.Icon.SetActive(false);
             yield return Movement.TakeOpacity(handSlot.transform, newSlot.transform.position, handSlot.Image, 1, 10);
             yield return new WaitForSeconds(0.01f);
@@ -28,7 +27,7 @@ public class DecelerationCard : SpecialCard
             int index = handSlot.OldSlot.transform.GetSiblingIndex();
             handSlot.OldSlot.Hand.RemoveFromHand(index);
             newSlot.DragSlot.OldSlot.CardData.LimitMove++;
-            Main.Levels[Main.Instance.IndexLevel].Rival.IssueCard();
+            Main.Instance.StartCoroutine(Main.Levels[Main.Instance.IndexLevel].Rival.IssueCard());
             handSlot.transform.SetParent(handSlot.OldSlot.transform);
             Object.Destroy(handSlot.OldSlot.gameObject);
         }
@@ -39,7 +38,7 @@ public class DecelerationCard : SpecialCard
     }
     public override bool TryExpose(Slot newSlot)
     {
-        if (newSlot.CardData.NotNull)
+        if (newSlot.CardData.TypeFigure != TypeFigure.White && newSlot.CardData.NotNull)
             return true;
 
         return false;

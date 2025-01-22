@@ -21,28 +21,27 @@ public class Hand : MonoBehaviour
     public IEnumerator AddToHand(HandSlot slot)
     {
         Slots.Add(slot);
-        slot.Drag.objDelete = true;
+        slot.Image.raycastTarget = false;
         ResetAlignetSet();
-        SmoothMovement();
-        yield return new WaitForSeconds(1f);
-        slot.Drag.objDelete = false;
+        yield return SmoothMovement();
+        slot.Image.raycastTarget = true;
     }
     public void RemoveFromHand(int index)
     {
         Slots.RemoveAt(index);
         ResetAlignetSet();
-        SmoothMovement();
+        StartCoroutine(SmoothMovement());
     }
     public Vector2 GetPosition(int i)
     {
-        float offset = i * Spacing - (AlignetSet.Count / 2 - 0.5f) * Spacing;
+        float offset = i * Spacing - ((float)AlignetSet.Count - 1) / 2 * Spacing;
         return transform.position + Vector3.right * offset;
     }
-    public void SmoothMovement()
+    public IEnumerator SmoothMovement()
     {
         for (int i = 0; i < AlignetSet.Count; i++)
         {
-            StartCoroutine(Movement.Smooth(AlignetSet[i].transform, 0.25f, AlignetSet[i].transform.position, GetPosition(i)));
+            yield return Movement.Smooth(AlignetSet[i].transform, 0.25f, AlignetSet[i].transform.position, GetPosition(i));
         }
     }
 

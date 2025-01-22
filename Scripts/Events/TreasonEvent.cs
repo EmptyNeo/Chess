@@ -41,7 +41,7 @@ public class TreasonEvent : Event
                 Main.Levels[Main.Instance.IndexLevel].Rival.DisplayedSlot.Add(changeSlot);
                 Main.Instance.Hand.DisplayedSlot.Remove(slot);
 
-                Main.Instance.IsCanMove = true;
+                
                 break;
             }
         }

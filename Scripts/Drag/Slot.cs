@@ -26,11 +26,13 @@ public class Slot : MonoBehaviour
             NotNull = false,
             Icon = null
         };
-        FigureImage.sprite = CardData.Icon; 
+        FigureImage.sprite = null; 
         FigureImage.color = new Color(1, 1, 1, 0);
     }
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         DrawText.Set($"X:{X} Y:{Y}", transform.position + Vector3.up, Color.white);
     }
+#endif
 }

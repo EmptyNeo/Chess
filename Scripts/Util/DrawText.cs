@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+using UnityEngine;
 
 public static class DrawText
 {
@@ -13,3 +14,4 @@ public static class DrawText
         UnityEditor.Handles.EndGUI();
     }
 }
+#endif

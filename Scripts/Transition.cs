@@ -4,13 +4,7 @@ using UnityEngine.UI;
 
 public class Transition : MonoBehaviour
 {
-    public static Transition Instance { get; private set; }
     private SpriteRenderer _image => GetComponent<SpriteRenderer>();
-    public void Start()
-    {
-        Instance = this;
-    }
-   
     public IEnumerator TakeOpacity(float speed)
     {
         float opacity = 1;

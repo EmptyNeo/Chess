@@ -9,12 +9,12 @@ public class EarthquakeEvent : Event
     public int Amount;
     public int MaxAmount;
     public TMP_Text Counter;
+    private AudioSource AudioSource;
     private void Start()
     {
         Amount = MaxAmount;
         Counter.text = $"Earthquake Left <size=45><color=red>{Amount}</color></size> Turn";
 
-        Panel.transform.SetParent(transform.parent.parent);
     }
     public override IEnumerator StartEvent()
     {
@@ -33,8 +33,8 @@ public class EarthquakeEvent : Event
             Main.Instance.IsCanMove = false;
             yield return RearrangingSlots(Main.Instance.Hand.DisplayedSlot, Main.Levels[Main.Instance.IndexLevel].Rival.DisplayedSlot);
 
-            Sounds.AudioSource.Stop();
-            if(Main.Instance.Hand.Slots.Count == 0 && Main.Instance.DeckData.Cards.Count == 0)
+            AudioSource.Stop();
+            if (Main.Instance.Hand.Slots.Count == 0 && Main.Instance.DeckData.Cards.Count == 0)
                 Main.Instance.IsCanMove = true;
         }
     }
@@ -78,7 +78,7 @@ public class EarthquakeEvent : Event
         {
             Main.Instance.Canvas.renderMode = RenderMode.WorldSpace;
             StartCoroutine(ShakeUtil.Instance.Shake(0.05f));
-            Sounds.PlaySound(Sounds.Get<SoundEarthquake>(), 1, 1);
+            AudioSource = Sounds.PlaySound(Sounds.Get<SoundEarthquake>(), 1, 1);
         }
         yield return new WaitForSeconds(0.5f);
         foreach (var slot in displayedSlot)
@@ -87,9 +87,9 @@ public class EarthquakeEvent : Event
             {
                 int randomY = Random.Range(5, 8);
                 int randomX = Random.Range(0, Board.Instance.Slots.GetLength(1));
-                if (Board.Instance.Slots[randomY, randomX].CardData.NotNull)
+                while (Board.Instance.Slots[randomY, randomX].CardData.NotNull)
                 {
-                    Reroll(ref randomY, ref randomX, 5,7);
+                    Reroll(ref randomY, ref randomX, 5, 8);
                 }
                 Slot rechargeSlot = Board.Instance.Slots[randomY, randomX];
                 slot.DragSlot.transform.SetParent(rechargeSlot.transform.parent.parent);
@@ -104,15 +104,16 @@ public class EarthquakeEvent : Event
                 slot.Nullify();
             }
         }
+       
         foreach (var slot in rivalDisplayedSlot)
         {
             if (slot.Y < 3)
             {
-                int randomY = Random.Range(0, 2);
+                int randomY = Random.Range(0, 3);
                 int randomX = Random.Range(0, Board.Instance.Slots.GetLength(1));
-                if (Board.Instance.Slots[randomY, randomX].CardData.NotNull)
+                while (Board.Instance.Slots[randomY, randomX].CardData.NotNull)
                 {
-                    Reroll(ref randomY, ref randomX, 0,3);
+                    Reroll(ref randomY, ref randomX, 0, 3);
                 }
                 Slot rechargeSlot = Board.Instance.Slots[randomY, randomX];
                 slot.DragSlot.transform.SetParent(rechargeSlot.transform.parent.parent);
@@ -131,19 +132,20 @@ public class EarthquakeEvent : Event
 
         Main.Instance.Canvas.renderMode = RenderMode.ScreenSpaceCamera;
 
-        StartCoroutine(Sounds.GraduallyReducingVolume());
-        Sounds.AudioSource.Stop();
+        StartCoroutine(Sounds.GraduallyReducingVolume(AudioSource));
+        AudioSource.Stop();
+        AudioSource.volume = 1;
         foreach (var slot in deleteSlots)
-            displayedSlot.Remove(slot);
+            Main.Instance.Hand.DisplayedSlot.RemoveAt(Main.Instance.Hand.FindDisplayedSlot(slot));
 
         foreach (var slot in rechargeSlots)
-            displayedSlot.Add(slot);
+            Main.Instance.Hand.DisplayedSlot.Add(slot);
 
         foreach (var slot in rivalDeleteSlots)
-            rivalDisplayedSlot.Remove(slot);
+            Main.Levels[Main.Instance.IndexLevel].Rival.DisplayedSlot.RemoveAt(Main.Instance.Hand.FindDisplayedSlot(Main.Levels[Main.Instance.IndexLevel].Rival.DisplayedSlot, slot));
 
         foreach (var slot in rivalRechargeSlots)
-            rivalDisplayedSlot.Add(slot);
+            Main.Levels[Main.Instance.IndexLevel].Rival.DisplayedSlot.Add(slot);
 
 
     }
@@ -151,10 +153,6 @@ public class EarthquakeEvent : Event
     {
         randomY = Random.Range(start, end);
         randomX = Random.Range(0, Board.Instance.Slots.GetLength(1));
-        if (Board.Instance.Slots[randomY, randomX].CardData.NotNull)
-        {
-            Reroll(ref randomY, ref randomX, start, end);
-        }
     }
 
 }

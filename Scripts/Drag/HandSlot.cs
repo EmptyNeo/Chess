@@ -7,6 +7,7 @@ public class HandSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public CardData CardData;
     public Image FigureImage;
+    public Image Image;
     public TMP_Text Cost;
     public Hand Hand;
     public DragHandSlot Drag;
@@ -27,7 +28,7 @@ public class HandSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         FigureImage.sprite = CardData.Icon;
         FigureImage.color = new Color(1, 1, 1, 1);
     }
-   
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         foreach (var slot in Main.Instance.Hand.Slots)
@@ -35,15 +36,13 @@ public class HandSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             if (slot.Drag.IsDragging)
                 return;
         }
-        if (Drag.TryDrag && !Drag.objDelete)
-        {
-            Drag.transform.SetParent(transform.parent);
-            _tooltip.View.SetActive(true);
-            _tooltip.SetDescription(CardData.Name ,CardData.Description);
-            _tooltip.SetDescription(CardData.Name, CardData.Description);
-            _tooltip.RectTransform.transform.position = new Vector3(transform.position.x - (_tooltip.Description.preferredWidth + _tooltip.Name.preferredWidth) / 100, transform.position.y);
 
-        }
+        Drag.transform.SetParent(transform.parent);
+        _tooltip.View.SetActive(true);
+        _tooltip.SetDescription(CardData.Name, CardData.Description);
+        _tooltip.SetDescription(CardData.Name, CardData.Description);
+        _tooltip.RectTransform.transform.position = new Vector3(transform.position.x - (_tooltip.Description.preferredWidth + _tooltip.Name.preferredWidth) / 100, transform.position.y);
+
 
     }
 
@@ -55,11 +54,7 @@ public class HandSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             if (slot.Drag.IsDragging)
                 return;
         }
-        if (Drag.TryDrag && !Drag.objDelete)
-        {
-           
-            _tooltip.View.SetActive(false);
-            Drag.transform.SetParent(transform);
-        }
+        _tooltip.View.SetActive(false);
+        Drag.transform.SetParent(transform);
     }
 }

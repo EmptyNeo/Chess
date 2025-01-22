@@ -99,3 +99,17 @@ public class SoundClick : SoundFX
         Clip = Resources.Load<AudioClip>("Sounds/click");
     }
 }
+public class SoundPoof : SoundFX
+{
+    public SoundPoof()
+    {
+        Clip = Resources.Load<AudioClip>("Sounds/poof");
+    }
+}
+public class SoundTyping : SoundFX
+{
+    public SoundTyping()
+    {
+        Clip = Resources.Load<AudioClip>("Sounds/typing");
+    }
+}

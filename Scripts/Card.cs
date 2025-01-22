@@ -28,16 +28,23 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     }
     public IEnumerator Click()
     {
-
-        Sounds.PlaySound(Sounds.Get<SoundTakeCard>(), 1, 1);
-        Vector2 pos = new(0, transform.position.y - Vector2.up.y * 8);
-        yield return Movement.Smooth(transform, 0.5f, transform.position, pos);
-        yield return new WaitForSeconds(0.2f);
-        Main.Instance.DeckData.NameFigures.Add(CardData.NameSprite);
-        Main.Instance.AmountChoiceCard++;
-        BinarySavingSystem.SaveDeck(Main.Instance.DeckData);
-        if (Main.Instance.AmountChoiceCard == 2)
-            SceneManager.LoadScene("Map");
+        print(Main.Instance.AmountChoiceCard);
+        if (Main.Instance.AmountChoiceCard < 2)
+        {
+            Main.Instance.AmountChoiceCard++;
+            Sounds.PlaySound(Sounds.Get<SoundTakeCard>(), 1, 1);
+            Vector2 pos = new(0, transform.position.y - Vector2.up.y * 8);
+            yield return Movement.Smooth(transform, 0.5f, transform.position, pos);
+            yield return new WaitForSeconds(0.2f);
+            Main.Instance.DeckData.NameFigures.Add(CardData.NameSprite);
+          
+            BinarySavingSystem.SaveDeck(Main.Instance.DeckData);
+            if (Main.Instance.AmountChoiceCard == 2)
+            {
+                yield return Main.Instance.Transition.AddOpacity(0.75f);
+                SceneManager.LoadScene("Map");
+            }
+        }
     }
     private float _fontSizeDescription;
     private float _fontSizeName;

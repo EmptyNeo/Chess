@@ -18,6 +18,15 @@ public class Hand : MonoBehaviour
         }
         return true;
     }
+    public bool IsOnlySpecialCardInHand()
+    {
+        foreach (var slot in Slots)
+        {
+            if (slot.CardData is SpecialCard specialCard && Board.Instance.TryPossibleExposeSpecialCard(specialCard))
+                return false;
+        }
+        return true;
+    }
     public IEnumerator AddToHand(HandSlot slot)
     {
         Slots.Add(slot);

@@ -10,7 +10,8 @@ public class Queen : FigureData
         Priority = 9;
         Description = "It can move any number of squares\n" +
                       "vertically, horizontally or diagonally\n" +
-                      "combining the powers of the rook and bishop";
+                      "combining the powers\n" +
+                      "of the rook and bishop";
     }
     public override bool CanMove(Slot targetSlot)
     {

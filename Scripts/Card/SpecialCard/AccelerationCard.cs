@@ -9,7 +9,7 @@ public class AccelerationCard : SpecialCard
         Icon = SpriteUtil.Load("special_card", nameSprite);
         Cost = 1;
         Description = "Speeds up the operation\n" +
-                "of the selected card";
+                "of the selected piece";
         Rarity = Rarity.Uncommon;
     }
     public override IEnumerator Recharge(DragHandSlot handSlot, Slot newSlot)

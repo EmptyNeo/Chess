@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -84,6 +85,35 @@ public class Board : MonoBehaviour
         }
         return false;
     }
+    public bool TryPossibleMove(List<Slot> slots)
+    {
+        foreach (Slot slot in slots)
+        {
+            for (int i = 0; i < Slots.GetLength(0); i++)
+            {
+                for (int j = 0; j < Slots.GetLength(1); j++)
+                {
+                    if (slot.CardData is FigureData figureData && figureData.CanMove(Slots[i, j]))
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+    public bool TryPossibleExposeSpecialCard(SpecialCard specialCard)
+    {
+        for (int i = 0; i < Slots.GetLength(0); i++)
+        {
+            for (int j = 0; j < Slots.GetLength(1); j++)
+            {
+                if (specialCard.TryExpose(Slots[i, j]))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     public void HideHints()
     {
@@ -113,7 +143,7 @@ public class Board : MonoBehaviour
             }
         }
     }
-    
+
     public void HideBacklight()
     {
         for (int i = 0; i < Slots.GetLength(0); i++)

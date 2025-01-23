@@ -104,6 +104,7 @@ public class DragSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
         int index = Main.Instance.Hand.FindDisplayedSlot(OldSlot);
         bool back = true;
         OldSlot.Nullify();
+        Main.Instance.Tooltip.View.SetActive(false);
         if (newSlot.CardData.NotNull)
         {
 

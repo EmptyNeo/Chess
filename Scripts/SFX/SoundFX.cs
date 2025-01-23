@@ -92,6 +92,13 @@ public class SoundLose : SoundFX
         Clip = Resources.Load<AudioClip>("Sounds/lose");
     }
 }
+public class SoundDraw: SoundFX
+{
+    public SoundDraw()
+    {
+        Clip = Resources.Load<AudioClip>("Sounds/draw");
+    }
+}
 public class SoundClick : SoundFX
 {
     public SoundClick()

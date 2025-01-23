@@ -10,7 +10,7 @@ public class BarrelCard : SpecialCard
         Icon = SpriteUtil.Load("special_card", nameSprite);
         Cost = 1;
         LimitMove = 2;
-        Description = "Puts <size=25>3</size> barrels ";
+        Description = "Puts <size=25>3</size> barrels";
         Rarity = Rarity.Uncommon;
     }
     public override void ZeroAction()

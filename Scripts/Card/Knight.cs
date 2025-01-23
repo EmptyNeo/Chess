@@ -8,8 +8,10 @@ public class Knight : FigureData
         Icon = SpriteUtil.Load("pieces", nameSprite);
         Cost = 1;
         Priority = 3;
-        Description = "It moves two squares vertically and one square horizontally\n" +
-                      "or two squares horizontally and one square vertically\n" +
+        Description = "It moves two squares vertically\n" +
+                       "and one square horizontally\n" +
+                      "or two squares horizontally\n" +
+                      "and one square vertically\n" +
                       "jumping over other pieces";
     }
     public override bool CanMove(Slot targetSlot)

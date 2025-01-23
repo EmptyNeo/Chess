@@ -22,6 +22,7 @@ public class Main : Sounds
     public Transform RivalHand;
     public GameObject Win;
     public GameObject Lose;
+    public GameObject Draw;
     public GameObject Pick;
     public Transform BoardParent;
     public TutorialText TutorialText;
@@ -81,7 +82,7 @@ public class Main : Sounds
         }
         yield return new WaitForSeconds(0.5f);
        
-        if (IndexLevel == 0 && TutorialText.gameObject.activeSelf)
+        if (IndexLevel == 0 && !PlayerPrefs.HasKey("tutorial") && TutorialText.gameObject.activeSelf)
         {
             TutorialText.EnablePanel();
             yield return Tutorial.Enable(TutorialText);
@@ -200,10 +201,17 @@ public class Main : Sounds
             Win.SetActive(true);
             Ivent.gameObject.SetActive(false);
         }
-        else if (Hand.DisplayedSlot.Count == 0 && DeckData.Cards.Count == 0 && Hand.Slots.Count == 0)
+        else if (Hand.DisplayedSlot.Count == 0 && DeckData.Cards.Count == 0 && Hand.IsOnlySpecialCardInHand())
         {
             PlaySound(Get<SoundLose>(), 0.2f, 1);
             Lose.SetActive(true);
+            Levels[IndexLevel].Rival = null;
+            Ivent.gameObject.SetActive(false);
+        }
+        else if(Board.TryPossibleMove(Hand.DisplayedSlot) == false && Board.TryPossibleMove(Levels[IndexLevel].Rival.DisplayedSlot) == false)
+        {
+            PlaySound(Get<SoundDraw>(), 0.2f, 1);
+            Draw.SetActive(true);
             Levels[IndexLevel].Rival = null;
             Ivent.gameObject.SetActive(false);
         }
@@ -267,6 +275,15 @@ public class Main : Sounds
         PlayerPrefs.SetInt("IndexLevel", 1);
         PlayerPrefs.SetInt("Index", 1);
         PlayerPrefs.Save();
+        yield return Transition.AddOpacity(1);
+        SceneManager.LoadScene("Game");
+    }
+    public void RestartDraw()
+    {
+        StartCoroutine(RestartDrawOn());
+    }
+    public IEnumerator RestartDrawOn()
+    {
         yield return Transition.AddOpacity(1);
         SceneManager.LoadScene("Game");
     }

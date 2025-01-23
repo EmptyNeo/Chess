@@ -8,7 +8,8 @@ public class ThunderCard : SpecialCard
         Name = "Thunder Card";
         Icon = SpriteUtil.Load("special_card", nameSprite);
         Cost = 0;
-        Description = "Attacks the selected figure with lightning";
+        Description = "Attacks the selected\n" +
+                       "piece with lightning";
         Rarity = Rarity.Common;
     }
     public override IEnumerator Recharge(DragHandSlot handSlot, Slot newSlot)

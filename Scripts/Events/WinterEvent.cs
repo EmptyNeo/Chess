@@ -19,8 +19,8 @@ public class WinterEvent : Event
     }
     public override IEnumerator StartEvent()
     {
-       
         Amount--;
+        Counter.text = $"Freezing Left <size=45><color=red>{Amount}</color></size> Turn";
         if (Amount == 0)
         {
             foreach (Slot slot in Main.Instance.Hand.DisplayedSlot)
@@ -37,7 +37,7 @@ public class WinterEvent : Event
             yield return new WaitForSeconds(2f);
             Panel.SetActive(false);
             Amount = MaxAmount;
-
+            Counter.text = $"Freezing Left <size=45><color=red>{Amount}</color></size> Turn";
             Sounds.PlaySound(Sounds.Get<SoundFreezing>(), 1, 1);
          
             for (int i = 0; i < Board.Instance.Slots.GetLength(0); i++)
@@ -56,7 +56,6 @@ public class WinterEvent : Event
             if (Main.Instance.Hand.Slots.Count == 0 && Main.Instance.DeckData.Cards.Count == 0)
                 Main.Instance.IsCanMove = true;
         }
-        Counter.text = $"Freezing Left <size=45><color=red>{Amount}</color></size> Turn";
     }
 
 }

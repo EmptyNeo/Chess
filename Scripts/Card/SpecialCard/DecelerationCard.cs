@@ -8,7 +8,7 @@ public class DecelerationCard : SpecialCard
         Name = "Snail Card";
         Icon = SpriteUtil.Load("special_card", nameSprite);
         Cost = 0;
-        Description = "Slows down the selected card";
+        Description = "Slows down the selected piece";
         Rarity = Rarity.Common;
     }
     public override IEnumerator Recharge(DragHandSlot handSlot, Slot newSlot)

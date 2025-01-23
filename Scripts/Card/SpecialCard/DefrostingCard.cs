@@ -9,6 +9,7 @@ public class DefrostingCard : SpecialCard
         Icon = SpriteUtil.Load("special_card", nameSprite);
         Cost = 2;
         Description = "Defrost shapes\n" +
+                     "and destroy random piece\n" +
                      "within a 3 by 3 radius";
         Rarity = Rarity.Rare;
     }
@@ -27,19 +28,25 @@ public class DefrostingCard : SpecialCard
             Characteristics.Instance.TakeMana(Cost);
             int index = handSlot.OldSlot.transform.GetSiblingIndex();
             Main.Instance.Hand.RemoveFromHand(index);
-
+            int iRandom = Random.Range(-1, 2);
+            int jRandom = Random.Range(-1, 2);
             for (int i = -1; i <= 1; i++)
             {
                 for (int j = -1; j <= 1; j++)
                 {
                     int Y = newSlot.Y - i;
                     int X = newSlot.X - j;
-                    bool tryOutBordersY = Y > -1 || Y < Board.Instance.Slots.GetLength(0);
-                    bool tryOutBordersX = X > -1 || X < Board.Instance.Slots.GetLength(1);
+                    bool tryOutBordersY = Y > -1 && Y < Board.Instance.Slots.GetLength(0);
+                    bool tryOutBordersX = X > -1 && X < Board.Instance.Slots.GetLength(1);
+                  
                     if (tryOutBordersY && tryOutBordersX)
                     {
                         Slot slot = Board.Instance.Slots[Y, X];
-                        if (slot.CardData.NotNull && slot.CardData is FigureData figure && slot.FigureImage.sprite.name == figure.FreezeName)
+                        if (iRandom == i && jRandom == j)
+                        {
+                            slot.Nullify();
+                        }
+                        else if (slot.CardData.NotNull && slot.CardData is FigureData figure && slot.FigureImage.sprite.name == figure.FreezeName)
                         {
                             figure.LimitMove = 0;
                         }
@@ -60,7 +67,7 @@ public class DefrostingCard : SpecialCard
     {
         if (slot.CardData is FigureData figure)
         {
-            if (figure.TypeFigure == TypeFigure.White && slot.FigureImage.sprite.name == figure.FreezeName)
+            if (figure.NotNull)
             {
                 return true;
             }

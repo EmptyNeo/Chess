@@ -8,7 +8,8 @@ public class ProtectiveCard : SpecialCard
         Name = "Shield Card";
         Icon = SpriteUtil.Load("special_card", nameSprite);
         Cost = 1;
-        Description =  "Protects the selected card for one turn";
+        Description = "Protects the selected\n" +
+                      "piece for one turn";
         Rarity = Rarity.Uncommon;
     }
     public override IEnumerator Recharge(DragHandSlot handSlot, Slot newSlot)

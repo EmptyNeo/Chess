@@ -1,2 +1,2 @@
 # chess
-in development
+released in itchio

@@ -27,7 +27,7 @@ public class DragHandSlot : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
 
         if (OldSlot.CardData.NotNull && TryDrag)
         {
-            OldSlot.Tooltip.View.SetActive(false);
+            Main.Instance.Tooltip.View.gameObject.SetActive(false);
             Sounds.PlaySound(Sounds.Get<SoundTakeCard>(), 1, 1);
             Vector2 pos = transform.position;
             GetComponentInChildren<RectTransform>().localScale = new Vector2(1.25f, 1.25f);

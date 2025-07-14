@@ -11,9 +11,9 @@ public class Hand : MonoBehaviour
     public float Spacing = 1f;
     public bool IsOnlySpecialCard()
     {
-        foreach(var slot in DisplayedSlot)
+        foreach (var slot in DisplayedSlot)
         {
-            if(slot.CardData is not SpecialCard)
+            if (slot.CardData is not SpecialCard)
                 return false;
         }
         return true;
@@ -27,30 +27,30 @@ public class Hand : MonoBehaviour
         }
         return true;
     }
-    public IEnumerator AddToHand(HandSlot slot)
+    public void AddToHand(HandSlot slot)
     {
         Slots.Add(slot);
         slot.Image.raycastTarget = false;
         ResetAlignetSet();
-        yield return SmoothMovement();
+        SmoothMovement();
         slot.Image.raycastTarget = true;
     }
     public void RemoveFromHand(int index)
     {
         Slots.RemoveAt(index);
         ResetAlignetSet();
-        StartCoroutine(SmoothMovement());
+        SmoothMovement();
     }
     public Vector2 GetPosition(int i)
     {
         float offset = i * Spacing - ((float)AlignetSet.Count - 1) / 2 * Spacing;
         return transform.position + Vector3.right * offset;
     }
-    public IEnumerator SmoothMovement()
+    public void SmoothMovement()
     {
         for (int i = 0; i < AlignetSet.Count; i++)
         {
-            yield return Movement.Smooth(AlignetSet[i].transform, 0.25f, AlignetSet[i].transform.position, GetPosition(i));
+            StartCoroutine(Movement.Smooth(AlignetSet[i].transform, 0.25f, AlignetSet[i].transform.position, GetPosition(i)));
         }
     }
 

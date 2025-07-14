@@ -11,6 +11,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public Image Image;
     public TMP_Text Cost;
     private Tooltip _tooltip;
+    private Coroutine _tooltipRotine;
     private void Start()
     {
         _tooltip = Main.Instance.Tooltip;
@@ -37,7 +38,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             yield return Movement.Smooth(transform, 0.5f, transform.position, pos);
             yield return new WaitForSeconds(0.2f);
             Main.Instance.DeckData.NameFigures.Add(CardData.NameSprite);
-          
+
             BinarySavingSystem.SaveDeck(Main.Instance.DeckData);
             if (Main.Instance.AmountChoiceCard == 2)
             {
@@ -50,20 +51,27 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     private float _fontSizeName;
     public void OnPointerEnter(PointerEventData eventData)
     {
-        _tooltip.View.SetActive(true);
         _fontSizeDescription = _tooltip.Description.fontSize;
         _fontSizeName = _tooltip.Name.fontSize;
         _tooltip.Description.fontSize *= 1.3f;
         _tooltip.Name.fontSize *= 1.3f;
-        _tooltip.SetDescription(CardData.Name, CardData.Description);
-        _tooltip.SetDescription(CardData.Name, CardData.Description);
-        _tooltip.RectTransform.transform.position = new Vector3(transform.position.x - (_tooltip.Description.preferredWidth + _tooltip.Name.preferredWidth) / 100, transform.position.y);
-    }
+        _tooltipRotine = StartCoroutine(ActiveTooltip());
 
+    }
+    private IEnumerator ActiveTooltip()
+    {
+        yield return new WaitForSeconds(0.5f);
+        if (_tooltipRotine == null)
+            yield break;
+        Main.Instance.Tooltip.View.gameObject.SetActive(true);
+        Main.Instance.Tooltip.SetDescription(CardData.Name, CardData.Description);
+        Main.Instance.Tooltip.SetDescription(CardData.Name, CardData.Description);
+    }
     public void OnPointerExit(PointerEventData eventData)
     {
+        _tooltipRotine = null;
         _tooltip.Description.fontSize = _fontSizeDescription;
         _tooltip.Name.fontSize = _fontSizeName;
-        _tooltip.View.SetActive(false);
+        _tooltip.View.gameObject.SetActive(false);
     }
 }
